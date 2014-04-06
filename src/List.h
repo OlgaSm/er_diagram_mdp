@@ -1,3 +1,9 @@
+#ifndef LIST_H
+#define LIST_H
+//#include "ListItem.cpp"
+
+namespace ERdiagram{
+
 template<class T>
 class List{
 private:
@@ -9,6 +15,11 @@ public:
 
 public:
 	T at(int i);
+    int     size();
 	void    push_back(T value);          
-	void    popAt(int i);
+    bool    popAt(int i);
 };
+
+}
+
+#endif // LIST_H

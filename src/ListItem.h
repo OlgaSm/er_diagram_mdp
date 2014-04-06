@@ -1,3 +1,8 @@
+#ifndef LISTITEM_H
+#define LISTITEM_H
+
+namespace ERdiagram{
+
 template<class Type>
 class ListItem{
     private:
@@ -5,7 +10,7 @@ class ListItem{
 		ListItem* next;
 
     public:
-		ListItem(Type x0);
+        ListItem(Type x);
 		~ListItem();
     public:
 		void setNext(ListItem* next);
@@ -13,3 +18,7 @@ class ListItem{
 		void setValue(Type x);
 		Type getValue();
 };
+
+}
+
+#endif // LISTITEM_H

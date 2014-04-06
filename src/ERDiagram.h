@@ -1,3 +1,8 @@
+#ifndef ERDIAGRAM_H
+#define ERDIAGRAM_H
+
+namespace ERdiagram{
+
 class ERDiagram {
 private:
 	char* ID;
@@ -20,3 +25,6 @@ public:
 	void    addEntitie(Entitie* e);          
 	void    popEntitieAt(int i);
 };
+
+}
+#endif // ERDIAGRAM_H

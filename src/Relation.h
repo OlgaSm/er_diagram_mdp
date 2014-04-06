@@ -1,12 +1,37 @@
+#ifndef RELATION_H
+#define RELATION_H
+//#include "Entitie.h"
+class Entitie;
+namespace ERdiagram{
+
 class Relation {
 private:
-	char* fieldID;
+    char* relationID;
 	Entitie* entitieR;
 	Entitie* entitieL;
 	bool MultiplicityR;
 	bool MultiplicityL;
+    bool AbstractR;
+    bool AbstractL;
 	
 public:
-	Relation(char* fieldID, Entitie* entitieR, Entitie* entitieL, bool MultiplicityR, bool MultiplicityL);
+    char* getID();
+    Entitie* getEntR();
+    Entitie* getEntL();
+    bool getMulR();
+    bool getMulL();
+    bool getAbsR();
+    bool getAbsL();
+    Relation(char* fieldID,
+             Entitie* entitieR,
+             Entitie* entitieL,
+             bool MultiplicityR,
+             bool MultiplicityL,
+             bool AbstractR,
+             bool AbstractL);
 	~Relation();
 };
+
+}
+
+#endif // RELATION_H

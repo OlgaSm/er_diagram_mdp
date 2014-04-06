@@ -1,3 +1,8 @@
+#ifndef ENTITIE_H
+#define ENTITIE_H
+
+namespace ERdiagram{
+
 class Entitie {
 private:
 	char* ID;
@@ -24,3 +29,6 @@ public:
 	void    addRelation(Relation* r);          
 	void    popRelationAt(int i);
 };
+
+}
+#endif // ENTITIE_H
