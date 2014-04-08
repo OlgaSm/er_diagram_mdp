@@ -1,12 +1,18 @@
 #ifndef ENTITIE_H
 #define ENTITIE_H
 
-namespace ERdiagram{
+//=====================================================
+#include "List.h"
+//#include "Fild.h"
+//#include "Relation.h"
+//=====================================================
+class Relation;
+class Feild;
 
 class Entitie {
 private:
-	char* ID;
-	List<Fild*> field;
+    char* ID;
+    List<Feild*> field;
 	List<Relation*> myRelations;
 
 public:
@@ -18,9 +24,9 @@ public:
 	void setID(char* ID);
 	
 public:
-	Fild* 	fildAt(int i);
-	Fild* 	fildByID(char* ID);
-	void    addFild(Fild* f);          
+	Feild* 	fildAt(int i);
+	Feild* 	fildByID(char* ID);
+	void    addFild(Feild* f);          
 	void    popFildAt(int i);
 	
 public:	
@@ -30,5 +36,4 @@ public:
 	void    popRelationAt(int i);
 };
 
-}
 #endif // ENTITIE_H

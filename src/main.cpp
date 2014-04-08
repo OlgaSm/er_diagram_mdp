@@ -1,15 +1,16 @@
 #include <QCoreApplication>
 #include <stdio.h>
 #include <conio.h>
-//#include "List.cpp"
-//#include "Fild.cpp"
-#include "Relation.cpp"
-
-using namespace ERdiagram;
+//=============================================================
+#include "List.h"
+#include "Field.h"
+#include "Relation.h"
+//=============================================================
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
+
     // ListItem Test
     //=================================================
         ListItem<int>* li = new ListItem<int>(5);
@@ -57,18 +58,17 @@ int main(int argc, char *argv[])
         }
     //=================================================
 
-    // Fild Test
+    // Field Test
     //=================================================
     printf("\n");
-    Fild* fild = new Fild((char*)"Test");
-    printf("Fild %s\n", fild->getID());
-    printf("Fild %s\n", fild->getType());
+    Field* field = new Field((char*)"Test");
+    printf("Field %s\n", field->getID());
+    printf("Field %d\n", field->getType());
     //=================================================
 
     // Relation Test
     //=================================================
     Relation* relation = new Relation((char*)"Test relation",NULL,NULL,true,true,true,true);
-
     printf("Relation %s\n", relation->getID());
     //=================================================
     return a.exec();

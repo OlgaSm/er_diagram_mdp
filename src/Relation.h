@@ -1,14 +1,18 @@
 #ifndef RELATION_H
 #define RELATION_H
+
+//=============================================================
+//#include "includs.h"
 //#include "Entitie.h"
+//=============================================================
+
 class Entitie;
-namespace ERdiagram{
 
 class Relation {
 private:
     char* relationID;
-	Entitie* entitieR;
-	Entitie* entitieL;
+    Entitie* entitieR;
+    Entitie* entitieL;
 	bool MultiplicityR;
 	bool MultiplicityL;
     bool AbstractR;
@@ -31,7 +35,5 @@ public:
              bool AbstractL);
 	~Relation();
 };
-
-}
 
 #endif // RELATION_H
