@@ -2,15 +2,15 @@
 #define RELATION_H
 
 //=============================================================
-//#include "includs.h"
-//#include "Entitie.h"
+#include <string>
 //=============================================================
+using namespace std;
 
 class Entitie;
 
 class Relation {
 private:
-    char* relationID;
+    string relationID;
     Entitie* entitieR;
     Entitie* entitieL;
 	bool MultiplicityR;
@@ -19,14 +19,14 @@ private:
     bool AbstractL;
 	
 public:
-    char* getID();
+    string getID();
     Entitie* getEntR();
     Entitie* getEntL();
     bool getMulR();
     bool getMulL();
     bool getAbsR();
     bool getAbsL();
-    Relation(char* fieldID,
+    Relation(string fieldID,
              Entitie* entitieR,
              Entitie* entitieL,
              bool MultiplicityR,

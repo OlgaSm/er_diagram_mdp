@@ -21,7 +21,6 @@ HEADERS  += ListItem.h \
     Field.h
 
 SOURCES += main.cpp \
-    List.cpp \
     Relation.cpp \
     Entitie.cpp \
     Field.cpp

@@ -5,6 +5,7 @@
 #include "List.h"
 #include "Field.h"
 #include "Relation.h"
+#include "Entitie.h"
 //=============================================================
 
 int main(int argc, char *argv[])
@@ -61,15 +62,24 @@ int main(int argc, char *argv[])
     // Field Test
     //=================================================
     printf("\n");
-    Field* field = new Field((char*)"Test");
-    printf("Field %s\n", field->getID());
+    Field* field = new Field("Test");
+    printf("Field %s\n", field->getID().c_str());
     printf("Field %d\n", field->getType());
+    //=================================================
+
+    // Entitie Test
+    //=================================================
+    Entitie* entitie1 = new Entitie("Test entitie 1");
+    Entitie* entitie2 = new Entitie("Test entitie 2");
+
     //=================================================
 
     // Relation Test
     //=================================================
-    Relation* relation = new Relation((char*)"Test relation",NULL,NULL,true,true,true,true);
-    printf("Relation %s\n", relation->getID());
+    Relation* relation = new Relation("Test relation",entitie1,entitie2,true,true,true,true);
+    printf("Relation %s\n", relation->getID().c_str());
+    printf("Entitie %s\n", relation->getEntR()->getID().c_str());
+    printf("Entitie %s\n", relation->getEntL()->getID().c_str());
     //=================================================
     return a.exec();
 }

@@ -1,19 +1,31 @@
 #ifndef FIELD_H
 #define FIELD_H
-#define BASE_FIELD 1
+
+//=====================================================
+#include <string>
+//=====================================================
+
+using namespace std;
+
+enum Fild_Types{
+    BASE_FIELD,
+    STRING_FIELD,
+    INT_FIELD
+};
 
 class Field {
+
 private:
-    char* ID;
+    string ID;
 	
 public:
-    Field(char* ID);
+    Field(string ID);
     ~Field();
 	
 public:
-	char* getID();
-    void setID(char* ID);
-    virtual int getType();
+    string getID();
+    void setID(string ID);
+    virtual Fild_Types getType();
 };
 
 #endif // FIELD_H

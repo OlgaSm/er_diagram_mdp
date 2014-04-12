@@ -2,36 +2,37 @@
 #define ENTITIE_H
 
 //=====================================================
+#include <string>
 #include "List.h"
-//#include "Fild.h"
-//#include "Relation.h"
 //=====================================================
+using namespace std;
+
 class Relation;
-class Feild;
+class Field;
 
 class Entitie {
 private:
-    char* ID;
-    List<Feild*> field;
-	List<Relation*> myRelations;
+    string ID;
+    List<Field*>* myfield;
+    List<Relation*>* myRelations;
 
 public:
-	Entitie();
+    Entitie(string ID);
 	~Entitie();	
 	
 public:
-	char* getID();
-	void setID(char* ID);
+    string getID();
+    void setID(string ID);
 	
 public:
-	Feild* 	fildAt(int i);
-	Feild* 	fildByID(char* ID);
-	void    addFild(Feild* f);          
+    Field* 	fildAt(int i);
+    Field* 	fildByID(string ID);
+    void    addFild(Field* f);
 	void    popFildAt(int i);
 	
 public:	
 	Relation* 	relationAt(int i);
-	Relation* 	relationByID(char* ID);
+    Relation* 	relationByID(string ID);
 	void    addRelation(Relation* r);          
 	void    popRelationAt(int i);
 };

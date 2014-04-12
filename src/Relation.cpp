@@ -1,7 +1,8 @@
 //=============================================================
 #include "Relation.h"
+#include "Entitie.h"
 //=============================================================
-char* Relation::getID(){
+string Relation::getID(){
     return this->relationID;
 }
 
@@ -29,7 +30,7 @@ bool Relation::getAbsL(){
     return this->AbstractL;
 }
 
-Relation::Relation(char* relationID,
+Relation::Relation(string relationID,
          Entitie* entitieR,
          Entitie* entitieL,
          bool MultiplicityR,

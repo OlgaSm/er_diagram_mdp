@@ -1,6 +1,6 @@
 #include "Field.h"
 
-Field::Field(char* ID){
+Field::Field(string ID){
     this->ID = ID;
 }
 
@@ -8,15 +8,15 @@ Field::~Field(){
 
 }
 
-char* Field::getID(){
+string Field::getID(){
     return this->ID;
 }
 
-void Field::setID(char* ID){
+void Field::setID(string ID){
     this->ID = ID;
 }
 
-int Field::getType(){
+Fild_Types Field::getType(){
     return BASE_FIELD;
 }
 
