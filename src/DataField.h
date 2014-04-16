@@ -1,22 +1,24 @@
-#ifndef DATAFILD_H
-#define DATAFILD_H
+#ifndef DATAFIELD_H
+#define DATAFIELD_H
 
-namespace ERdiagram{
+#include <string>
+#include Field.h
+
+using namespace std;
 
 template<class Type>
-class DataFild : Fild {
+class DataField : Field 
+{
 private:
 	Type value;
-	
-public:	
-	DataFild(char* ID, Type value);
-	~DataFild();
-	
-public:	
-	Type getValue();
-	void setValue(Type value);
-	char* getType();
+
+public:    
+    DataField(string id, Type val);
+    ~DataField();
+
+public:    
+    Type getValue();
+    void setValue(Type val);
 };
 
-}
-#endif // DATAFILD_H
+#endif

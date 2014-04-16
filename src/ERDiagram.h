@@ -1,30 +1,36 @@
 #ifndef ERDIAGRAM_H
 #define ERDIAGRAM_H
 
-namespace ERdiagram{
+#include <string>
+#include "List.h"
 
-class ERDiagram {
+using namespace std;
+
+class Entitie;
+class Relation;
+
+class ERDiagram 
+{
 private:
-	char* ID;
-	List<Entitie*> entities;
-	List<Relation*> relations;
+    string ID;
+    List<Entitie*> entities;
+    List<Relation*> relations;
 
 public:
-	ERDiagram();
-	~ERDiagram();
-	
-public:	
-	Relation* 	relationAt(int i);
-	Relation* 	relationByID(char* ID);
-	void    addRelation(Relation* r);          
-	void    popRelationAt(int i);
-	
-public:	
-	Entitie* 	entitieAt(int i);
-	Entitie* 	entitieByID(char* ID);
-	void    addEntitie(Entitie* e);          
-	void    popEntitieAt(int i);
+    ERDiagram(string id);
+    ~ERDiagram();
+
+public:    
+    Relation*     relationAt(int i);
+    Relation*     relationByID(string id);
+    void    addRelation(Relation* r);          
+    void    popRelationAt(int i);
+
+public:    
+    Entitie*     entitieAt(int i);
+    Entitie*     entitieByID(string id);
+    void    addEntitie(Entitie* e);          
+    void    popEntitieAt(int i);
 };
 
-}
-#endif // ERDIAGRAM_H
+#endif
