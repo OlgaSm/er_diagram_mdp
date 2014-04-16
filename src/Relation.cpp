@@ -45,8 +45,16 @@ Relation::Relation(string relationID,
     this->MultiplicityL = MultiplicityL;
     this->entitieL = entitieL;
     this->entitieR = entitieR;
+
+    this->entitieL->addRelation(this);
+    this->entitieR->addRelation(this);
 }
 
 Relation::~Relation(){
-
+    if(this->entitieL!=NULL){
+        this->entitieL->popRelationByID(this->relationID);
+    }
+    if(this->entitieR!=NULL){
+        this->entitieR->popRelationByID(this->relationID);
+    }
 }

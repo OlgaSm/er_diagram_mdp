@@ -12,7 +12,8 @@ Entitie::Entitie(string ID){
 }
 
 Entitie::~Entitie(){
-
+    delete(myfield);
+    delete(myRelations);
 }
 
 string Entitie::getID(){
@@ -23,11 +24,11 @@ void Entitie::setID(string ID){
     this->ID = ID;
 }
 
-Field* 	Entitie::fildAt(int i){
+Field* 	Entitie::fieldAt(int i){
     return this->myfield->at(i);
 }
 
-Field* 	Entitie::fildByID(string ID){
+Field* 	Entitie::fieldByID(string ID){
     for(int i=0; i<this->myfield->size(); i++){
         if(this->myfield->at(i)->getID()==ID){
             return this->myfield->at(i);
@@ -36,12 +37,34 @@ Field* 	Entitie::fildByID(string ID){
     return NULL;
 }
 
-void    Entitie::addFild(Field* f){
+void    Entitie::addField(Field* f){
     this->myfield->push_back(f);
 }
 
-void    Entitie::popFildAt(int i){
+void    Entitie::popFieldAt(int i){
     this->myfield->popAt(i);
+}
+
+void    Entitie::popFieldByID(string ID){
+    bool stop = false;
+    for(int i=0; i<this->myfield->size()&& stop==false; i++){
+        if(this->myfield->at(i)->getID()==ID){
+            this->popFieldAt(i);
+            stop=true;
+        }
+    }
+}
+
+int Entitie::fieldCount(){
+    return this->myfield->size();
+}
+
+bool Entitie::isFieldListEmpty(){
+    if(this->fieldCount()>0){
+        return false;
+    }else{
+        return true;
+    }
 }
 
 Relation* 	Entitie::relationAt(int i){
@@ -63,4 +86,26 @@ void    Entitie::addRelation(Relation* r){
 
 void    Entitie::popRelationAt(int i){
     this->myRelations->popAt(i);
+}
+
+void    Entitie::popRelationByID(string ID){
+    bool stop = false;
+    for(int i=0; i<this->myRelations->size() && stop==false; i++){
+        if(this->myRelations->at(i)->getID()==ID){
+            this->popRelationAt(i);
+            stop=true;
+        }
+    }
+}
+
+int Entitie::relationCount(){
+    return this->myRelations->size();
+}
+
+bool Entitie::isRelationListEmpty(){
+    if(this->relationCount()>0){
+        return false;
+    }else{
+        return true;
+    }
 }

@@ -25,16 +25,22 @@ public:
     void setID(string ID);
 	
 public:
-    Field* 	fildAt(int i);
-    Field* 	fildByID(string ID);
-    void    addFild(Field* f);
-	void    popFildAt(int i);
+    Field* 	fieldAt(int i);
+    Field* 	fieldByID(string ID);
+    void    addField(Field* f);
+    void    popFieldAt(int i);
+    void    popFieldByID(string ID);
+    int     fieldCount();
+    bool    isFieldListEmpty();
 	
 public:	
 	Relation* 	relationAt(int i);
     Relation* 	relationByID(string ID);
 	void    addRelation(Relation* r);          
-	void    popRelationAt(int i);
+    void    popRelationAt(int i);
+    void    popRelationByID(string ID);
+    int     relationCount();
+    bool    isRelationListEmpty();
 };
 
 #endif // ENTITIE_H

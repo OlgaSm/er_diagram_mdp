@@ -14,13 +14,13 @@ private:
      ListItem<T>* head;
 
 public:
-	List();                        
-	~List();                          
+    List();
+    ~List();
 
 public:
-	T at(int i);
+    T at(int i);
     int     size();
-	void    push_back(T value);          
+    void    push_back(T value);
     bool    popAt(int i);
 };
 
@@ -35,7 +35,8 @@ List<T>::List(){
 
 template<class T>
 List<T>::~List(){
-    this->head->~ListItem();
+    delete head;
+    head = 0;
 }
 
 template<class T>
@@ -91,7 +92,8 @@ bool List<T>::popAt(int i){
             ListItem<T>* li = this->head;
             this->head = this->head->getNext();
             li->setNext(0);
-            li->~ListItem();
+            //li->~ListItem();
+            delete(li);
             return true;
         }
         ListItem<T>* li0 = this->head;
@@ -100,7 +102,8 @@ bool List<T>::popAt(int i){
             if(j==i){
                 li0->setNext(li1->getNext());
                 li1->setNext(0);
-                li1->~ListItem();
+                //li1->~ListItem();
+                delete(li1);
                 return true;
             }
             li0 = li1;

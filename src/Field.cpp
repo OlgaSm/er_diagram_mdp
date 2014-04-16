@@ -16,7 +16,7 @@ void Field::setID(string ID){
     this->ID = ID;
 }
 
-Fild_Types Field::getType(){
+Field_Types Field::getType(){
     return BASE_FIELD;
 }
 

@@ -29,8 +29,9 @@ ListItem<Type>::ListItem(Type x){
 
 template<class Type>
 ListItem<Type>::~ListItem(){
-    if(this->next!=0 && this->next!=this){
-        this->next->~ListItem();
+    if(next != 0 && next != this) {
+        delete next;
+        next = 0;
     }
 }
 

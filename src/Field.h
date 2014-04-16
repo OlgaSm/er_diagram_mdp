@@ -7,7 +7,7 @@
 
 using namespace std;
 
-enum Fild_Types{
+enum Field_Types{
     BASE_FIELD,
     STRING_FIELD,
     INT_FIELD
@@ -25,7 +25,7 @@ public:
 public:
     string getID();
     void setID(string ID);
-    virtual Fild_Types getType();
+    virtual Field_Types getType();
 };
 
 #endif // FIELD_H
