@@ -4,6 +4,10 @@
 //=============================================================
 #include "List.h"
 #include "Field.h"
+#include "IntField.h"
+#include "DoubleField.h"
+#include "DataField.h"
+#include "StringField.h"
 #include "Relation.h"
 #include "Entitie.h"
 //=============================================================
@@ -55,14 +59,14 @@ int main(int argc, char *argv[])
         list->popAt(0);
         list->popAt(4);
         list->popAt(3);
-        for(int j=0; j<100000; j++){
-            for(int i=0; i<1000; i++){
-                list->push_back(1);
-            }
-            for(int i=0; i<1000; i++){
-                list->popAt(0);
-            }
-        }
+//        for(int j=0; j<100; j++){
+//            for(int i=0; i<10; i++){
+//                list->push_back(1);
+//            }
+//            for(int i=0; i<10; i++){
+//                list->popAt(0);
+//            }
+//        }
         printf("\n");
         for(int i=0; i<list->size(); i++){
             printf("%d ",list->at(i));
@@ -76,16 +80,57 @@ int main(int argc, char *argv[])
     printf("\n");
     Field* field = new Field("Test");
     printf("Field %s\n", field->getID().c_str());
-    printf("Field %d\n", field->getType());
+    printf("Field Type %d\n", field->getType());
     //=================================================
     printf("\n===================================================\n");
+
+    // IntField Test
+    //=================================================
+    printf("\n");
+    IntField* intfield = new IntField("Test1",1);
+    printf("IntField %s\n", intfield->getID().c_str());
+    printf("IntField Type %d\n", intfield->getType());
+    printf("IntField Value %d\n", intfield->getValue());
+    //=================================================
+    printf("\n===================================================\n");
+
+    // DoubleField Test
+    //=================================================
+    printf("\n");
+    DoubleField* doublefield = new DoubleField("Test2",2.2);
+    printf("DoubleField %s\n", doublefield->getID().c_str());
+    printf("DoubleField Type %d\n", doublefield->getType());
+    printf("DoubleField Value %e\n", doublefield->getValue());
+    //=================================================
+    printf("\n===================================================\n");
+
+    // StringField Test
+    //=================================================
+    printf("\n");
+    StringField* templatefield = new StringField("Test3","Value");
+    printf("StringField %s\n", templatefield->getID().c_str());
+    printf("StringField Type %d\n", templatefield->getType());
+    printf("StringField Value %s\n", templatefield->getValue().c_str());
+    //=================================================
+    printf("\n===================================================\n");
+
+    // TemplateField Test
+    //=================================================
+    printf("\n");
+    DataField<string>* stringfield = new DataField<string>("Test3","Value");
+    printf("TemplateField %s\n", stringfield->getID().c_str());
+    printf("TemplateField Type %d\n", stringfield->getType());
+    printf("TemplateField Value %s\n", stringfield->getValue().c_str());
+    //=================================================
+    printf("\n===================================================\n");
+
 
     // Entitie Test
     //=================================================
     Entitie* entitie1 = new Entitie("Test entitie 1");
     Entitie* entitie2 = new Entitie("Test entitie 2");
-    entitie1->addField(field);
-    entitie2->addField(field);
+    entitie1->addUserField(field);
+    entitie2->addUserField(field);
     printf("Field from entitie1 %s\n", entitie1->fieldAt(0)->getID().c_str());
     printf("Field from entitie2 %s\n", entitie2->fieldAt(0)->getID().c_str());
     //=================================================

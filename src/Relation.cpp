@@ -52,9 +52,9 @@ Relation::Relation(string relationID,
 
 Relation::~Relation(){
     if(this->entitieL!=NULL){
-        this->entitieL->popRelationByID(this->relationID);
+        this->entitieL->popRelationByID(this->relationID, false);
     }
     if(this->entitieR!=NULL){
-        this->entitieR->popRelationByID(this->relationID);
+        this->entitieR->popRelationByID(this->relationID, false);
     }
 }

@@ -2,6 +2,9 @@
 
 //=====================================================
 #include "Field.h"
+#include "IntField.h"
+#include "DoubleField.h"
+#include "StringField.h"
 #include "Relation.h"
 //=====================================================
 
@@ -12,6 +15,14 @@ Entitie::Entitie(string ID){
 }
 
 Entitie::~Entitie(){
+    for(int i=0; i<this->myfield->size(); i++){
+		delete(myfield->at(i));
+    }
+	for(int i=0; i<this->myRelations->size(); i++){
+        Relation* del = this->myRelations->at(i);
+        this->myRelations->popAt(i);
+        delete(del);
+    }
     delete(myfield);
     delete(myRelations);
 }
@@ -37,18 +48,32 @@ Field* 	Entitie::fieldByID(string ID){
     return NULL;
 }
 
-void    Entitie::addField(Field* f){
+void    Entitie::addUserField(Field* f){
     this->myfield->push_back(f);
 }
 
+void    Entitie::addIntField(int value){
+    this->myfield->push_back(new IntField("StandartInt",value));
+}
+
+void    Entitie::addDoubleField(double value){
+    this->myfield->push_back(new DoubleField("StandartDouble",value));
+}
+
+void    Entitie::addStringField(string value){
+    this->myfield->push_back(new StringField("StandartString",value));
+}
+
 void    Entitie::popFieldAt(int i){
-    this->myfield->popAt(i);
+	delete(this->myfield->at(i));
+	this->myfield->popAt(i);
 }
 
 void    Entitie::popFieldByID(string ID){
     bool stop = false;
     for(int i=0; i<this->myfield->size()&& stop==false; i++){
         if(this->myfield->at(i)->getID()==ID){
+			delete(this->myfield->at(i));
             this->popFieldAt(i);
             stop=true;
         }
@@ -84,15 +109,17 @@ void    Entitie::addRelation(Relation* r){
     this->myRelations->push_back(r);
 }
 
-void    Entitie::popRelationAt(int i){
+void    Entitie::popRelationAt(int i, bool deleteRelationAfterPoping){
     this->myRelations->popAt(i);
+    if(deleteRelationAfterPoping){ delete(this->myRelations->at(i)); }
 }
 
-void    Entitie::popRelationByID(string ID){
+void    Entitie::popRelationByID(string ID, bool deleteRelationAfterPoping){
     bool stop = false;
     for(int i=0; i<this->myRelations->size() && stop==false; i++){
         if(this->myRelations->at(i)->getID()==ID){
-            this->popRelationAt(i);
+            this->myRelations->popAt(i);
+            if(deleteRelationAfterPoping){ delete(this->myRelations->at(i)); }
             stop=true;
         }
     }

@@ -9,6 +9,9 @@ using namespace std;
 
 class Relation;
 class Field;
+class IntField;
+class DoubleField;
+class StringField;
 
 class Entitie {
 private:
@@ -27,7 +30,10 @@ public:
 public:
     Field* 	fieldAt(int i);
     Field* 	fieldByID(string ID);
-    void    addField(Field* f);
+    void    addUserField(Field* f);
+    void    addIntField(int value);
+    void    addDoubleField(double value);
+    void    addStringField(string value);
     void    popFieldAt(int i);
     void    popFieldByID(string ID);
     int     fieldCount();
@@ -37,8 +43,8 @@ public:
 	Relation* 	relationAt(int i);
     Relation* 	relationByID(string ID);
 	void    addRelation(Relation* r);          
-    void    popRelationAt(int i);
-    void    popRelationByID(string ID);
+    void    popRelationAt(int i, bool deleteRelationAfterPoping);
+    void    popRelationByID(string ID, bool deleteRelationAfterPoping);
     int     relationCount();
     bool    isRelationListEmpty();
 };

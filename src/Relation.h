@@ -33,7 +33,7 @@ public:
              bool MultiplicityL,
              bool AbstractR,
              bool AbstractL);
-	~Relation();
+    ~Relation();
 };
 
 #endif // RELATION_H

@@ -10,7 +10,9 @@ using namespace std;
 enum Field_Types{
     BASE_FIELD,
     STRING_FIELD,
-    INT_FIELD
+    INT_FIELD,
+    DOUBLE_FIELD,
+	TEMPLATE_FILD
 };
 
 class Field {
@@ -20,7 +22,7 @@ private:
 	
 public:
     Field(string ID);
-    ~Field();
+    virtual ~Field();
 	
 public:
     string getID();
