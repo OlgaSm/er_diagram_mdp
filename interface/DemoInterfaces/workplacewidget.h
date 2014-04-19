@@ -13,7 +13,7 @@ private:
     Core* core;
     void paintDesk();
     void drawEntitie(Entitie* e, bool focus);
-    void drawRelation(Relation* r);
+    void drawRelation(Relation* r, bool focus);
     void calculateEntitie(Entitie* e);
 
 public:

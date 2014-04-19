@@ -8,7 +8,7 @@
         this->content = new ERDiagram("Common");
         this->state = 0;
         this->focus = -1;
-        //this->e = NULL;
+        this->focusEntitieOrRelation = true;
     }
 
 //    Core::~Core(){
@@ -88,11 +88,17 @@
     }
 
     void Core::spotFocus(){
-        for(int i=0; i<this->content->getEntitieCount(); i++){
-            if(this->focus!=i){
+        if(this->focusEntitieOrRelation){
+            for(int i=0; i<this->content->getEntitieCount(); i++){
+                if(this->focus!=i){
+                    ((IntField*)(this->content->entitieAt(i)->fieldByID("F")))->setValue(0);
+                }else{
+                    ((IntField*)(this->content->entitieAt(i)->fieldByID("F")))->setValue(1);
+                }
+            }
+        }else{
+            for(int i=0; i<this->content->getEntitieCount(); i++){
                 ((IntField*)(this->content->entitieAt(i)->fieldByID("F")))->setValue(0);
-            }else{
-                ((IntField*)(this->content->entitieAt(i)->fieldByID("F")))->setValue(1);
             }
         }
     }
@@ -102,13 +108,13 @@
         spotFocus();
     }
 
-//    Entitie* Core::getSavedEntitie(){
-//        return this->e;
-//    }
+    bool Core::getFocusObj(){
+        return this->focusEntitieOrRelation;
+    }
 
-//    void Core::SaveEntitie(Entitie* e){
-//        this->e=e;
-//    }
+    void Core::setFocusObj(bool feor){
+        this->focusEntitieOrRelation = feor;
+    }
 
 //    List<string>* Core::getBestWay(Entitie* e1, Entitie* e2){
 //        return NULL;

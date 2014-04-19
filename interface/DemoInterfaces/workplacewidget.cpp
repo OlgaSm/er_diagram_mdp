@@ -34,7 +34,7 @@ void WorkPlaceWidget::paintEvent(QPaintEvent *){
 void WorkPlaceWidget::paintDesk(){
     this->core->spotFocus();
     for(int i=0; i<this->core->getEntitieCount(); i++){
-       this->drawEntitie(this->core->getEntitieAt(i),(i==this->core->getFocus()));
+       this->drawEntitie(this->core->getEntitieAt(i),(i==this->core->getFocus() && this->core->getFocusObj()));
     }
 }
 
@@ -64,33 +64,63 @@ void WorkPlaceWidget::drawEntitie(Entitie* e, bool focus){
        painter.drawText(tr,field.c_str());
     }
     for(int i=0; i<e->relationCount(); i++){
-        drawRelation(e->relationAt(i));
+        drawRelation(e->relationAt(i),(i==this->core->getFocus() && !this->core->getFocusObj()));
     }
 }
 
-void WorkPlaceWidget::drawRelation(Relation* r){
+void WorkPlaceWidget::drawRelation(Relation* r, bool focus){
     QPainter painter(this);
+    QColor color ( 128,128,128 );
+
+    painter.setBrush ( palette().background() );
+
     Entitie* eR = r->getEntR();
     Entitie* eL = r->getEntL();
     int indexR = 0;
     int indexL = 0;
-    for(int i=0; eR->fieldCount() && indexR==0; i++){
-        if(eR->fieldAt(i)->getID()==r->getKey()){
-            indexR = i;
+    for(int j=0; j<eR->fieldCount() && indexR==0; j++){
+        if(eR->fieldAt(j)->getID()==r->getKey()){
+            indexR = j;
         }
     }
-    for(int i=0; eL->fieldCount() && indexL==0; i++){
-        if(eL->fieldAt(i)->getID()==r->getKey()){
-            indexL = i;
+    for(int j=0; j<eL->fieldCount() && indexL==0; j++){
+        if(eL->fieldAt(j)->getID()==r->getKey()){
+            indexL = j;
         }
     }
     int x1 = ((IntField*)eR->fieldByID("X"))->getValue();
     int y1 = ((IntField*)eR->fieldByID("Y"))->getValue();
     int x2 = ((IntField*)eL->fieldByID("X"))->getValue();
     int y2 = ((IntField*)eL->fieldByID("Y"))->getValue();
-    QPointF p1(x1+5,y1+(indexR+1)*24);
-    QPointF p2(x2+5,y2+(indexL+1)*24);
+    int x01 = x1+5;
+    int y01 = y1+(indexR+1)*24;
+    int x02 = x2+5;
+    int y02 = y2+(indexL+1)*24;
+    int x0 = 0;
+    int y0 = 0;
+    QPointF p1(x01,y01);
+    QPointF p2(x02,y02);
+    if(x01>x02){
+        x0 = x02 + (x01 - x02)/2;
+    }else{
+        x0 = x01 + (x02 - x01)/2;
+    }
+    if(y01>y02){
+        y0 = y02 + (y01 - y02)/2;
+    }else{
+        y0 = y01 + (y02 - y01)/2;
+    }
+    QPointF p0(x0,y0);
     painter.drawLine(p1,p2);
+    if(focus){
+        QPointF p1(x1+5+1,y1+(indexR+1)*24-1);
+        QPointF p2(x2+5+1,y2+(indexL+1)*24-1);
+        painter.drawLine(p1,p2);
+        QPointF p3(x1+5-1,y1+(indexR+1)*24+1);
+        QPointF p4(x2+5-1,y2+(indexL+1)*24+1);
+        painter.drawLine(p3,p4);
+    }
+    painter.drawEllipse(p0, 10, 10);
 }
 
 void WorkPlaceWidget::calculateEntitie(Entitie* e){
@@ -182,6 +212,68 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
            int h = ((IntField*)e->fieldByID("H"))->getValue();
            if((x<pe->x())&&(y<pe->y())&&(w+x>pe->x())&&(h+y>pe->y())){
                core->setFocus(i);
+               core->setFocusObj(true);
+           }
+        }
+        for(int i=0; i<this->core->getRelationCount(); i++){
+           Relation* r = this->core->getRelationAt(i);
+           Entitie* eR = r->getEntR();
+           Entitie* eL = r->getEntL();
+
+           int indexR = 0;
+           int indexL = 0;
+           for(int j=0; j<eR->fieldCount() && indexR==0; j++){
+               if(eR->fieldAt(j)->getID()==r->getKey()){
+                   indexR = j;
+               }
+           }
+           for(int j=0; j<eL->fieldCount() && indexL==0; j++){
+               if(eL->fieldAt(j)->getID()==r->getKey()){
+                   indexL = j;
+               }
+           }
+           int x1 = ((IntField*)eR->fieldByID("X"))->getValue();
+           int y1 = ((IntField*)eR->fieldByID("Y"))->getValue();
+           int x2 = ((IntField*)eL->fieldByID("X"))->getValue();
+           int y2 = ((IntField*)eL->fieldByID("Y"))->getValue();
+           x1 = x1+5;
+           y1 = y1+(indexR+1)*24;
+           x2 = x2+5;
+           y2 = y2+(indexL+1)*24;
+//           int x1_1 = x1+3;
+//           int y1_1 = y1-3;
+//           int x2_1 = x2+3;
+//           int y2_1 = y2-3;
+//           int x1_2 = x1-3;
+//           int y1_2 = y1+3;
+//           int x2_2 = x2-3;
+//           int y2_2 = y2+3;
+           int x = pe->x();
+           int y = pe->y();
+
+           int x0 = 0;
+           int y0 = 0;
+           if(x1>x2){
+               x0 = x2 + (x1 - x2)/2;
+           }else{
+               x0 = x1 + (x2 - x1)/2;
+           }
+           if(y1>y2){
+               y0 = y2 + (y1 - y2)/2;
+           }else{
+               y0 = y1 + (y2 - y1)/2;
+           }
+           if((((x1>x2)&&(x2<x)&&(x1>x))||((x1<x2)&&(x2>x)&&(x1<x)))
+           &&(((y1>y2)&&(y2<y)&&(y1>y))||((y1<y2)&&(y2>y)&&(y1<y)))){
+               if(x<x0+10 && x>x0-10 && y>y0-10 && y<y0+10){
+                   core->setFocus(i);
+                   core->setFocusObj(false);
+               }
+//               if((((x1 > x2 && y1 > y2)||(x1 < x2 && y1 > y2))&&(y<=(y1_1-((x1_1-x)*(y1_1-y2_1)/(x1_1-x2_1))))&&(y>=(y1_2-((x1_2-x)*(y1_2-y2_2)/(x1_2-x2_2)))))
+//               ||(((x1 < x2 && y1 < y2)||(x1 > x2 && y1 < y2))&&(y>=(y1_1-((x1_1-x)*(y1_1-y2_1)/(x1_1-x2_1))))&&(y<=(y1_2-((x1_2-x)*(y1_2-y2_2)/(x1_2-x2_2)))))){
+//                   core->setFocus(i);
+//                   core->setFocusObj(false);
+//               }
            }
         }
         core->spotFocus();

@@ -19,7 +19,7 @@ private:
     // 2 - Выделить
     // 3 - Указатель
     // 4 - Удалить
-    //Entitie* e;
+    bool focusEntitieOrRelation;
 
 public:
 	Core();
@@ -42,8 +42,8 @@ public:
     void setState(int state);
     void setFocus(int focus);
     void spotFocus();
-    //Entitie* getSavedEntitie();
-    //void SaveEntitie(Entitie* e);
+    bool getFocusObj();
+    void setFocusObj(bool feor);
 
 };
 
