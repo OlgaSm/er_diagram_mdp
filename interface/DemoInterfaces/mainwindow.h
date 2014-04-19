@@ -8,6 +8,7 @@
 #include <QLabel>
 #include <QTabWidget>
 #include "Contaner/Core.h"
+#include "workplacewidget.h"
 
 class MainWindow : public QWidget{
 
@@ -17,6 +18,8 @@ private:
     QMenu* pmenu;
     QBoxLayout* qbl;
     QTabWidget* qtw;
+    WorkPlaceWidget* w11;
+    WorkPlaceWidget* w12;
 
     QWidget* tab1;
     QWidget* tab2;

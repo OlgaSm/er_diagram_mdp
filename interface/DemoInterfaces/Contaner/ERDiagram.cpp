@@ -73,8 +73,8 @@ void ERDiagram::popEntitieAt (int i)
 	this->entities->popAt(i);
 }
 
-void    ERDiagram::addRelation(string fieldID, Entitie* entitieR, Entitie* entitieL, bool MultiplicityR, bool MultiplicityL, bool AbstractR, bool AbstractL){
-    this->relations->push_back(new Relation(fieldID, entitieR, entitieL, MultiplicityR, MultiplicityL, AbstractR, AbstractL));
+void    ERDiagram::addRelation(string fieldID, string key, Entitie* entitieR, Entitie* entitieL, bool MultiplicityR, bool MultiplicityL, bool AbstractR, bool AbstractL){
+    this->relations->push_back(new Relation(fieldID, key, entitieR, entitieL, MultiplicityR, MultiplicityL, AbstractR, AbstractL));
 }
 
 void    ERDiagram::addEntitie(string ID){

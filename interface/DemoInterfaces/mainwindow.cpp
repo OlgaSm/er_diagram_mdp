@@ -52,7 +52,7 @@ MainWindow::MainWindow(QWidget *parent)
     //this->qbl->addStretch();
 
     //==============================================
-    WorkPlaceWidget* w11 = new WorkPlaceWidget();
+    this->w11 = new WorkPlaceWidget();
     w11->setCore(this->core);
     w11->setFrameStyle(QFrame::Panel);
     QWidget* w21 = new QWidget();
@@ -75,7 +75,7 @@ MainWindow::MainWindow(QWidget *parent)
         blt->addStretch();
         w21->layout()->addWidget(pb4);
     //==============================================
-        WorkPlaceWidget* w12 = new WorkPlaceWidget();
+        this->w12 = new WorkPlaceWidget();
         w12->setCore(this->core);
         w12->setFrameStyle(QFrame::Panel);
         QWidget* w22 = new QWidget();
@@ -121,25 +121,31 @@ MainWindow::~MainWindow()
 void MainWindow::button1Pressed(){
     this->state->setText("Сущность");
     this->core->setState(0);
+    this->w11->repaint();
 }
 
 void MainWindow::button2Pressed(){
     this->state->setText("Связь");
     this->core->setState(1);
+    this->core->setFocus(-1);
+    this->w11->repaint();
 }
 
 void MainWindow::button3Pressed(){
     this->state->setText("Выделить");
     this->core->setState(2);
+    this->w11->repaint();
 }
 
 void MainWindow::button4Pressed(){
     this->state->setText("Указатель");
     this->core->setState(3);
+    this->w11->repaint();
 }
 
 void MainWindow::button5Pressed(){
     this->state->setText("Удалить");
     this->core->setState(4);
+    this->w11->repaint();
 }
 

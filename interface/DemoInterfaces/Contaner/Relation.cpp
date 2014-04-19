@@ -30,7 +30,12 @@ bool Relation::getAbsL(){
     return this->AbstractL;
 }
 
+string Relation::getKey(){
+    return this->key;
+}
+
 Relation::Relation(string relationID,
+         string key,
          Entitie* entitieR,
          Entitie* entitieL,
          bool MultiplicityR,
@@ -39,6 +44,7 @@ Relation::Relation(string relationID,
          bool AbstractL){
 
     this->relationID = relationID;
+    this->key = key;
     this->AbstractL = AbstractL;
     this->AbstractR = AbstractR;
     this->MultiplicityR = MultiplicityR;

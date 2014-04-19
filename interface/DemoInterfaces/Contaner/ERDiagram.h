@@ -26,6 +26,7 @@ public:
     int     getRelationCount();
     void    addUserRelation(Relation* r);   
 	void    addRelation(string fieldID,
+                        string key,
 						Entitie* entitieR,
 						Entitie* entitieL,
 						bool MultiplicityR,

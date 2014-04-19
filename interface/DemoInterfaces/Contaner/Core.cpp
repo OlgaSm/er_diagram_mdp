@@ -7,7 +7,8 @@
     Core::Core(){
         this->content = new ERDiagram("Common");
         this->state = 0;
-        this->focus = 0;
+        this->focus = -1;
+        //this->e = NULL;
     }
 
 //    Core::~Core(){
@@ -22,9 +23,9 @@
 
 //    }
 
-//    void Core::addRelation(Entitie* e1, Entitie* e2){
-
-//    }
+    void Core::addRelation(Entitie* e1, Entitie* e2, string id, string key){
+        this->content->addRelation(id,key,e1,e2,false,false,false,false);
+    }
 
     void Core::addEntitie(string name){
         Entitie* e = new Entitie(name);
@@ -100,6 +101,15 @@
         this->focus=focus;
         spotFocus();
     }
+
+//    Entitie* Core::getSavedEntitie(){
+//        return this->e;
+//    }
+
+//    void Core::SaveEntitie(Entitie* e){
+//        this->e=e;
+//    }
+
 //    List<string>* Core::getBestWay(Entitie* e1, Entitie* e2){
 //        return NULL;
 //    }
