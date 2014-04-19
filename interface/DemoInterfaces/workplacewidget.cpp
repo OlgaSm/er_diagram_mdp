@@ -157,7 +157,7 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
             //core->e= this->core->getEntitieCount(focus);
             core->setFocus(focus);
         }else{
-            if(focus!=this->core->getFocus()){
+            if(focus!=this->core->getFocus() && focus!=-1){
                 string name;
                 int num = this->core->getRelationCount();
                 char str[255];
