@@ -14,7 +14,29 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    workplacewidget.cpp
+    workplacewidget.cpp \
+    Contaner/Core.cpp \
+    Contaner/DoubleField.cpp \
+    Contaner/Entitie.cpp \
+    Contaner/ERDiagram.cpp \
+    Contaner/Field.cpp \
+    Contaner/IntField.cpp \
+    Contaner/Relation.cpp \
+    Contaner/StringField.cpp
 
 HEADERS  += mainwindow.h \
-    workplacewidget.h
+    workplacewidget.h \
+    Contaner/Core.h \
+    Contaner/DataField.h \
+    Contaner/DoubleField.h \
+    Contaner/Entitie.h \
+    Contaner/ERDiagram.h \
+    Contaner/Field.h \
+    Contaner/IntField.h \
+    Contaner/List.h \
+    Contaner/ListItem.h \
+    Contaner/Relation.h \
+    Contaner/StringField.h
+
+OTHER_FILES += \
+    Contaner/ReadMe.txt

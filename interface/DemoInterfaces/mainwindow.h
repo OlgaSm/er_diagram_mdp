@@ -5,7 +5,9 @@
 #include <QMenuBar>
 #include <QMenu>
 #include <QBoxLayout>
+#include <QLabel>
 #include <QTabWidget>
+#include "Contaner/Core.h"
 
 class MainWindow : public QWidget{
 
@@ -19,9 +21,19 @@ private:
     QWidget* tab1;
     QWidget* tab2;
 
+    QLabel* state;
+    Core* core;
+
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+public slots:
+    void button1Pressed();
+    void button2Pressed();
+    void button3Pressed();
+    void button4Pressed();
+    void button5Pressed();
 };
 
 #endif // MAINWINDOW_H
