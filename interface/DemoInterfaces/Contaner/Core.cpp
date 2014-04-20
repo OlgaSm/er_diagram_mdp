@@ -9,6 +9,10 @@
         this->state = 0;
         this->focus = -1;
         this->focusEntitieOrRelation = true;
+        this->counter = 0;
+    }
+    int Core::getCounter(){
+        return this->counter++;
     }
 
 //    Core::~Core(){
@@ -22,6 +26,22 @@
 //    void Core::loadProject(string file){
 
 //    }
+
+    void Core::popRelationAt(int n){
+        this->content->popRelationAt(n,true);
+    }
+
+    void Core::popRelationByID(string ID){
+        this->content->popRelationByID(ID,true);
+    }
+
+    void Core::popEntitieAt(int n){
+        this->content->popEntitieAt(n);
+    }
+
+    void Core::popEntitieByID(string ID){
+        this->content->popEntitieByID(ID);
+    }
 
     void Core::addRelation(Entitie* e1, Entitie* e2, string id, string key){
         this->content->addRelation(id,key,e1,e2,false,false,false,false);
@@ -101,6 +121,10 @@
                 ((IntField*)(this->content->entitieAt(i)->fieldByID("F")))->setValue(0);
             }
         }
+    }
+
+    void Core::addRelation(Relation* r){
+        this->content->addUserRelation(r);
     }
 
     void Core::setFocus(int focus){

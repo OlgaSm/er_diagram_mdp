@@ -9,6 +9,8 @@
 WorkPlaceWidget::WorkPlaceWidget(QWidget *parent) :
     QFrame(parent){
     this->core = new Core();
+    this->setMinimumHeight(500);
+    this->setMinimumWidth(500);
 }
 
 //WorkPlaceWidget::paintEvent(QPaintEvent pe){
@@ -35,6 +37,9 @@ void WorkPlaceWidget::paintDesk(){
     this->core->spotFocus();
     for(int i=0; i<this->core->getEntitieCount(); i++){
        this->drawEntitie(this->core->getEntitieAt(i),(i==this->core->getFocus() && this->core->getFocusObj()));
+    }
+    for(int i=0; i<this->core->getRelationCount(); i++){
+        drawRelation(this->core->getRelationAt(i),((i==this->core->getFocus())&&(!this->core->getFocusObj())));
     }
 }
 
@@ -63,14 +68,11 @@ void WorkPlaceWidget::drawEntitie(Entitie* e, bool focus){
        QRect tr(x+5,y+5+(i+1)*20,w-10,h-10);
        painter.drawText(tr,field.c_str());
     }
-    for(int i=0; i<e->relationCount(); i++){
-        drawRelation(e->relationAt(i),(i==this->core->getFocus() && !this->core->getFocusObj()));
-    }
 }
 
 void WorkPlaceWidget::drawRelation(Relation* r, bool focus){
     QPainter painter(this);
-    QColor color ( 128,128,128 );
+    //QColor color ( 128,128,128 );
 
     painter.setBrush ( palette().background() );
 
@@ -138,6 +140,7 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
         //=====================================================
         string name;
         int num = this->core->getEntitieCount();
+        //int num = this->core->getCounter();
         char str[255];
         sprintf(str, "Entitie № %d", num);
         name = (const char*)str;
@@ -189,7 +192,7 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
         }else{
             if(focus!=this->core->getFocus() && focus!=-1){
                 string name;
-                int num = this->core->getRelationCount();
+                int num = this->core->getCounter();
                 char str[255];
                 sprintf(str, "Relation № %d", num);
                 name = (const char*)str;
@@ -263,17 +266,12 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
            }else{
                y0 = y1 + (y2 - y1)/2;
            }
-           if((((x1>x2)&&(x2<x)&&(x1>x))||((x1<x2)&&(x2>x)&&(x1<x)))
-           &&(((y1>y2)&&(y2<y)&&(y1>y))||((y1<y2)&&(y2>y)&&(y1<y)))){
+           if((((x1>x2)&&(x2<=x)&&(x1>=x))||((x1<=x2)&&(x2>=x)&&(x1<=x)))
+           &&(((y1>y2)&&(y2<=y)&&(y1>=y))||((y1<=y2)&&(y2>=y)&&(y1<=y)))){
                if(x<x0+10 && x>x0-10 && y>y0-10 && y<y0+10){
                    core->setFocus(i);
                    core->setFocusObj(false);
                }
-//               if((((x1 > x2 && y1 > y2)||(x1 < x2 && y1 > y2))&&(y<=(y1_1-((x1_1-x)*(y1_1-y2_1)/(x1_1-x2_1))))&&(y>=(y1_2-((x1_2-x)*(y1_2-y2_2)/(x1_2-x2_2)))))
-//               ||(((x1 < x2 && y1 < y2)||(x1 > x2 && y1 < y2))&&(y>=(y1_1-((x1_1-x)*(y1_1-y2_1)/(x1_1-x2_1))))&&(y<=(y1_2-((x1_2-x)*(y1_2-y2_2)/(x1_2-x2_2)))))){
-//                   core->setFocus(i);
-//                   core->setFocusObj(false);
-//               }
            }
         }
         core->spotFocus();

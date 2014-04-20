@@ -19,9 +19,9 @@ Entitie::~Entitie(){
 		delete(myfield->at(i));
     }
 	for(int i=0; i<this->myRelations->size(); i++){
-        Relation* del = this->myRelations->at(i);
+        delete(this->myRelations->at(i));
         this->myRelations->popAt(i);
-        delete(del);
+
     }
     delete(myfield);
     delete(myRelations);
@@ -118,8 +118,8 @@ void    Entitie::popRelationByID(string ID, bool deleteRelationAfterPoping){
     bool stop = false;
     for(int i=0; i<this->myRelations->size() && stop==false; i++){
         if(this->myRelations->at(i)->getID()==ID){
-            this->myRelations->popAt(i);
             if(deleteRelationAfterPoping){ delete(this->myRelations->at(i)); }
+            this->myRelations->popAt(i);
             stop=true;
         }
     }

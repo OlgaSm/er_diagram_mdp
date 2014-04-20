@@ -22,7 +22,9 @@ SOURCES += main.cpp\
     Contaner/Field.cpp \
     Contaner/IntField.cpp \
     Contaner/Relation.cpp \
-    Contaner/StringField.cpp
+    Contaner/StringField.cpp \
+    entitiecustomewidget.cpp \
+    lineoffield.cpp
 
 HEADERS  += mainwindow.h \
     workplacewidget.h \
@@ -36,7 +38,9 @@ HEADERS  += mainwindow.h \
     Contaner/List.h \
     Contaner/ListItem.h \
     Contaner/Relation.h \
-    Contaner/StringField.h
+    Contaner/StringField.h \
+    entitiecustomewidget.h \
+    lineoffield.h
 
 OTHER_FILES += \
     Contaner/ReadMe.txt

@@ -33,7 +33,8 @@ public:
 						bool MultiplicityL,
 						bool AbstractR,
 						bool AbstractL);  	
-    void    popRelationAt(int i);
+    void    popRelationAt(int i, bool del);
+    void    popRelationByID(string ID, bool del);
 
 public:
     int          getEntitieCount();
@@ -42,6 +43,7 @@ public:
     void    addUserEntitie(Entitie* e);   
 	void    addEntitie(string ID);
     void    popEntitieAt(int i);
+    void    popEntitieByID(string ID);
 };
 
 #endif

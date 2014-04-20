@@ -11,6 +11,7 @@
 #include "workplacewidget.h"
 #include "Contaner/Entitie.h"
 #include "Contaner/IntField.h"
+#include "entitiecustomewidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
@@ -18,7 +19,6 @@ MainWindow::MainWindow(QWidget *parent)
     // Модель данных
     //===============================================
     this->core = new Core();
-    //core->addEntitie("Entitie1");
     //===============================================
 
     // Настройка
@@ -59,20 +59,27 @@ MainWindow::MainWindow(QWidget *parent)
     this->tab1->layout()->addWidget(w11);
     this->tab1->layout()->addWidget(w21);
     QBoxLayout* blt = new QBoxLayout(QBoxLayout::TopToBottom);
+    w21->setMaximumWidth(400);
     w21->setLayout(blt);
+    //==============================================
+    this->ecw = new EntitieCustomeWidget();
+    ecw->setCore(this->core);
     //==============================================
     QPushButton* pb0 = new QPushButton("Сущность");
     QPushButton* pb1 = new QPushButton("Связь");
     QPushButton* pb2 = new QPushButton("Выделить");
     QPushButton* pb3 = new QPushButton("Указатель");
     QPushButton* pb4 = new QPushButton("Удалить");
+    QPushButton* pb5 = new QPushButton("Сохранить");
     //==============================================
         //this->tab1->setStyleSheet("border: 1px solid black");
         w21->layout()->addWidget(pb0);
         w21->layout()->addWidget(pb1);
         w21->layout()->addWidget(pb2);
         w21->layout()->addWidget(pb3);
-        blt->addStretch();
+        w21->layout()->addWidget(ecw);
+        //blt->addStretch();
+        w21->layout()->addWidget(pb5);
         w21->layout()->addWidget(pb4);
     //==============================================
         this->w12 = new WorkPlaceWidget();
@@ -82,6 +89,7 @@ MainWindow::MainWindow(QWidget *parent)
         this->tab2->layout()->addWidget(w12);
         this->tab2->layout()->addWidget(w22);
         QBoxLayout* blt2 = new QBoxLayout(QBoxLayout::TopToBottom);
+        w22->setMaximumWidth(400);
         w22->setLayout(blt2);
         //==============================================
             //this->tab1->setStyleSheet("border: 1px solid black");
@@ -92,17 +100,7 @@ MainWindow::MainWindow(QWidget *parent)
             blt2->addStretch();
             w22->layout()->addWidget(new QPushButton("Отправить посылку"));
     //==============================================
-
-
-    //w11->addWidget(new Image);
     this->setLayout(qbl);
-
-
-//  QPushButton pb0 = new QPushButton("Сущность");
-//  QPushButton pb1 = new QPushButton("Связь");
-//  QPushButton pb2 = new QPushButton("Выделить");
-//  QPushButton pb3 = new QPushButton("Указатель");
-//  QPushButton pb4 = new QPushButton("Удалить");
     // Соединение со сингналов со слотами
     //==============================================
     QObject::connect(pb0,SIGNAL(clicked()),this,SLOT(button1Pressed()));
@@ -110,6 +108,7 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(pb2,SIGNAL(clicked()),this,SLOT(button3Pressed()));
     QObject::connect(pb3,SIGNAL(clicked()),this,SLOT(button4Pressed()));
     QObject::connect(pb4,SIGNAL(clicked()),this,SLOT(button5Pressed()));
+    QObject::connect(pb5,SIGNAL(clicked()),this,SLOT(button6Pressed()));
 }
 
 MainWindow::~MainWindow()
@@ -121,6 +120,8 @@ MainWindow::~MainWindow()
 void MainWindow::button1Pressed(){
     this->state->setText("Сущность");
     this->core->setState(0);
+    this->core->setFocus(-1);
+    this->core->setFocusObj(true);
     this->w11->repaint();
 }
 
@@ -128,6 +129,7 @@ void MainWindow::button2Pressed(){
     this->state->setText("Связь");
     this->core->setState(1);
     this->core->setFocus(-1);
+    this->core->setFocusObj(true);
     this->w11->repaint();
 }
 
@@ -144,8 +146,45 @@ void MainWindow::button4Pressed(){
 }
 
 void MainWindow::button5Pressed(){
-    this->state->setText("Удалить");
-    this->core->setState(4);
-    this->w11->repaint();
+    if(this->core->getFocus()!=-1){
+        this->state->setText("Удалить");
+        //this->core->setState(4);
+        if(core->getFocusObj()){
+            this->core->popEntitieAt(this->core->getFocus());
+        }else{
+            this->core->popRelationAt(this->core->getFocus());
+        }
+        this->core->setFocus(-1);
+        this->core->setFocusObj(false);
+        this->w11->repaint();
+    }
+}
+
+void MainWindow::button6Pressed(){
+    if(this->core->getFocus()!=-1){
+        this->state->setText("Сохранить");
+        if(core->getFocusObj()){
+            //this->core->popEntitieAt(this->core->getFocus());
+        }else{
+            Relation* r = this->core->getRelationAt(core->getFocus());
+            string name;
+            int num = this->core->getCounter();
+            char str[255];
+            sprintf(str, "Relation № %d", num);
+            name = (const char*)str;
+            Relation* nr = new Relation(name,
+                                        this->ecw->key->text().toStdString(),
+                                        r->getEntL(),r->getEntR(),
+                                        this->ecw->mr->isChecked(),
+                                        this->ecw->ml->isChecked(),
+                                        this->ecw->ar->isChecked(),
+                                        this->ecw->al->isChecked());
+            this->core->popRelationByID(r->getID());
+            //delete(r);
+            this->core->addRelation(nr);
+            //this->ecw
+        }
+        this->w11->repaint();
+    }
 }
 

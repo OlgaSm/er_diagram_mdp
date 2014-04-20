@@ -9,6 +9,7 @@
 #include <QTabWidget>
 #include "Contaner/Core.h"
 #include "workplacewidget.h"
+#include "entitiecustomewidget.h"
 
 class MainWindow : public QWidget{
 
@@ -20,6 +21,7 @@ private:
     QTabWidget* qtw;
     WorkPlaceWidget* w11;
     WorkPlaceWidget* w12;
+    EntitieCustomeWidget* ecw;
 
     QWidget* tab1;
     QWidget* tab2;
@@ -37,6 +39,7 @@ public slots:
     void button3Pressed();
     void button4Pressed();
     void button5Pressed();
+    void button6Pressed();
 };
 
 #endif // MAINWINDOW_H
