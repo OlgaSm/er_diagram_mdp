@@ -7,12 +7,10 @@
 #include <QBoxLayout>
 #include <QLabel>
 #include <QTimer>
-#include <QCheckBox>
 #include "lineoffield.h"
 #include "Contaner/Core.h"
 #include "Contaner/ERDiagram.h"
 #include "Contaner/Entitie.h"
-#include "Contaner/Relation.h"
 #include "workplacewidget.h"
 
 class EntitieCustomeWidget : public QWidget
@@ -21,21 +19,11 @@ class EntitieCustomeWidget : public QWidget
 private:
     Core* core;
     int curFocus;
-    bool curObj;
 
 public:
     explicit EntitieCustomeWidget(QWidget *parent = 0);
     void setCore(Core* core);
     Core* getCore();
-    QBoxLayout* qbl;
-    QLabel* entitieName;
-    QLineEdit* tb;
-    QLineEdit* key;
-    QTimer* timer;
-    QCheckBox* ml;
-    QCheckBox* mr;
-    QCheckBox* al;
-    QCheckBox* ar;
 
 signals:
 

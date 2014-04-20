@@ -14,7 +14,6 @@ private:
 	ERDiagram* content;
     int focus;
     int state;
-    int counter;
     // 0 - Сущность
     // 1 - Связь
     // 2 - Выделить
@@ -27,7 +26,6 @@ public:
 	~Core();
     void saveProject(string file);
     void loadProject(string file);
-    void addRelation(Relation* r);
     void addRelation(Entitie* e1, Entitie* e2, string id, string key);
     void addEntitie(string name);
     void addEntitieTo(string name, int x, int y);
@@ -38,12 +36,11 @@ public:
     void popEntitieByID(string ID);
     int getEntitieCount();
     int getRelationCount();
-    int getCounter();
     Entitie* getEntitieByID(string name);
     Relation* getRelationByID(string name);
     Entitie* getEntitieAt(int n);
     Relation* getRelationAt(int n);
-    List<string>* getBestWay(Entitie* e1, Entitie* e2);
+    List<string>* getBestWay();
     int getState();
     int getFocus();
     void setState(int state);

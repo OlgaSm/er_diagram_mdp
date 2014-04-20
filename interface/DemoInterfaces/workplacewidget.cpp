@@ -140,7 +140,6 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
         //=====================================================
         string name;
         int num = this->core->getEntitieCount();
-        //int num = this->core->getCounter();
         char str[255];
         sprintf(str, "Entitie № %d", num);
         name = (const char*)str;
@@ -192,7 +191,6 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
         }else{
             if(focus!=this->core->getFocus() && focus!=-1){
                 string name;
-                int num = this->core->getCounter();
                 char str[255];
                 sprintf(str, "Relation № %d", num);
                 name = (const char*)str;
