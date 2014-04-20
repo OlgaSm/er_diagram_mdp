@@ -169,6 +169,8 @@ void MainWindow::button6Pressed(){
         this->state->setText("Сохранить");
         if(core->getFocusObj()){
             //this->core->popEntitieAt(this->core->getFocus());
+            Entitie* e = this->core->getEntitieAt(core->getFocus());
+            e->setID(this->ecw->tb->text().toStdString());
             for(int i=0; i<this->ecw->fildlist->size(); i++){
                 LineOfField* lf = this->ecw->fildlist->at(i);
                 Field* field = lf->getField();
