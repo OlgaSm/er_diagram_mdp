@@ -2,7 +2,6 @@
 #include "ERDiagram.h"
 #include "Entitie.h"
 #include "IntField.h"
-#include "relation.h"
 #include "qmath.h"
 
     Core::Core(){
@@ -10,6 +9,10 @@
         this->state = 0;
         this->focus = -1;
         this->focusEntitieOrRelation = true;
+        this->counter = 0;
+    }
+    int Core::getCounter(){
+        return this->counter++;
     }
 
 //    Core::~Core(){
@@ -120,6 +123,10 @@
         }
     }
 
+    void Core::addRelation(Relation* r){
+        this->content->addUserRelation(r);
+    }
+
     void Core::setFocus(int focus){
         this->focus=focus;
         spotFocus();
@@ -133,15 +140,6 @@
         this->focusEntitieOrRelation = feor;
     }
 
-    List<string>* Core::getBestWay(){
-         Entitie* e1= this->content->entitieAt(0);
-         Entitie* e2= this->content->entitieAt(content->getEntitieCount()-1);
-         List<string>* way = new List<string>();
-         string e3 = e1->relationAt(0)->getEntR()->getID();
-         string e4 = e1->relationAt(0)->getEntR()->getID();
-         way->push_back(e1->getID());
-         way->push_back(e3);
-         way->push_back(e2->getID());
-         way->push_back(e4);
-         return way;
-    }
+//    List<string>* Core::getBestWay(Entitie* e1, Entitie* e2){
+//        return NULL;
+//    }

@@ -8,12 +8,10 @@
 #include <QComboBox>
 #include <QFrame>
 #include <QObject>
-#include <QLineEdit>
 #include "workplacewidget.h"
-#include "Contaner/List.h"
-#include "entitiecustomewidget.h"
 #include "Contaner/Entitie.h"
 #include "Contaner/IntField.h"
+#include "entitiecustomewidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
@@ -64,6 +62,7 @@ MainWindow::MainWindow(QWidget *parent)
     w21->setMaximumWidth(400);
     w21->setLayout(blt);
     //==============================================
+    this->ecw = new EntitieCustomeWidget();
     ecw->setCore(this->core);
     //==============================================
     QPushButton* pb0 = new QPushButton("Сущность");
@@ -72,7 +71,6 @@ MainWindow::MainWindow(QWidget *parent)
     QPushButton* pb3 = new QPushButton("Указатель");
     QPushButton* pb4 = new QPushButton("Удалить");
     QPushButton* pb5 = new QPushButton("Сохранить");
-    QPushButton* pb6 = new QPushButton("Отправить посылку");
     //==============================================
         //this->tab1->setStyleSheet("border: 1px solid black");
         w21->layout()->addWidget(pb0);
@@ -95,16 +93,12 @@ MainWindow::MainWindow(QWidget *parent)
         w22->setLayout(blt2);
         //==============================================
             //this->tab1->setStyleSheet("border: 1px solid black");
-            this->le = new QLineEdit();
-            le->resize(400,200);
-            //le->setText("проверка");
             w22->layout()->addWidget(new QLabel("Получатель"));
             w22->layout()->addWidget(new QComboBox());
             w22->layout()->addWidget(new QLabel("Отправитель"));
             w22->layout()->addWidget(new QComboBox());
             blt2->addStretch();
-            w22->layout()->addWidget(le);
-            w22->layout()->addWidget(pb6);
+            w22->layout()->addWidget(new QPushButton("Отправить посылку"));
     //==============================================
     this->setLayout(qbl);
     // Соединение со сингналов со слотами
@@ -114,7 +108,7 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(pb2,SIGNAL(clicked()),this,SLOT(button3Pressed()));
     QObject::connect(pb3,SIGNAL(clicked()),this,SLOT(button4Pressed()));
     QObject::connect(pb4,SIGNAL(clicked()),this,SLOT(button5Pressed()));
-    QObject::connect(pb6,SIGNAL(clicked()),this,SLOT(buttonway()));
+    QObject::connect(pb5,SIGNAL(clicked()),this,SLOT(button6Pressed()));
 }
 
 MainWindow::~MainWindow()
@@ -126,6 +120,8 @@ MainWindow::~MainWindow()
 void MainWindow::button1Pressed(){
     this->state->setText("Сущность");
     this->core->setState(0);
+    this->core->setFocus(-1);
+    this->core->setFocusObj(true);
     this->w11->repaint();
 }
 
@@ -151,12 +147,44 @@ void MainWindow::button4Pressed(){
 
 void MainWindow::button5Pressed(){
     if(this->core->getFocus()!=-1){
+        this->state->setText("Удалить");
+        //this->core->setState(4);
+        if(core->getFocusObj()){
+            this->core->popEntitieAt(this->core->getFocus());
+        }else{
+            this->core->popRelationAt(this->core->getFocus());
+        }
+        this->core->setFocus(-1);
+        this->core->setFocusObj(false);
+        this->w11->repaint();
     }
 }
 
-void MainWindow::buttonway(){
-    this->state->setText("Нахождение оптимального пути");
-    List<string>* way = core->getBestWay();
-    this->le->setText( QString::fromStdString(way->at(1))+""+QString::fromStdString(way->at(3)));
+void MainWindow::button6Pressed(){
+    if(this->core->getFocus()!=-1){
+        this->state->setText("Сохранить");
+        if(core->getFocusObj()){
+            //this->core->popEntitieAt(this->core->getFocus());
+        }else{
+            Relation* r = this->core->getRelationAt(core->getFocus());
+            string name;
+            int num = this->core->getCounter();
+            char str[255];
+            sprintf(str, "Relation № %d", num);
+            name = (const char*)str;
+            Relation* nr = new Relation(name,
+                                        this->ecw->key->text().toStdString(),
+                                        r->getEntL(),r->getEntR(),
+                                        this->ecw->mr->isChecked(),
+                                        this->ecw->ml->isChecked(),
+                                        this->ecw->ar->isChecked(),
+                                        this->ecw->al->isChecked());
+            this->core->popRelationByID(r->getID());
+            //delete(r);
+            this->core->addRelation(nr);
+            //this->ecw
+        }
+        this->w11->repaint();
+    }
 }
 

@@ -23,6 +23,7 @@ bool Relation::getMulL(){
 }
 
 bool Relation::getAbsR(){
+    return this->AbstractR;
 }
 
 bool Relation::getAbsL(){

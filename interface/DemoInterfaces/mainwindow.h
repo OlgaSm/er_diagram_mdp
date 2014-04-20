@@ -7,9 +7,9 @@
 #include <QBoxLayout>
 #include <QLabel>
 #include <QTabWidget>
-#include <QLineEdit>
 #include "Contaner/Core.h"
 #include "workplacewidget.h"
+#include "entitiecustomewidget.h"
 
 class MainWindow : public QWidget{
 
@@ -21,6 +21,7 @@ private:
     QTabWidget* qtw;
     WorkPlaceWidget* w11;
     WorkPlaceWidget* w12;
+    EntitieCustomeWidget* ecw;
 
     QWidget* tab1;
     QWidget* tab2;
@@ -28,7 +29,6 @@ private:
     QLabel* state;
     Core* core;
 
-    QLineEdit* le;
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
@@ -39,7 +39,7 @@ public slots:
     void button3Pressed();
     void button4Pressed();
     void button5Pressed();
-    void buttonway();
+    void button6Pressed();
 };
 
 #endif // MAINWINDOW_H
