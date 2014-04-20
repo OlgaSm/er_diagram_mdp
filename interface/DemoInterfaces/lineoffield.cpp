@@ -28,9 +28,10 @@ LineOfField::LineOfField(Field* field, QWidget *parent) :
             value = "Object";
             break;
     }
-
-    this->qbl->addWidget(new QLineEdit(QString::fromStdString(field->getID())));
-    this->qbl->addWidget(new QLineEdit(value));
+    this->ID = new QLineEdit(QString::fromStdString(field->getID()));
+    this->value = new QLineEdit(value);
+    this->qbl->addWidget(this->ID);
+    this->qbl->addWidget(this->value);
     QString type="";
     this->qcb = new QComboBox();
     this->qcb->addItem("BASE_FIELD");
@@ -66,4 +67,8 @@ LineOfField::LineOfField(Field* field, QWidget *parent) :
     this->qbl->addWidget(new QPushButton("Удалить"));
     //this->qbl->addStretch();
     this->setLayout(this->qbl);
+}
+
+Field* LineOfField::getField(){
+    return this->field;
 }

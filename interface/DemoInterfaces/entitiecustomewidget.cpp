@@ -23,6 +23,7 @@ EntitieCustomeWidget::EntitieCustomeWidget(QWidget *parent) :
     this->qbl->addWidget(this->entitieName);
     this->qbl->addWidget(this->tb);
     this->qbl->addStretch();
+    this->fildlist = new List<LineOfField*>();
     //this->setStyleSheet("border-radius: 5px; border: 1px solid black;");
 }
 
@@ -64,7 +65,9 @@ void EntitieCustomeWidget::timerEvent(){
                 this->qbl->addWidget(this->entitieName);
                 this->qbl->addWidget(this->tb);
                 for(int i=0; i<e->fieldCount(); i++){
-                    this->qbl->addWidget(new LineOfField(e->fieldAt(i),this));
+                    LineOfField* lf = new LineOfField(e->fieldAt(i),this);
+                    this->fildlist->push_back(lf);
+                    this->qbl->addWidget(lf);
                 }
                 this->qbl->addWidget(new QPushButton("Добавить поле"));
                 //this->qbl->addWidget(new QPushButton("Сохранить"));

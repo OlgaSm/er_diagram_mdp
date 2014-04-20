@@ -19,7 +19,9 @@ private:
     QComboBox* qcb;
 public:
     explicit LineOfField(Field* field = NULL,QWidget *parent = 0);
-
+    QLineEdit* ID;
+    QLineEdit* value;
+    Field* getField();
 signals:
 
 public slots:

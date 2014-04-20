@@ -13,6 +13,7 @@
 #include "Contaner/ERDiagram.h"
 #include "Contaner/Entitie.h"
 #include "Contaner/Relation.h"
+#include "Contaner/List.h"
 #include "workplacewidget.h"
 
 class EntitieCustomeWidget : public QWidget
@@ -36,6 +37,7 @@ public:
     QCheckBox* mr;
     QCheckBox* al;
     QCheckBox* ar;
+    List<LineOfField*>* fildlist;
 
 signals:
 

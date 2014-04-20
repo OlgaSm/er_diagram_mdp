@@ -12,6 +12,10 @@
 #include "Contaner/Entitie.h"
 #include "Contaner/IntField.h"
 #include "entitiecustomewidget.h"
+#include "lineoffield.h"
+#include "Contaner/DoubleField.h"
+#include "Contaner/DataField.h"
+#include "Contaner/StringField.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
@@ -165,6 +169,23 @@ void MainWindow::button6Pressed(){
         this->state->setText("Сохранить");
         if(core->getFocusObj()){
             //this->core->popEntitieAt(this->core->getFocus());
+            for(int i=0; i<this->ecw->fildlist->size(); i++){
+                LineOfField* lf = this->ecw->fildlist->at(i);
+                Field* field = lf->getField();
+                field->setID(lf->ID->text().toStdString());
+                switch((int)field->getType()){
+                    case 1:
+                        ((StringField*)(field))->setValue(lf->value->text().toStdString());
+                        break;
+                    case 2:
+                        ((IntField*)(field))->setValue(lf->value->text().toInt());
+                        break;
+                    case 3:
+                        ((DoubleField*)(field))->setValue(lf->value->text().toDouble());
+                        break;
+                }
+            }
+
         }else{
             Relation* r = this->core->getRelationAt(core->getFocus());
             string name;
