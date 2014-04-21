@@ -19,13 +19,13 @@ class LineOfField : public QWidget
 private:
     Field* field;
     QBoxLayout* qbl;
-    QComboBox* qcb;
     QPushButton* qpb;
     Entitie* e;
     EntitieCustomeWidget* ec;
 
 public:
     explicit LineOfField(EntitieCustomeWidget* ec, Entitie* e, Field* field = NULL,QWidget *parent = 0);
+    QComboBox* qcb;
     QLineEdit* ID;
     QLineEdit* value;
     Field* getField();

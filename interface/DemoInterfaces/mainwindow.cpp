@@ -200,6 +200,7 @@ void MainWindow::button6Pressed(){
             Entitie* e = this->core->getEntitieAt(core->getFocus());
             e->setID(this->ecw->tb->text().toStdString());
             for(int i=0; i<this->ecw->fildlist->size(); i++){
+                if(i>5){
                 LineOfField* lf = this->ecw->fildlist->at(i);
                 Field* field = lf->getField();
                 field->setID(lf->ID->text().toStdString());
@@ -213,6 +214,7 @@ void MainWindow::button6Pressed(){
                     case 3:
                         ((DoubleField*)(field))->setValue(lf->value->text().toDouble());
                         break;
+                }
                 }
             }
 
@@ -249,3 +251,56 @@ void MainWindow::button7Pressed(){
         i++;
     }
 }
+
+
+////this->core->popEntitieAt(this->core->getFocus());
+//Entitie* e = this->core->getEntitieAt(core->getFocus());
+//e->setID(this->ecw->tb->text().toStdString());
+//List<Field*>* del = new List<Field*>();
+//List<Field*>* add = new List<Field*>();
+//for(int i=0; i<this->ecw->fildlist->size(); i++){
+//    LineOfField* lf = this->ecw->fildlist->at(i);
+//    Field* field = lf->getField();
+//    int ind = lf->qcb->currentIndex();
+//    if(field->getType() == ind){
+//        field->setID(lf->ID->text().toStdString());
+//        switch((int)field->getType()){
+//            case 1:
+//                ((StringField*)(field))->setValue(lf->value->text().toStdString());
+//                break;
+//            case 2:
+//                ((IntField*)(field))->setValue(lf->value->text().toInt());
+//                break;
+//            case 3:
+//                ((DoubleField*)(field))->setValue(lf->value->text().toDouble());
+//                break;
+//        }
+//    }else{
+//        Field* d = e->fieldAt(i);
+//        Field* a = NULL;
+//        string ID = lf->ID->text().toStdString();
+//        switch(lf->qcb->currentIndex()){
+//            case 0:
+//                a = new Field(ID);
+//                break;
+//            case 1:
+//                a = new StringField(ID,lf->value->text().toStdString());
+//                break;
+//            case 2:
+//                a = new IntField(ID, lf->value->text().toInt());
+//                break;
+//            case 3:
+//                a = new DoubleField(ID, lf->value->text().toDouble());
+//                break;
+//        }
+//        if(a==NULL) a = new Field(ID);
+//        del->push_back(d);
+//        add->push_back(a);
+//    }
+//}
+//for(int i=0; i< del->size(); i++){
+//    e->popFieldByID(del->at(i)->getID());
+//}
+//for(int i=0; i< add->size(); i++){
+//    e->addUserField(add->at(i));
+//}
