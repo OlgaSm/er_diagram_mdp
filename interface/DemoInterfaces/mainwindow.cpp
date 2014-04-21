@@ -179,15 +179,10 @@ void MainWindow::buttonway(){
     this->state->setText("Нахождение оптимального пути");
     List<string>* way = core->getBestWay();
     i=0;
+    te->clear();
     this->te->setReadOnly(true);
     while (i<way->size()){
         this->te->append( QString::fromStdString(way->at(i)));
-        i++;
-    }
-    i=0;
-    List<string>* l = core->getListEn();
-    while (i<l->size()){
-        this->cb->addItem( QString::fromStdString(l->at(i)));
         i++;
     }
 }
@@ -244,6 +239,8 @@ void MainWindow::button6Pressed(){
 void MainWindow::button7Pressed(){
     int i;
     i=0;
+    cb->clear();
+    cb2->clear();
     List<string>* l = core->getListEn();
     while (i<l->size()){
         this->cb->addItem( QString::fromStdString(l->at(i)));
@@ -253,7 +250,7 @@ void MainWindow::button7Pressed(){
 }
 
 
-////this->core->popEntitieAt(this->core->getFocus());
+//this->core->popEntitieAt(this->core->getFocus());
 //Entitie* e = this->core->getEntitieAt(core->getFocus());
 //e->setID(this->ecw->tb->text().toStdString());
 //List<Field*>* del = new List<Field*>();
