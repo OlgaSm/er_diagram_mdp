@@ -33,6 +33,10 @@ void EntitieCustomeWidget::ClearWidget(){
         delete item;
         this->layout()->update();
     }
+    for(int i=0; i<this->fildlist->size(); i++){
+        this->fildlist->popAt(i);
+    }
+    this->fildlist = new List<LineOfField*>();
 }
 
 void EntitieCustomeWidget::timerEvent(){
