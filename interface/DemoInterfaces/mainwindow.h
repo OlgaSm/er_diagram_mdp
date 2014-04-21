@@ -4,9 +4,12 @@
 #include <QWidget>
 #include <QMenuBar>
 #include <QMenu>
+#include <QLineEdit>
 #include <QBoxLayout>
+#include <QTextEdit>
 #include <QLabel>
 #include <QTabWidget>
+#include <QComboBox>
 #include "Contaner/Core.h"
 #include "workplacewidget.h"
 #include "entitiecustomewidget.h"
@@ -22,10 +25,12 @@ private:
     WorkPlaceWidget* w11;
     WorkPlaceWidget* w12;
     EntitieCustomeWidget* ecw;
-
+    //QLineEdit* le;
+    QTextEdit* te;
     QWidget* tab1;
     QWidget* tab2;
-
+    QComboBox* cb;
+    QComboBox* cb2;
     QLabel* state;
     Core* core;
 
@@ -40,6 +45,8 @@ public slots:
     void button4Pressed();
     void button5Pressed();
     void button6Pressed();
+    void buttonway();
+    void button7Pressed();
 };
 
 #endif // MAINWINDOW_H

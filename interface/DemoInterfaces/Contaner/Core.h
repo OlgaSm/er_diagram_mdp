@@ -44,6 +44,7 @@ public:
     Entitie* getEntitieAt(int n);
     Relation* getRelationAt(int n);
     List<string>* getBestWay(Entitie* e1, Entitie* e2);
+    List<string>* getBestWay();
     int getState();
     int getFocus();
     void setState(int state);
@@ -51,7 +52,7 @@ public:
     void spotFocus();
     bool getFocusObj();
     void setFocusObj(bool feor);
-
+    List<string>* getListEn();
 };
 
 #endif //CORE_H

@@ -75,6 +75,8 @@ MainWindow::MainWindow(QWidget *parent)
     QPushButton* pb3 = new QPushButton("Указатель");
     QPushButton* pb4 = new QPushButton("Удалить");
     QPushButton* pb5 = new QPushButton("Сохранить");
+    QPushButton* pb6 = new QPushButton("Отправить посылку");
+    QPushButton* pb7 = new QPushButton("Получатели/Отправители");
     //==============================================
         //this->tab1->setStyleSheet("border: 1px solid black");
         w21->layout()->addWidget(pb0);
@@ -97,12 +99,19 @@ MainWindow::MainWindow(QWidget *parent)
         w22->setLayout(blt2);
         //==============================================
             //this->tab1->setStyleSheet("border: 1px solid black");
+
+            this->te = new QTextEdit();
             w22->layout()->addWidget(new QLabel("Получатель"));
-            w22->layout()->addWidget(new QComboBox());
+            this->cb = new QComboBox();
+            this->cb2 = new QComboBox();
+            w22->layout()->addWidget(cb);
             w22->layout()->addWidget(new QLabel("Отправитель"));
-            w22->layout()->addWidget(new QComboBox());
+            w22->layout()->addWidget(cb2);
             blt2->addStretch();
-            w22->layout()->addWidget(new QPushButton("Отправить посылку"));
+            w22->layout()->addWidget(pb7);
+            w22->layout()->addWidget(te);
+            w22->layout()->addWidget(pb6);
+
     //==============================================
     this->setLayout(qbl);
     // Соединение со сингналов со слотами
@@ -113,6 +122,8 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(pb3,SIGNAL(clicked()),this,SLOT(button4Pressed()));
     QObject::connect(pb4,SIGNAL(clicked()),this,SLOT(button5Pressed()));
     QObject::connect(pb5,SIGNAL(clicked()),this,SLOT(button6Pressed()));
+    QObject::connect(pb6,SIGNAL(clicked()),this,SLOT(buttonway()));
+    QObject::connect(pb7,SIGNAL(clicked()),this,SLOT(button7Pressed()));
 }
 
 MainWindow::~MainWindow()
@@ -164,6 +175,24 @@ void MainWindow::button5Pressed(){
     }
 }
 
+void MainWindow::buttonway(){
+    int i;
+    this->state->setText("Нахождение оптимального пути");
+    List<string>* way = core->getBestWay();
+    i=0;
+    this->te->setReadOnly(true);
+    while (i<way->size()){
+        this->te->append( QString::fromStdString(way->at(i)));
+        i++;
+    }
+    i=0;
+    List<string>* l = core->getListEn();
+    while (i<l->size()){
+        this->cb->addItem( QString::fromStdString(l->at(i)));
+        i++;
+    }
+}
+
 void MainWindow::button6Pressed(){
     if(this->core->getFocus()!=-1){
         this->state->setText("Сохранить");
@@ -211,3 +240,13 @@ void MainWindow::button6Pressed(){
     }
 }
 
+void MainWindow::button7Pressed(){
+    int i;
+    i=0;
+    List<string>* l = core->getListEn();
+    while (i<l->size()){
+        this->cb->addItem( QString::fromStdString(l->at(i)));
+        this->cb2->addItem( QString::fromStdString(l->at(i)));
+        i++;
+    }
+}

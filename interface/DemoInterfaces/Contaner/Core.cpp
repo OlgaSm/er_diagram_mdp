@@ -3,7 +3,7 @@
 #include "Entitie.h"
 #include "IntField.h"
 #include "qmath.h"
-
+#include "Relation.h"
     Core::Core(){
         this->content = new ERDiagram("Common");
         this->state = 0;
@@ -143,3 +143,38 @@
 //    List<string>* Core::getBestWay(Entitie* e1, Entitie* e2){
 //        return NULL;
 //    }
+
+    List<string>* Core::getBestWay(){
+           Entitie* e1;
+           Relation* r1;
+           List<string>* way = new List<string>();
+           int i,j;
+           i=0;
+           while (i<this->content->getEntitieCount()){
+               e1= this->content->entitieAt(i);
+               way->push_back("Сущность "+e1->getID()+"\n");
+               j=0;
+               while (j<e1->relationCount()){
+                   r1=e1->relationAt(j);
+                   j++;
+                   way->push_back("Связь R "+r1->getEntR()->getID());
+                   way->push_back("Связь L "+r1->getEntL()->getID());
+               }
+               i++;
+
+           };
+           return way;
+      }
+
+    List<string>* Core::getListEn(){
+           Entitie* e1;
+           List<string>* l = new List<string>();
+           int i;
+           i=0;
+           while (i<this->content->getEntitieCount()){
+               e1= this->content->entitieAt(i);
+               l->push_back(e1->getID());
+               i++;
+           };
+           return l;
+      }
