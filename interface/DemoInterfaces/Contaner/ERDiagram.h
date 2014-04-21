@@ -26,13 +26,17 @@ public:
     int     getRelationCount();
     void    addUserRelation(Relation* r);   
 	void    addRelation(string fieldID,
+                        string key,
 						Entitie* entitieR,
 						Entitie* entitieL,
 						bool MultiplicityR,
 						bool MultiplicityL,
 						bool AbstractR,
 						bool AbstractL);  	
-    void    popRelationAt(int i);
+    void    popRelationAt(int i, bool del);
+    void    popRelationByID(string ID, bool del);
+    int    getIndexRelationByID(string ID);
+    int    getIndexEntitieByID(string ID);
 
 public:
     int          getEntitieCount();
@@ -41,6 +45,7 @@ public:
     void    addUserEntitie(Entitie* e);   
 	void    addEntitie(string ID);
     void    popEntitieAt(int i);
+    void    popEntitieByID(string ID);
 };
 
 #endif

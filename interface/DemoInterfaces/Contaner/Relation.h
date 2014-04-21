@@ -11,6 +11,7 @@ class Entitie;
 class Relation {
 private:
     string relationID;
+    string key;
     Entitie* entitieR;
     Entitie* entitieL;
 	bool MultiplicityR;
@@ -20,6 +21,7 @@ private:
 	
 public:
     string getID();
+    string getKey();
     Entitie* getEntR();
     Entitie* getEntL();
     bool getMulR();
@@ -27,6 +29,7 @@ public:
     bool getAbsR();
     bool getAbsL();
     Relation(string fieldID,
+             string key,
              Entitie* entitieR,
              Entitie* entitieL,
              bool MultiplicityR,
