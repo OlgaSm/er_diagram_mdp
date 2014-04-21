@@ -14,6 +14,7 @@
 #include "workplacewidget.h"
 #include "entitiecustomewidget.h"
 
+
 class MainWindow : public QWidget{
 
     Q_OBJECT
