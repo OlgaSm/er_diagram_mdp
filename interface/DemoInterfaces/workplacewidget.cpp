@@ -139,8 +139,8 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
     if(this->core->getState()==0){
         //=====================================================
         string name;
-        int num = this->core->getEntitieCount();
-        //int num = this->core->getCounter();
+        //int num = this->core->getEntitieCount();
+        int num = this->core->getCounter();
         char str[255];
         sprintf(str, "Entitie № %d", num);
         name = (const char*)str;
@@ -170,7 +170,7 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
         }
         if(add){
             core->addEntitieTo(e0);
-            core->setFocus(num);
+            core->setFocus(core->getIndexEntitieByID(e0->getID()));
             this->repaint();
         }
     }
@@ -200,8 +200,9 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
                 Entitie* e1 = this->core->getEntitieAt(this->core->getFocus());
                 Entitie* e2 = this->core->getEntitieAt(focus);
                 core->addRelation(e1,e2,name,"W");
+                core->setFocus(core->getRelationCount()-1);
+                core->setFocusObj(false);
             }
-            core->setFocus(-1);
         }
         core->spotFocus();
         this->repaint();

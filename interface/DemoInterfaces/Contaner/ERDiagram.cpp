@@ -119,3 +119,21 @@ int ERDiagram::getEntitieCount(){
 int ERDiagram::getRelationCount(){
     return this->relations->size();
 }
+
+int ERDiagram::getIndexRelationByID(string ID){
+    for(int i=0; i<this->getRelationCount(); i++){
+        if(this->relationAt(i)->getID()==ID){
+            return i;
+        }
+    }
+    return 0;
+}
+
+int ERDiagram::getIndexEntitieByID(string ID){
+    for(int i=0; i<this->getEntitieCount(); i++){
+        if(this->entitieAt(i)->getID()==ID){
+            return i;
+        }
+    }
+    return 0;
+}

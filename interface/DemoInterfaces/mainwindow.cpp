@@ -170,7 +170,6 @@ void MainWindow::button5Pressed(){
             this->core->popRelationAt(this->core->getFocus());
         }
         this->core->setFocus(-1);
-        this->core->setFocusObj(false);
         this->w11->repaint();
     }
 }

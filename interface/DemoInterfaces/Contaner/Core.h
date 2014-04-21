@@ -53,6 +53,8 @@ public:
     bool getFocusObj();
     void setFocusObj(bool feor);
     List<string>* getListEn();
+    int getIndexRelationByID(string ID);
+    int getIndexEntitieByID(string ID);
 };
 
 #endif //CORE_H

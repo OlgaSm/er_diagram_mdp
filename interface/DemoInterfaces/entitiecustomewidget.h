@@ -23,26 +23,31 @@ private:
     Core* core;
     int curFocus;
     bool curObj;
+    QLabel* entitieName;
+    QTimer* timer;
+    QPushButton* addButton;
 
 public:
     explicit EntitieCustomeWidget(QWidget *parent = 0);
     void setCore(Core* core);
     Core* getCore();
     QBoxLayout* qbl;
-    QLabel* entitieName;
     QLineEdit* tb;
     QLineEdit* key;
-    QTimer* timer;
     QCheckBox* ml;
     QCheckBox* mr;
     QCheckBox* al;
     QCheckBox* ar;
     List<LineOfField*>* fildlist;
+    int getCurFocus();
+    void setCurFocus(int curFocus);
+    void ClearWidget();
 
 signals:
 
 public slots:
     void timerEvent();
+    void buttonAdd();
 
 };
 

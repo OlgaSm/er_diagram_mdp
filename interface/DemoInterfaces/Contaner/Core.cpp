@@ -178,3 +178,11 @@
            };
            return l;
       }
+
+int Core::getIndexRelationByID(string ID){
+    return this->content->getIndexRelationByID(ID);
+}
+
+int Core::getIndexEntitieByID(string ID){
+    return this->content->getIndexEntitieByID(ID);
+}

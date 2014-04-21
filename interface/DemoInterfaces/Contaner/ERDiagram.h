@@ -35,6 +35,8 @@ public:
 						bool AbstractL);  	
     void    popRelationAt(int i, bool del);
     void    popRelationByID(string ID, bool del);
+    int    getIndexRelationByID(string ID);
+    int    getIndexEntitieByID(string ID);
 
 public:
     int          getEntitieCount();

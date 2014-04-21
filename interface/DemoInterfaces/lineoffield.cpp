@@ -3,12 +3,13 @@
 #include "Contaner/DoubleField.h"
 #include "Contaner/DataField.h"
 #include "Contaner/StringField.h"
+#include "entitiecustomewidget.h"
 
-LineOfField::LineOfField(Field* field, QWidget *parent) :
+LineOfField::LineOfField(EntitieCustomeWidget* ec, Entitie* e, Field* field, QWidget *parent) :
     QWidget(parent)
-{
+{   this->ec = ec;
     this->field = field;
-
+    this->e = e;
     this->qbl = new QBoxLayout(QBoxLayout::LeftToRight);
     QString value;
     switch(field->getType()){
@@ -64,9 +65,17 @@ LineOfField::LineOfField(Field* field, QWidget *parent) :
     }
     //this->qbl->addWidget(new QLabel(type));
     this->qbl->addWidget(this->qcb);
-    this->qbl->addWidget(new QPushButton("Удалить"));
+    this->qpb = new QPushButton("Удалить");
+    this->qbl->addWidget(this->qpb);
     //this->qbl->addStretch();
     this->setLayout(this->qbl);
+    QObject::connect(this->qpb,SIGNAL(clicked()),this,SLOT(buttonDelete()));
+}
+
+void LineOfField::buttonDelete(){
+    this->ec->ClearWidget();
+    this->e->popFieldByID(field->getID());
+    this->ec->setCurFocus(-1);
 }
 
 Field* LineOfField::getField(){
