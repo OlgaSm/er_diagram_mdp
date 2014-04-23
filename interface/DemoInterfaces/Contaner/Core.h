@@ -44,7 +44,8 @@ public:
     Entitie* getEntitieAt(int n);
     Relation* getRelationAt(int n);
     List<string>* getBestWay(Entitie* e1, Entitie* e2);
-    List<string>* getBestWay();
+    bool getBestWay(Entitie* e1, Entitie* e2, List<string>* &last);
+    //List<string>* getBestWay();
     int getState();
     int getFocus();
     void setState(int state);

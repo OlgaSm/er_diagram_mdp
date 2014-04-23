@@ -75,7 +75,7 @@ MainWindow::MainWindow(QWidget *parent)
     QPushButton* pb4 = new QPushButton("Удалить");
     QPushButton* pb5 = new QPushButton("Сохранить");
     QPushButton* pb6 = new QPushButton("Отправить посылку");
-    QPushButton* pb7 = new QPushButton("Обновить список сущностей");
+    //QPushButton* pb7 = new QPushButton("Обновить список сущностей");
     //==============================================
         //this->tab1->setStyleSheet("border: 1px solid black");
         w21->layout()->addWidget(pb0);
@@ -106,9 +106,9 @@ MainWindow::MainWindow(QWidget *parent)
             w22->layout()->addWidget(cb);
             w22->layout()->addWidget(new QLabel("Отправитель"));
             w22->layout()->addWidget(cb2);
-            blt2->addStretch();
-            w22->layout()->addWidget(pb7);
-            w22->layout()->addWidget(te);
+            //blt2->addStretch();
+            //w22->layout()->addWidget(pb7);
+            w22->layout()->addWidget(this->te);
             w22->layout()->addWidget(pb6);
 
     //==============================================
@@ -122,7 +122,7 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(pb4,SIGNAL(clicked()),this,SLOT(button5Pressed()));
     QObject::connect(pb5,SIGNAL(clicked()),this,SLOT(button6Pressed()));
     QObject::connect(pb6,SIGNAL(clicked()),this,SLOT(buttonway()));
-    QObject::connect(pb7,SIGNAL(clicked()),this,SLOT(button7Pressed()));
+//    QObject::connect(pb7,SIGNAL(clicked()),this,SLOT(button7Pressed()));
     QObject::connect(this->qtw,SIGNAL(currentChanged(int)),this,SLOT(tabChanged()));
 }
 
@@ -192,7 +192,11 @@ void MainWindow::button5Pressed(){
 void MainWindow::buttonway(){
     int i;
     this->state->setText("Нахождение оптимального пути");
-    List<string>* way = core->getBestWay();
+    int ind1 = this->cb->currentIndex();
+    int ind2 = this->cb2->currentIndex();
+    Entitie* e1 = this->core->getEntitieAt(ind1);
+    Entitie* e2 = this->core->getEntitieAt(ind2);
+    List<string>* way = core->getBestWay(e1,e2);
     i=0;
     te->clear();
     this->te->setReadOnly(true);
@@ -275,16 +279,16 @@ void MainWindow::button6Pressed(){
     }
 }
 
-void MainWindow::button7Pressed(){
-    int i;
-    i=0;
-    cb->clear();
-    cb2->clear();
-    List<string>* l = core->getListEn();
-    while (i<l->size()){
-        this->cb->addItem( QString::fromStdString(l->at(i)));
-        this->cb2->addItem( QString::fromStdString(l->at(i)));
-        i++;
-    }
-}
+//void MainWindow::button7Pressed(){
+//    int i;
+//    i=0;
+//    cb->clear();
+//    cb2->clear();
+//    List<string>* l = core->getListEn();
+//    while (i<l->size()){
+//        this->cb->addItem( QString::fromStdString(l->at(i)));
+//        this->cb2->addItem( QString::fromStdString(l->at(i)));
+//        i++;
+//    }
+//}
 

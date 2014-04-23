@@ -46,7 +46,7 @@ public slots:
     void button5Pressed();
     void button6Pressed();
     void buttonway();
-    void button7Pressed();
+    //void button7Pressed();
     void tabChanged();
 };
 

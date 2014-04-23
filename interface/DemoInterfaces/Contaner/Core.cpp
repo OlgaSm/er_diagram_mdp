@@ -143,27 +143,72 @@
 //    List<string>* Core::getBestWay(Entitie* e1, Entitie* e2){
 //        return NULL;
 //    }
+    bool Core::getBestWay(Entitie* e1, Entitie* e2, List<string>* &last){
+        last->push_back(e1->getID());
+        if(e1->getID()==e2->getID()){
+            return true;
+        }else{
+            for(int i=0; i<e1->relationCount(); i++){
+                Relation* r = e1->relationAt(i);
+                if(r->getEntL()!=e1){
+                    Entitie* el = r->getEntL();
+                    bool tr=true;
+                    for(int j=0; j<last->size(); j++){
+                        if(last->at(j)==el->getID()){
+                            tr=false;
+                        }
+                    }
+                    if(tr){
+                        if(getBestWay(el, e2, last)){
+                            return true;
+                        }
+                    }
+                }
+                if(r->getEntR()!=e1){
+                    Entitie* er = r->getEntR();
+                    bool tr=true;
+                    for(int j=0; j<last->size(); j++){
+                        if(last->at(j)==er->getID()){
+                            tr=false;
+                        }
+                    }
+                    if(tr){
+                        if(getBestWay(er, e2, last)){
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        last->popAt(last->size()-1);
+        return false;
+    }
 
-    List<string>* Core::getBestWay(){
-           Entitie* e1;
-           Relation* r1;
+    List<string>* Core::getBestWay(Entitie* e1, Entitie* e2){
+           //Entitie* e1;
+           //Relation* r1;
            List<string>* way = new List<string>();
-           int i,j;
-           i=0;
-           while (i<this->content->getEntitieCount()){
-               e1= this->content->entitieAt(i);
-               way->push_back("Сущность "+e1->getID()+"\n");
-               j=0;
-               while (j<e1->relationCount()){
-                   r1=e1->relationAt(j);
-                   j++;
-                   way->push_back("Связь R "+r1->getEntR()->getID());
-                   way->push_back("Связь L "+r1->getEntL()->getID());
-               }
-               i++;
+           if(getBestWay(e1, e2, way)){
+               return way;
+           }else{
+               return new List<string>();
+           }
+//           int i,j;
+//           i=0;
+//           while (i<this->content->getEntitieCount()){
+//               e1= this->content->entitieAt(i);
+//               way->push_back("Сущность "+e1->getID()+"\n");
+//               j=0;
+//               while (j<e1->relationCount()){
+//                   r1=e1->relationAt(j);
+//                   j++;
+//                   way->push_back("Связь R "+r1->getEntR()->getID());
+//                   way->push_back("Связь L "+r1->getEntL()->getID());
+//               }
+//               i++;
 
-           };
-           return way;
+//           };
+           //return way;
       }
 
     List<string>* Core::getListEn(){
