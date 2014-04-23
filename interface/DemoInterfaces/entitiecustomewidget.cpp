@@ -62,7 +62,7 @@ void EntitieCustomeWidget::timerEvent(){
                     // Добавление widget'ов
                     this->qbl->addWidget(this->entitieName);
                     this->qbl->addWidget(this->tb);
-                    for(int i=0; i<e->fieldCount(); i++){
+                    for(int i=5; i<e->fieldCount(); i++){
                         LineOfField* lf = new LineOfField(this, e, e->fieldAt(i),this);
                         this->fildlist->push_back(lf);
                         this->qbl->addWidget(lf);

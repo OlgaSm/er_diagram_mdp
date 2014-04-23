@@ -53,7 +53,6 @@ MainWindow::MainWindow(QWidget *parent)
     this->qbl->addWidget(qtw);
     this->state = new QLabel("Сущность");
     this->qbl->addWidget(this->state);
-    //this->qbl->addStretch();
 
     //==============================================
     this->w11 = new WorkPlaceWidget();
@@ -76,7 +75,7 @@ MainWindow::MainWindow(QWidget *parent)
     QPushButton* pb4 = new QPushButton("Удалить");
     QPushButton* pb5 = new QPushButton("Сохранить");
     QPushButton* pb6 = new QPushButton("Отправить посылку");
-    QPushButton* pb7 = new QPushButton("Получатели/Отправители");
+    QPushButton* pb7 = new QPushButton("Обновить список сущностей");
     //==============================================
         //this->tab1->setStyleSheet("border: 1px solid black");
         w21->layout()->addWidget(pb0);
@@ -124,6 +123,7 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(pb5,SIGNAL(clicked()),this,SLOT(button6Pressed()));
     QObject::connect(pb6,SIGNAL(clicked()),this,SLOT(buttonway()));
     QObject::connect(pb7,SIGNAL(clicked()),this,SLOT(button7Pressed()));
+    QObject::connect(this->qtw,SIGNAL(currentChanged(int)),this,SLOT(tabChanged()));
 }
 
 MainWindow::~MainWindow()
@@ -131,6 +131,21 @@ MainWindow::~MainWindow()
 
 }
 
+void MainWindow::tabChanged(){
+    if(this->qtw->currentIndex()==1){
+        this->core->setState(3);
+        int i;
+        i=0;
+        cb->clear();
+        cb2->clear();
+        List<string>* l = core->getListEn();
+        while (i<l->size()){
+            this->cb->addItem( QString::fromStdString(l->at(i)));
+            this->cb2->addItem( QString::fromStdString(l->at(i)));
+            i++;
+        }
+    }
+}
 
 void MainWindow::button1Pressed(){
     this->state->setText("Сущность");
@@ -195,9 +210,33 @@ void MainWindow::button6Pressed(){
             Entitie* e = this->core->getEntitieAt(core->getFocus());
             e->setID(this->ecw->tb->text().toStdString());
             for(int i=0; i<this->ecw->fildlist->size(); i++){
-                if(i>5){
+                //if(i>4){
                 LineOfField* lf = this->ecw->fildlist->at(i);
                 Field* field = lf->getField();
+                if(lf->qcb->currentIndex()>=0 && lf->qcb->currentIndex()<4){
+                //if(false){
+                if((int)field->getType()!=lf->qcb->currentIndex()){
+                    this->core->getEntitieAt(this->core->getFocus())->popFieldAt(i+5);
+                    this->ecw->fildlist->popAt(i+5);
+                    switch(lf->qcb->currentIndex()){
+                        case 0:
+                            field = new Field(lf->ID->text().toStdString());
+                            break;
+                        case 1:
+                            field = new StringField(lf->ID->text().toStdString(),"Defoult value");
+                            break;
+                        case 2:
+                            field = new IntField(lf->ID->text().toStdString(),0);
+                            break;
+                        case 3:
+                            field = new DoubleField(lf->ID->text().toStdString(),0.0);
+                            break;
+                    }
+                    this->core->getEntitieAt(this->core->getFocus())->addUserField(field);
+                    this->ecw->fildlist->push_back(new LineOfField(this->ecw,this->core->getEntitieAt(this->core->getFocus()),field, this));
+                    this->ecw->setCurFocus(-1);
+                }
+                }
                 field->setID(lf->ID->text().toStdString());
                 switch((int)field->getType()){
                     case 1:
@@ -210,17 +249,17 @@ void MainWindow::button6Pressed(){
                         ((DoubleField*)(field))->setValue(lf->value->text().toDouble());
                         break;
                 }
-                }
+                //}
             }
 
         }else{
             Relation* r = this->core->getRelationAt(core->getFocus());
-            string name;
-            int num = this->core->getCounter();
-            char str[255];
-            sprintf(str, "Relation № %d", num);
-            name = (const char*)str;
-            Relation* nr = new Relation(name,
+//            string name;
+//            int num = this->core->getCounter();
+//            char str[255];
+//            sprintf(str, "Relation № %d", num);
+//            name = (const char*)str;
+            Relation* nr = new Relation(this->ecw->tb->text().toStdString(),
                                         this->ecw->key->text().toStdString(),
                                         r->getEntL(),r->getEntR(),
                                         this->ecw->mr->isChecked(),
@@ -249,55 +288,3 @@ void MainWindow::button7Pressed(){
     }
 }
 
-
-//this->core->popEntitieAt(this->core->getFocus());
-//Entitie* e = this->core->getEntitieAt(core->getFocus());
-//e->setID(this->ecw->tb->text().toStdString());
-//List<Field*>* del = new List<Field*>();
-//List<Field*>* add = new List<Field*>();
-//for(int i=0; i<this->ecw->fildlist->size(); i++){
-//    LineOfField* lf = this->ecw->fildlist->at(i);
-//    Field* field = lf->getField();
-//    int ind = lf->qcb->currentIndex();
-//    if(field->getType() == ind){
-//        field->setID(lf->ID->text().toStdString());
-//        switch((int)field->getType()){
-//            case 1:
-//                ((StringField*)(field))->setValue(lf->value->text().toStdString());
-//                break;
-//            case 2:
-//                ((IntField*)(field))->setValue(lf->value->text().toInt());
-//                break;
-//            case 3:
-//                ((DoubleField*)(field))->setValue(lf->value->text().toDouble());
-//                break;
-//        }
-//    }else{
-//        Field* d = e->fieldAt(i);
-//        Field* a = NULL;
-//        string ID = lf->ID->text().toStdString();
-//        switch(lf->qcb->currentIndex()){
-//            case 0:
-//                a = new Field(ID);
-//                break;
-//            case 1:
-//                a = new StringField(ID,lf->value->text().toStdString());
-//                break;
-//            case 2:
-//                a = new IntField(ID, lf->value->text().toInt());
-//                break;
-//            case 3:
-//                a = new DoubleField(ID, lf->value->text().toDouble());
-//                break;
-//        }
-//        if(a==NULL) a = new Field(ID);
-//        del->push_back(d);
-//        add->push_back(a);
-//    }
-//}
-//for(int i=0; i< del->size(); i++){
-//    e->popFieldByID(del->at(i)->getID());
-//}
-//for(int i=0; i< add->size(); i++){
-//    e->addUserField(add->at(i));
-//}

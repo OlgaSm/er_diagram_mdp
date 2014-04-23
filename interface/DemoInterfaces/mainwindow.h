@@ -47,6 +47,7 @@ public slots:
     void button6Pressed();
     void buttonway();
     void button7Pressed();
+    void tabChanged();
 };
 
 #endif // MAINWINDOW_H
