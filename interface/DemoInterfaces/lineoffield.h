@@ -13,8 +13,7 @@
 
 class EntitieCustomeWidget;
 
-class LineOfField : public QWidget
-{
+class LineOfField : public QWidget{
     Q_OBJECT
 private:
     Field* field;
