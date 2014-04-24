@@ -10,6 +10,8 @@
         this->focus = -1;
         this->focusEntitieOrRelation = true;
         this->counter = 0;
+        this->weightOfSolution = -1;
+        this->solution = NULL;
     }
     int Core::getCounter(){
         return this->counter++;
@@ -143,9 +145,22 @@
 //    List<string>* Core::getBestWay(Entitie* e1, Entitie* e2){
 //        return NULL;
 //    }
-    bool Core::getBestWay(Entitie* e1, Entitie* e2, List<string>* &last){
+    bool Core::getBestWay(Entitie* e1, Entitie* e2, List<string>* &last, int weight){
         last->push_back(e1->getID());
         if(e1->getID()==e2->getID()){
+            if(weight<this->weightOfSolution || this->weightOfSolution==-1){
+                this->weightOfSolution = weight;
+                if(this->solution!=NULL){
+                    this->solution = new List<string>();
+                }else{
+                    delete(this->solution);
+                    this->solution = new List<string>();
+                }
+                for(int i=0; i<last->size(); i++){
+                    this->solution->push_back(last->at(i));
+                }
+            }
+            last->popAt(last->size()-1);
             return true;
         }else{
             for(int i=0; i<e1->relationCount(); i++){
@@ -159,8 +174,8 @@
                         }
                     }
                     if(tr){
-                        if(getBestWay(el, e2, last)){
-                            return true;
+                        if(getBestWay(el, e2, last,weight+1)){
+                            //return true;
                         }
                     }
                 }
@@ -173,8 +188,8 @@
                         }
                     }
                     if(tr){
-                        if(getBestWay(er, e2, last)){
-                            return true;
+                        if(getBestWay(er, e2, last,weight+1)){
+                            //return true;
                         }
                     }
                 }
@@ -188,8 +203,14 @@
            //Entitie* e1;
            //Relation* r1;
            List<string>* way = new List<string>();
-           if(getBestWay(e1, e2, way)){
-               return way;
+//           if(getBestWay(e1, e2, way, 0)){
+//               return way;
+//           }else{
+//               return new List<string>();
+//           }
+           getBestWay(e1, e2, way, 0);
+           if(this->solution!=NULL){
+               return this->solution;
            }else{
                return new List<string>();
            }

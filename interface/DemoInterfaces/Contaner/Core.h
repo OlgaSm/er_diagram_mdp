@@ -14,12 +14,14 @@ private:
 	ERDiagram* content;
     int focus;
     int state;
-    int counter;
     // 0 - Сущность
     // 1 - Связь
     // 2 - Выделить
     // 3 - Указатель
     // 4 - Удалить
+    int counter;
+    int weightOfSolution;
+    List<string>* solution;
     bool focusEntitieOrRelation;
 
 public:
@@ -44,7 +46,7 @@ public:
     Entitie* getEntitieAt(int n);
     Relation* getRelationAt(int n);
     List<string>* getBestWay(Entitie* e1, Entitie* e2);
-    bool getBestWay(Entitie* e1, Entitie* e2, List<string>* &last);
+    bool getBestWay(Entitie* e1, Entitie* e2, List<string>* &last, int weight);
     //List<string>* getBestWay();
     int getState();
     int getFocus();

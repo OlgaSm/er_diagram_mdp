@@ -6,12 +6,16 @@
 #include <string>
 #include <sstream>
 #include <math.h>
+#define max_width 5000
+#define max_height 5000
 
 WorkPlaceWidget::WorkPlaceWidget(QWidget *parent) :
     QFrame(parent){
     this->core = new Core();
-    this->setMinimumHeight(500);
-    this->setMinimumWidth(500);
+    QRect r2(0,0,this->size().width()-1,this->size().height()-1);
+    this->setMinimumHeight(max_width);
+    this->setMinimumWidth(max_height);
+    this->scroll(this->size().width()-1,this->size().height()-1,r2);
 }
 
 void WorkPlaceWidget::paintEvent(QPaintEvent *){
@@ -40,6 +44,22 @@ void WorkPlaceWidget::drawEntitie(Entitie* e, bool focus){
     int y = ((IntField*)e->fieldByID("Y"))->getValue();
     int w = ((IntField*)e->fieldByID("W"))->getValue();
     int h = ((IntField*)e->fieldByID("H"))->getValue();
+    if(x>max_width-w-5){
+        ((IntField*)e->fieldByID("X"))->setValue(max_width-w-5);
+        x=max_width-w-5;
+    }
+    if(y>max_height-h-5){
+        ((IntField*)e->fieldByID("Y"))->setValue(max_height-h-5);
+        y=max_height-h-56;
+    }
+    if(x<5){
+        ((IntField*)e->fieldByID("X"))->setValue(5);
+        x=5;
+    }
+    if(y<5){
+        ((IntField*)e->fieldByID("Y"))->setValue(5);
+        y=5;
+    }
     string label = e->getID();
     QRect r1(x,y,w,h);
     QRect r12(x+5,y+5,w-10,h-10);
@@ -84,6 +104,8 @@ void WorkPlaceWidget::drawRelation(Relation* r, bool focus){
     if(indexL<4){
         indexL=4;
     }
+    this->calculateEntitie(eL);
+    this->calculateEntitie(eR);
     int x1 = ((IntField*)eR->fieldByID("X"))->getValue();
     int y1 = ((IntField*)eR->fieldByID("Y"))->getValue();
     int w1 = ((IntField*)eR->fieldByID("W"))->getValue();
@@ -97,23 +119,23 @@ void WorkPlaceWidget::drawRelation(Relation* r, bool focus){
     int x02=0;
     int y01=0;
     int y02=0;
-    if(qAbs(x1-x2)>w2 && qAbs(x1-x2)>w1){
+    if(qAbs(x1-x2)>=w2 && qAbs(x1-x2)>=w1){
         if(x1>x2){
             x01=x1;
-            x02=x2+w2;
+            x02=x2+w2+1;
         }else{
-            x02=x2-5;
-            x01=x1+w1;
+            x02=x2;
+            x01=x1+w1+1;
         }
         y01 = y1+(indexR+1-5)*24+((indexR+1-4)*24-(indexR+1-5)*24)/2;
         y02 = y2+(indexL+1-5)*24+((indexL+1-4)*24-(indexL+1-5)*24)/2;
     }else{
         if(y1>y2){
             y01=y1;
-            y02=y2+h2;
+            y02=y2+h2+1;
         }else{
             y02=y2;
-            y01=y1+h1;
+            y01=y1+h1+1;
         }
         x01=x1+w1/2;
         x02=x2+w2/2;
@@ -165,7 +187,6 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
         char str[255];
         sprintf(str, "Entitie № %d", num);
         name = (const char*)str;
-
         Entitie* e0 = new Entitie(name);
         e0->addUserField(new IntField("X",pe->x()));
         e0->addUserField(new IntField("Y",pe->y()));
@@ -306,15 +327,6 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
 
            int x = pe->x();
            int y = pe->y();
-
-//           bool freey=false;
-//           bool freex=false;
-//           if(qAbs(y01-y02)<15){
-//               freey=true;
-//           }
-//           if(qAbs(x01-x02)<15){
-//               freex=true;
-//           }
 
            int x0 = 0;
            int y0 = 0;

@@ -129,7 +129,7 @@ void EntitieCustomeWidget::timerEvent(){
 void EntitieCustomeWidget::buttonAdd(){
     if(this->core->getFocus()!=-1 && this->core->getFocusObj()){
         Entitie* e = this->core->getEntitieAt(this->core->getFocus());
-        e->addIntField(0);
+        e->addStdField("DefaultField");
         this->curFocus = -1;
     }
 }

@@ -4,6 +4,7 @@
 #include "Contaner/DataField.h"
 #include "Contaner/StringField.h"
 #include "entitiecustomewidget.h"
+#include <qcoreapplication.h>
 
 LineOfField::LineOfField(EntitieCustomeWidget* ec, Entitie* e, Field* field, QWidget *parent) :
     QWidget(parent)
@@ -65,7 +66,11 @@ LineOfField::LineOfField(EntitieCustomeWidget* ec, Entitie* e, Field* field, QWi
     }
     //this->qbl->addWidget(new QLabel(type));
     this->qbl->addWidget(this->qcb);
-    this->qpb = new QPushButton("Удалить");
+    QPixmap delIcon("C:\\Users\\Ladone3\\Desktop\\mdp\\DemoInterfaces\\DemoInterfaces\\Images\\DelButton.png");
+    this->qpb = new QPushButton();
+    this->qpb->setIcon(delIcon);
+    this->qpb->saveGeometry();
+    //this->qpb->setIconSize(delIcon.size());
     this->qbl->addWidget(this->qpb);
     //this->qbl->addStretch();
     this->setLayout(this->qbl);

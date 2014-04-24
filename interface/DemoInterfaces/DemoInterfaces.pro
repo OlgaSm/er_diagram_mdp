@@ -43,4 +43,5 @@ HEADERS  += mainwindow.h \
     lineoffield.h
 
 OTHER_FILES += \
-    Contaner/ReadMe.txt
+    Contaner/ReadMe.txt \
+    Images/DelButton.png

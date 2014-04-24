@@ -16,6 +16,7 @@
 #include "Contaner/DoubleField.h"
 #include "Contaner/DataField.h"
 #include "Contaner/StringField.h"
+#include "QScrollArea"
 
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
@@ -46,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->pmenu->addAction("Создать");
     this->pmenu->addAction("Сохранить");
     this->pmenu->addAction("Загрузить");
-    this->pmenu->addAction("Выйти");
+    this->pmenu->addAction("Выйти",this,SLOT(close()));
 
     this->qbl->setMargin(1);
     this->qbl->addWidget(menuBar);
@@ -55,11 +56,13 @@ MainWindow::MainWindow(QWidget *parent)
     this->qbl->addWidget(this->state);
 
     //==============================================
+    QScrollArea* scrollarea1 = new QScrollArea();
     this->w11 = new WorkPlaceWidget();
     w11->setCore(this->core);
     w11->setFrameStyle(QFrame::Panel);
     QWidget* w21 = new QWidget();
-    this->tab1->layout()->addWidget(w11);
+    scrollarea1->setWidget(w11);
+    this->tab1->layout()->addWidget(scrollarea1);
     this->tab1->layout()->addWidget(w21);
     QBoxLayout* blt = new QBoxLayout(QBoxLayout::TopToBottom);
     w21->setMaximumWidth(400);
@@ -87,11 +90,15 @@ MainWindow::MainWindow(QWidget *parent)
         w21->layout()->addWidget(pb5);
         w21->layout()->addWidget(pb4);
     //==============================================
+        QScrollArea* scrollarea2 = new QScrollArea();
+        scrollarea2->setMaximumWidth(5000);
+        scrollarea2->setMaximumHeight(5000);
         this->w12 = new WorkPlaceWidget();
         w12->setCore(this->core);
         w12->setFrameStyle(QFrame::Panel);
         QWidget* w22 = new QWidget();
-        this->tab2->layout()->addWidget(w12);
+        scrollarea2->setWidget(w12);
+        this->tab2->layout()->addWidget(scrollarea2);
         this->tab2->layout()->addWidget(w22);
         QBoxLayout* blt2 = new QBoxLayout(QBoxLayout::TopToBottom);
         w22->setMaximumWidth(400);
@@ -134,6 +141,7 @@ MainWindow::~MainWindow()
 void MainWindow::tabChanged(){
     if(this->qtw->currentIndex()==1){
         this->core->setState(3);
+        this->core->setFocus(-1);
         int i;
         i=0;
         cb->clear();
@@ -227,13 +235,13 @@ void MainWindow::button6Pressed(){
                             field = new Field(lf->ID->text().toStdString());
                             break;
                         case 1:
-                            field = new StringField(lf->ID->text().toStdString(),"Defoult value");
+                            field = new StringField(lf->ID->text().toStdString(),lf->value->text().toStdString());
                             break;
                         case 2:
-                            field = new IntField(lf->ID->text().toStdString(),0);
+                            field = new IntField(lf->ID->text().toStdString(), lf->value->text().toInt(0));
                             break;
                         case 3:
-                            field = new DoubleField(lf->ID->text().toStdString(),0.0);
+                            field = new DoubleField(lf->ID->text().toStdString(), lf->value->text().toFloat());
                             break;
                     }
                     this->core->getEntitieAt(this->core->getFocus())->addUserField(field);

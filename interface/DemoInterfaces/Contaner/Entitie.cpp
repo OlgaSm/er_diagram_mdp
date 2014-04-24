@@ -64,6 +64,10 @@ void    Entitie::addStringField(string value){
     this->myfield->push_back(new StringField("StandartString",value));
 }
 
+void    Entitie::addStdField(string value){
+    this->myfield->push_back(new Field(value));
+}
+
 void    Entitie::popFieldAt(int i){
 	delete(this->myfield->at(i));
 	this->myfield->popAt(i);
