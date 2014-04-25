@@ -1,5 +1,11 @@
 <RCC>
     <qresource prefix="/">
         <file>Images/DelButton.png</file>
+        <file>Images/Entitie.png</file>
+        <file>Images/Relation.png</file>
+        <file>Images/Selection.png</file>
+        <file>Images/Work.png</file>
+        <file>Images/Use.png</file>
+        <file>Images/Exit.png</file>
     </qresource>
 </RCC>

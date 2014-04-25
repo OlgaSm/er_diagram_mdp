@@ -14,6 +14,7 @@ private:
 	ERDiagram* content;
     int focus;
     int state;
+    bool changed;
     // 0 - Сущность
     // 1 - Связь
     // 2 - Выделить
@@ -47,7 +48,7 @@ public:
     Relation* getRelationAt(int n);
     List<string>* getBestWay(Entitie* e1, Entitie* e2);
     bool getBestWay(Entitie* e1, Entitie* e2, List<string>* &last, int weight);
-    //List<string>* getBestWay();
+    List<string>* getBestWay();
     int getState();
     int getFocus();
     void setState(int state);
@@ -60,6 +61,8 @@ public:
     int getIndexEntitieByID(string ID);
     int getWeightOfSolution();
     void setWeightOfSolution(int weight);
+    void Changed(bool changed);
+    bool isChanged();
 };
 
 #endif //CORE_H

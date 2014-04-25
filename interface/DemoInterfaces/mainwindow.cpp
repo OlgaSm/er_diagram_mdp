@@ -39,15 +39,17 @@ MainWindow::MainWindow(QWidget *parent)
     this->tab2 = new QWidget();
     this->tab1->setLayout(new QBoxLayout(QBoxLayout::LeftToRight));
     this->tab2->setLayout(new QBoxLayout(QBoxLayout::LeftToRight));
-    this->qtw->addTab(tab1,QPixmap(),"&Редактор");
-    this->qtw->addTab(tab2,QPixmap(),"&Работа");
+    this->qtw->addTab(tab1,QPixmap(":Images/Work.png"),"&Редактор");
+    this->qtw->setIconSize(QSize(20,20));
+    this->qtw->addTab(tab2,QPixmap(":Images/Use.png"),"&Работа");
 
     this->menuBar->addMenu(pmenu);
 
     this->pmenu->addAction("Создать");
     this->pmenu->addAction("Сохранить");
     this->pmenu->addAction("Загрузить");
-    this->pmenu->addAction("Выйти",this,SLOT(close()));
+    this->pmenu->addSeparator();
+    this->pmenu->addAction(QPixmap(":Images/Exit.png"),"Выйти",this,SLOT(close()));
 
     this->qbl->setMargin(1);
     this->qbl->addWidget(menuBar);
@@ -71,21 +73,38 @@ MainWindow::MainWindow(QWidget *parent)
     this->ecw = new EntitieCustomeWidget();
     ecw->setCore(this->core);
     //==============================================
+    QPixmap EntitieIcon(":Images/Entitie.png");
+    QPixmap RelationIcon(":Images/Relation.png");
+    QPixmap SelectionIcon(":Images/Selection.png");
+    //==============================================
+    QWidget* pbButtons = new QWidget();
+    pbButtons->setLayout(new QBoxLayout(QBoxLayout::LeftToRight));
     QPushButton* pb0 = new QPushButton("Сущность");
+    pb0->setIcon(EntitieIcon);
+    pb0->setIconSize(QSize(20,20));
     QPushButton* pb1 = new QPushButton("Связь");
+    pb1->setIcon(RelationIcon);
+    pb1->setIconSize(QSize(20,20));
     QPushButton* pb2 = new QPushButton("Выделить");
-    QPushButton* pb3 = new QPushButton("Указатель");
+    pb2->setIcon(SelectionIcon);
+    pb2->setIconSize(QSize(20,20));
+    //QPushButton* pb3 = new QPushButton("Указатель");
+
     QPushButton* pb4 = new QPushButton("Удалить");
     QPushButton* pb5 = new QPushButton("Сохранить");
     QPushButton* pb6 = new QPushButton("Отправить посылку");
     //QPushButton* pb7 = new QPushButton("Обновить список сущностей");
     //==============================================
         //this->tab1->setStyleSheet("border: 1px solid black");
-        w21->layout()->addWidget(pb0);
-        w21->layout()->addWidget(pb1);
-        w21->layout()->addWidget(pb2);
-        w21->layout()->addWidget(pb3);
-        w21->layout()->addWidget(ecw);
+        pbButtons->layout()->addWidget(pb0);
+        pbButtons->layout()->addWidget(pb1);
+        pbButtons->layout()->addWidget(pb2);
+        //pbButtons->layout()->addWidget(pb3);
+
+        //w21->layout()->addWidget(pbButtons);
+        ((QBoxLayout*)(w21->layout()))->addWidget(pbButtons);
+        ((QBoxLayout*)(w21->layout()))->addStretch();
+        ((QBoxLayout*)(w21->layout()))->addWidget(ecw,Qt::AlignTop);
         //blt->addStretch();
         w21->layout()->addWidget(pb5);
         w21->layout()->addWidget(pb4);
@@ -125,7 +144,7 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(pb0,SIGNAL(clicked()),this,SLOT(button1Pressed()));
     QObject::connect(pb1,SIGNAL(clicked()),this,SLOT(button2Pressed()));
     QObject::connect(pb2,SIGNAL(clicked()),this,SLOT(button3Pressed()));
-    QObject::connect(pb3,SIGNAL(clicked()),this,SLOT(button4Pressed()));
+    //QObject::connect(pb3,SIGNAL(clicked()),this,SLOT(button4Pressed()));
     QObject::connect(pb4,SIGNAL(clicked()),this,SLOT(button5Pressed()));
     QObject::connect(pb5,SIGNAL(clicked()),this,SLOT(button6Pressed()));
     QObject::connect(pb6,SIGNAL(clicked()),this,SLOT(buttonway()));
@@ -140,8 +159,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::tabChanged(){
     if(this->qtw->currentIndex()==1){
-        this->core->setState(3);
+        this->core->setState(10);
         this->core->setFocus(-1);
+        if(this->core->isChanged()){
+            this->core->setWeightOfSolution(-1);
+            this->te->clear();
+        }
         int i;
         i=0;
         cb->clear();
@@ -152,6 +175,9 @@ void MainWindow::tabChanged(){
             this->cb2->addItem( QString::fromStdString(l->at(i)));
             i++;
         }
+    }else{
+       this->core->setState(9);
+       this->core->Changed(false);
     }
 }
 
@@ -194,6 +220,7 @@ void MainWindow::button5Pressed(){
         }
         this->core->setFocus(-1);
         this->w11->repaint();
+        this->core->Changed(true);
     }
 }
 
@@ -212,6 +239,7 @@ void MainWindow::buttonway(){
         this->te->append( QString::fromStdString(way->at(i)));
         i++;
     }
+    this->w12->repaint();
 }
 
 void MainWindow::button6Pressed(){

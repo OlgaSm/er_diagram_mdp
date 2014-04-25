@@ -12,6 +12,7 @@
         this->counter = 0;
         this->weightOfSolution = -1;
         this->solution = NULL;
+        this->changed = false;
     }
     int Core::getCounter(){
         return this->counter++;
@@ -142,9 +143,9 @@
         this->focusEntitieOrRelation = feor;
     }
 
-//    List<string>* Core::getBestWay(Entitie* e1, Entitie* e2){
-//        return NULL;
-//    }
+    List<string>* Core::getBestWay(){
+        return this->solution;
+    }
     bool Core::getBestWay(Entitie* e1, Entitie* e2, List<string>* &last, int weight){
         last->push_back(e1->getID());
         if(e1->getID()==e2->getID()){
@@ -260,4 +261,12 @@
 
     int Core::getIndexEntitieByID(string ID){
         return this->content->getIndexEntitieByID(ID);
+    }
+
+    void Core::Changed(bool changed){
+        this->changed=changed;
+    }
+
+    bool Core::isChanged(){
+        return this->changed;
     }

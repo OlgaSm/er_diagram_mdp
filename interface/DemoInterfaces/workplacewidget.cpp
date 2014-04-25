@@ -39,6 +39,24 @@ void WorkPlaceWidget::paintDesk(){
 
 void WorkPlaceWidget::drawEntitie(Entitie* e, bool focus){
     QPainter painter(this);
+    QColor color( 255,200,125 );
+    QColor colorRed( 255,125,125 );
+    QColor colorGreen( 55,155,55 );
+    if(this->core->getState()==10 && this->core->getWeightOfSolution()!=-1){
+        bool green = false;
+        for(int i=0; i<this->core->getBestWay()->size(); i++){
+            if(e->getID()==this->core->getBestWay()->at(i)){
+                green = true;
+            }
+        }
+        if(green){
+            painter.setBrush(QBrush(colorGreen));
+        }else{
+            painter.setBrush(QBrush(colorRed));
+        }
+    }else{
+        painter.setBrush(QBrush(color));
+    }
     this->calculateEntitie(e);
     int x = ((IntField*)e->fieldByID("X"))->getValue();
     int y = ((IntField*)e->fieldByID("Y"))->getValue();
@@ -80,9 +98,9 @@ void WorkPlaceWidget::drawEntitie(Entitie* e, bool focus){
 
 void WorkPlaceWidget::drawRelation(Relation* r, bool focus){
     QPainter painter(this);
-    //QColor color ( 128,128,128 );
+    QColor color(0,155,255);
 
-    painter.setBrush ( palette().background() );
+    painter.setBrush(QBrush(color));
 
     Entitie* eR = r->getEntR();
     Entitie* eL = r->getEntL();
@@ -179,7 +197,7 @@ void WorkPlaceWidget::setCore(Core* core){
 }
 
 void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
-    if(this->core->getState()==0){
+    if(this->core->getState()==0){ // Добавление сущности
         //=====================================================
         string name;
         //int num = this->core->getEntitieCount();
@@ -211,12 +229,13 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
            }
         }
         if(add){
+            this->core->Changed(true);
             core->addEntitieTo(e0);
             core->setFocus(core->getIndexEntitieByID(e0->getID()));
             this->repaint();
         }
     }
-    if(this->core->getState()==1){
+    if(this->core->getState()==1){ // Добавление связи
         //if(core->getFocusObj())
         int focus = -1;
         for(int i=0; i<this->core->getEntitieCount(); i++){
@@ -244,6 +263,7 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
                 Entitie* e1 = this->core->getEntitieAt(this->core->getFocus());
                 Entitie* e2 = this->core->getEntitieAt(focus);
                 core->addRelation(e1,e2,name,"W");
+                this->core->Changed(true);
             }
             this->core->setFocus(core->getRelationCount()-1);
             //core->setFocus(-1);
@@ -252,7 +272,7 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
         core->spotFocus();
         this->repaint();
     }
-    if(this->core->getState()==2){
+    if(this->core->getState()==2){ // Выделение объектов
         for(int i=0; i<this->core->getEntitieCount(); i++){
            Entitie* e = this->core->getEntitieAt(i);
            int x =((IntField*)e->fieldByID("X"))->getValue();
