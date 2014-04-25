@@ -202,6 +202,7 @@
     List<string>* Core::getBestWay(Entitie* e1, Entitie* e2){
            //Entitie* e1;
            //Relation* r1;
+           this->core->weightOfSolution = -1;
            List<string>* way = new List<string>();
 //           if(getBestWay(e1, e2, way, 0)){
 //               return way;
@@ -245,10 +246,18 @@
            return l;
       }
 
-int Core::getIndexRelationByID(string ID){
-    return this->content->getIndexRelationByID(ID);
-}
+    int Core::getWeightOfSolution(){
+        return this->weightOfSolution();
+    }
 
-int Core::getIndexEntitieByID(string ID){
-    return this->content->getIndexEntitieByID(ID);
-}
+    void Core::setWeightOfSolution(int weight){
+        this->weightOfSolution=weight;
+    }
+
+    int Core::getIndexRelationByID(string ID){
+        return this->content->getIndexRelationByID(ID);
+    }
+
+    int Core::getIndexEntitieByID(string ID){
+        return this->content->getIndexEntitieByID(ID);
+    }

@@ -58,6 +58,8 @@ public:
     List<string>* getListEn();
     int getIndexRelationByID(string ID);
     int getIndexEntitieByID(string ID);
+    int getWeightOfSolution();
+    void setWeightOfSolution(int weight);
 };
 
 #endif //CORE_H
