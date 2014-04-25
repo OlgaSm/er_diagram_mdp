@@ -247,7 +247,7 @@
       }
 
     int Core::getWeightOfSolution(){
-        return this->weightOfSolution();
+        return this->weightOfSolution;
     }
 
     void Core::setWeightOfSolution(int weight){
