@@ -42,6 +42,7 @@ public:
     int getCurFocus();
     void setCurFocus(int curFocus);
     void ClearWidget();
+    void save();
 
 signals:
 

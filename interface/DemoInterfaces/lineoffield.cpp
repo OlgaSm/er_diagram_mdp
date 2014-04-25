@@ -66,7 +66,7 @@ LineOfField::LineOfField(EntitieCustomeWidget* ec, Entitie* e, Field* field, QWi
     }
     //this->qbl->addWidget(new QLabel(type));
     this->qbl->addWidget(this->qcb);
-    QPixmap delIcon("C:\\Users\\Ladone3\\Desktop\\mdp\\DemoInterfaces\\DemoInterfaces\\Images\\DelButton.png");
+    QPixmap delIcon(":Images/DelButton.png");
     this->qpb = new QPushButton();
     this->qpb->setIcon(delIcon);
     this->qpb->saveGeometry();

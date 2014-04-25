@@ -45,3 +45,6 @@ HEADERS  += mainwindow.h \
 OTHER_FILES += \
     Contaner/ReadMe.txt \
     Images/DelButton.png
+
+RESOURCES += \
+    ERDRes.qrc

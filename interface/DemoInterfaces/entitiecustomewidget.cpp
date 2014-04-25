@@ -1,4 +1,9 @@
 #include "entitiecustomewidget.h"
+#include "Contaner/IntField.h"
+#include "Contaner/DoubleField.h"
+#include "Contaner/DataField.h"
+#include "Contaner/StringField.h"
+#include <QScrollArea>
 
 EntitieCustomeWidget::EntitieCustomeWidget(QWidget *parent) :
     QWidget(parent){
@@ -62,14 +67,23 @@ void EntitieCustomeWidget::timerEvent(){
                     // Добавление widget'ов
                     this->qbl->addWidget(this->entitieName);
                     this->qbl->addWidget(this->tb);
+                    QScrollArea* scrollArea = new QScrollArea();
+                    //scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+                    QWidget* qw = new QWidget();
+                    qw->setLayout(new QBoxLayout(QBoxLayout::TopToBottom));
                     for(int i=5; i<e->fieldCount(); i++){
                         LineOfField* lf = new LineOfField(this, e, e->fieldAt(i),this);
                         this->fildlist->push_back(lf);
-                        this->qbl->addWidget(lf);
+                        qw->layout()->addWidget(lf);
+                        //this->qbl->addWidget(lf);
                     }
+                    qw->setMaximumWidth(350);
+                    scrollArea->setWidget(qw);
+                    scrollArea->viewport()->isMaximized();
+                    this->qbl->addWidget(scrollArea);
                     this->addButton = new QPushButton("Добавить поле");
                     this->qbl->addWidget(this->addButton);
-                    this->qbl->addStretch();
+                    //this->qbl->addStretch();
                     QObject::connect(this->addButton,SIGNAL(clicked()),this,SLOT(buttonAdd()));
                 }
             }else{
@@ -128,9 +142,60 @@ void EntitieCustomeWidget::timerEvent(){
 //QObject::connect(this->addButton,SIGNAL(clicked()),this,SLOT(buttonAdd()));
 void EntitieCustomeWidget::buttonAdd(){
     if(this->core->getFocus()!=-1 && this->core->getFocusObj()){
+        this->save();
         Entitie* e = this->core->getEntitieAt(this->core->getFocus());
         e->addStdField("DefaultField");
         this->curFocus = -1;
+    }
+}
+
+void EntitieCustomeWidget::save(){
+    if(this->core->getFocus()!=-1){
+            //this->core->popEntitieAt(this->core->getFocus());
+            Entitie* e = this->core->getEntitieAt(core->getFocus());
+            e->setID(this->tb->text().toStdString());
+            for(int i=0; i<this->fildlist->size(); i++){
+                //if(i>4){
+                LineOfField* lf = this->fildlist->at(i);
+                Field* field = lf->getField();
+                if(lf->qcb->currentIndex()>=0 && lf->qcb->currentIndex()<4){
+                    //if(false){
+                    if((int)field->getType()!=lf->qcb->currentIndex()){
+                        this->core->getEntitieAt(this->core->getFocus())->popFieldAt(i+5);
+                        this->fildlist->popAt(i+5);
+                        switch(lf->qcb->currentIndex()){
+                            case 0:
+                                field = new Field(lf->ID->text().toStdString());
+                                break;
+                            case 1:
+                                field = new StringField(lf->ID->text().toStdString(),lf->value->text().toStdString());
+                                break;
+                            case 2:
+                                field = new IntField(lf->ID->text().toStdString(), lf->value->text().toInt(0));
+                                break;
+                            case 3:
+                                field = new DoubleField(lf->ID->text().toStdString(), lf->value->text().toFloat());
+                                break;
+                        }
+                        this->core->getEntitieAt(this->core->getFocus())->addUserField(field);
+                        this->fildlist->push_back(new LineOfField(this,this->core->getEntitieAt(this->core->getFocus()),field, this));
+                        this->setCurFocus(-1);
+                    }
+                }
+                field->setID(lf->ID->text().toStdString());
+                switch((int)field->getType()){
+                    case 1:
+                        ((StringField*)(field))->setValue(lf->value->text().toStdString());
+                        break;
+                    case 2:
+                        ((IntField*)(field))->setValue(lf->value->text().toInt());
+                        break;
+                    case 3:
+                        ((DoubleField*)(field))->setValue(lf->value->text().toDouble());
+                        break;
+                }
+                //}
+            }
     }
 }
 

@@ -10,13 +10,13 @@
 #include <QObject>
 #include "workplacewidget.h"
 #include "Contaner/Entitie.h"
-#include "Contaner/IntField.h"
 #include "entitiecustomewidget.h"
 #include "lineoffield.h"
+#include "Contaner/IntField.h"
 #include "Contaner/DoubleField.h"
 #include "Contaner/DataField.h"
 #include "Contaner/StringField.h"
-#include "QScrollArea"
+#include <QScrollArea>
 
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
@@ -281,6 +281,7 @@ void MainWindow::button6Pressed(){
             this->core->popRelationByID(r->getID());
             //delete(r);
             this->core->addRelation(nr);
+            this->core->setFocus(this->core->getRelationCount()-1);
             //this->ecw
         }
         this->w11->repaint();
