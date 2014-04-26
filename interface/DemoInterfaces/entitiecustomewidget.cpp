@@ -64,11 +64,24 @@ void EntitieCustomeWidget::timerEvent(){
                     // Layout
                     this->setLayout(qbl);
 
+                    // ComboBox
+                    this->qcb = new QComboBox();
+                    this->qcb->addItem("Посредник");
+                    this->qcb->addItem("Артефакт");
+                    int type = ((IntField*)(e->fieldByID("T")))->getValue();
+                    if(type>-1 && type < 2){
+                        this->qcb->setCurrentIndex(type);
+                    }else{
+                        this->qcb->setCurrentIndex(-1);
+                    }
+
                     // Добавление widget'ов
                     this->qbl->addWidget(this->entitieName);
                     this->qbl->addWidget(this->tb);
+                    this->qbl->addWidget(new QLabel("Тип сущности:"));
+                    this->qbl->addWidget(this->qcb);
                     QScrollArea* scrollArea = new QScrollArea();
-                    //scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+                    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
                     QWidget* qw = new QWidget();
                     qw->setLayout(new QBoxLayout(QBoxLayout::TopToBottom));
                     for(int i=6; i<e->fieldCount(); i++){
@@ -112,11 +125,11 @@ void EntitieCustomeWidget::timerEvent(){
                     this->mr->setChecked(r->getMulR());
                     this->qbl->addWidget(mr);
                     //==========================================
-                    this->al = new QCheckBox("Абстрактная связь слева");
+                    this->al = new QCheckBox("Обязательная связь слева");
                     this->al->setChecked(r->getAbsL());
                     this->qbl->addWidget(al);
                     //==========================================
-                    this->ar = new QCheckBox("Абстрактная связь справа");
+                    this->ar = new QCheckBox("Обязательная связь справа");
                     this->ar->setChecked(r->getAbsR());
                     this->qbl->addWidget(ar);
                     //==========================================
@@ -154,14 +167,15 @@ void EntitieCustomeWidget::save(){
             //this->core->popEntitieAt(this->core->getFocus());
             Entitie* e = this->core->getEntitieAt(core->getFocus());
             e->setID(this->tb->text().toStdString());
+            ((IntField*)e->fieldByID("T"))->setValue(this->qcb->currentIndex());
             for(int i=0; i<this->fildlist->size(); i++){
                 //if(i>4){
                 LineOfField* lf = this->fildlist->at(i);
                 Field* field = lf->getField();
-                if(lf->qcb->currentIndex()>=0 && lf->qcb->currentIndex()<4){
+                if(lf->qcb->currentIndex()>=0 && lf->qcb->currentIndex()<5){
                     //if(false){
                     if((int)field->getType()!=lf->qcb->currentIndex()){
-                        this->core->getEntitieAt(this->core->getFocus())->popFieldAt(i+5);
+                        this->core->getEntitieAt(this->core->getFocus())->popFieldAt(i+6);
                         this->fildlist->popAt(i+5);
                         switch(lf->qcb->currentIndex()){
                             case 0:

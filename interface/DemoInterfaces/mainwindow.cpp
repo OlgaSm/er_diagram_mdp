@@ -300,10 +300,10 @@ void MainWindow::button5Pressed(){
 void MainWindow::buttonway(){
     int i;
     this->state->setText("Нахождение оптимального пути");
-    int ind1 = this->cb->currentIndex();
-    int ind2 = this->cb2->currentIndex();
-    Entitie* e1 = this->core->getEntitieAt(ind1);
-    Entitie* e2 = this->core->getEntitieAt(ind2);
+    string en1 = this->cb->currentText().toStdString();
+    string en2 = this->cb2->currentText().toStdString();
+    Entitie* e1 = this->core->getEntitieByID(en1);
+    Entitie* e2 = this->core->getEntitieByID(en2);
     List<string>* way = core->getBestWay(e1,e2);
     i=0;
     te->clear();
@@ -323,36 +323,32 @@ void MainWindow::button6Pressed(){
     if(this->core->getFocus()!=-1){
         this->state->setText("Сохранить");
         if(core->getFocusObj()){
-            //this->core->popEntitieAt(this->core->getFocus());
+
             Entitie* e = this->core->getEntitieAt(core->getFocus());
             e->setID(this->ecw->tb->text().toStdString());
+            ((IntField*)e->fieldByID("T"))->setValue(this->ecw->qcb->currentIndex());
+            for(int j=6; e->fieldAt(j)!=NULL;){
+                e->popFieldAt(j);
+            }
             for(int i=0; i<this->ecw->fildlist->size(); i++){
-                //if(i>4){
                 LineOfField* lf = this->ecw->fildlist->at(i);
-                Field* field = lf->getField();
-                if(lf->qcb->currentIndex()>=0 && lf->qcb->currentIndex()<4){
-                //if(false){
-                if((int)field->getType()!=lf->qcb->currentIndex()){
-                    this->core->getEntitieAt(this->core->getFocus())->popFieldAt(i+5);
-                    this->ecw->fildlist->popAt(i+5);
-                    switch(lf->qcb->currentIndex()){
-                        case 0:
-                            field = new Field(lf->ID->text().toStdString());
-                            break;
-                        case 1:
-                            field = new StringField(lf->ID->text().toStdString(),lf->value->text().toStdString());
-                            break;
-                        case 2:
-                            field = new IntField(lf->ID->text().toStdString(), lf->value->text().toInt(0));
-                            break;
-                        case 3:
-                            field = new DoubleField(lf->ID->text().toStdString(), lf->value->text().toFloat());
-                            break;
-                    }
-                    this->core->getEntitieAt(this->core->getFocus())->addUserField(field);
-                    this->ecw->fildlist->push_back(new LineOfField(this->ecw,this->core->getEntitieAt(this->core->getFocus()),field, this));
-                    this->ecw->setCurFocus(-1);
-                }
+                Field* field;// = lf->getField();
+                if(lf->qcb->currentIndex()>=0 && lf->qcb->currentIndex()<5){
+                        switch(lf->qcb->currentIndex()){
+                            case 0:
+                                field = new Field(lf->ID->text().toStdString());
+                                break;
+                            case 1:
+                                field = new StringField(lf->ID->text().toStdString(),lf->value->text().toStdString());
+                                break;
+                            case 2:
+                                field = new IntField(lf->ID->text().toStdString(), lf->value->text().toInt(0));
+                                break;
+                            case 3:
+                                field = new DoubleField(lf->ID->text().toStdString(), lf->value->text().toFloat());
+                                break;
+                        }
+
                 }
                 field->setID(lf->ID->text().toStdString());
                 switch((int)field->getType()){
@@ -366,16 +362,18 @@ void MainWindow::button6Pressed(){
                         ((DoubleField*)(field))->setValue(lf->value->text().toDouble());
                         break;
                 }
-                //}
+                delete(lf);
+                e->addUserField(field);
             }
-
+            delete(this->ecw->fildlist);
+            this->ecw->fildlist = new List<LineOfField*>();
+            for(int i=6; i<e->fieldCount(); i++){
+                Field* f = e->fieldAt(i);
+                this->ecw->fildlist->push_back(new LineOfField(this->ecw,e,f, this));
+            }
+            this->ecw->setCurFocus(-1);
         }else{
             Relation* r = this->core->getRelationAt(core->getFocus());
-//            string name;
-//            int num = this->core->getCounter();
-//            char str[255];
-//            sprintf(str, "Relation № %d", num);
-//            name = (const char*)str;
             Relation* nr = new Relation(this->ecw->tb->text().toStdString(),
                                         this->ecw->key->text().toStdString(),
                                         r->getEntL(),r->getEntR(),

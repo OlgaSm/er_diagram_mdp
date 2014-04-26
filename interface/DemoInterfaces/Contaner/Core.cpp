@@ -47,7 +47,16 @@
     }
 
     void Core::addRelation(Entitie* e1, Entitie* e2, string id, string key){
-        this->content->addRelation(id,key,e1,e2,false,false,false,false);
+        bool add = true;
+        for(int i=0; i<e1->relationCount(); i++){
+           Relation* r = e1->relationAt(i);
+           if(r->getEntL()== e2 || r->getEntR()== e2){
+               add = false;
+           }
+        }
+        if(add){
+            this->content->addRelation(id,key,e1,e2,false,false,false,false);
+        }
     }
 
     void Core::addEntitie(string name){
@@ -201,37 +210,14 @@
     }
 
     List<string>* Core::getBestWay(Entitie* e1, Entitie* e2){
-           //Entitie* e1;
-           //Relation* r1;
            this->weightOfSolution = -1;
            List<string>* way = new List<string>();
-//           if(getBestWay(e1, e2, way, 0)){
-//               return way;
-//           }else{
-//               return new List<string>();
-//           }
            getBestWay(e1, e2, way, 0);
            if(this->solution!=NULL){
                return this->solution;
            }else{
                return new List<string>();
            }
-//           int i,j;
-//           i=0;
-//           while (i<this->content->getEntitieCount()){
-//               e1= this->content->entitieAt(i);
-//               way->push_back("Сущность "+e1->getID()+"\n");
-//               j=0;
-//               while (j<e1->relationCount()){
-//                   r1=e1->relationAt(j);
-//                   j++;
-//                   way->push_back("Связь R "+r1->getEntR()->getID());
-//                   way->push_back("Связь L "+r1->getEntL()->getID());
-//               }
-//               i++;
-
-//           };
-           //return way;
       }
 
     List<string>* Core::getListEn(){
@@ -241,7 +227,10 @@
            i=0;
            while (i<this->content->getEntitieCount()){
                e1= this->content->entitieAt(i);
-               l->push_back(e1->getID());
+               int t = ((IntField*)e1->fieldByID("T"))->getValue();
+               if(t!=1){
+                   l->push_back(e1->getID());
+               }
                i++;
            };
            return l;

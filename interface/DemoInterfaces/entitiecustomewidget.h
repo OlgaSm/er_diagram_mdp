@@ -38,6 +38,7 @@ public:
     QCheckBox* mr;
     QCheckBox* al;
     QCheckBox* ar;
+    QComboBox* qcb;
     List<LineOfField*>* fildlist;
     int getCurFocus();
     void setCurFocus(int curFocus);

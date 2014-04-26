@@ -41,8 +41,18 @@ void WorkPlaceWidget::paintDesk(){
 void WorkPlaceWidget::drawEntitie(Entitie* e, bool focus){
     QPainter painter(this);
     QColor color(255,200,125);
+    QColor color1(255,170,100);
+    QColor color2(215,215,255);
     QColor colorRed(255,125,125);
     QColor colorGreen(55,155,55);
+
+    this->calculateEntitie(e);
+    int x = ((IntField*)e->fieldByID("X"))->getValue();
+    int y = ((IntField*)e->fieldByID("Y"))->getValue();
+    int w = ((IntField*)e->fieldByID("W"))->getValue();
+    int h = ((IntField*)e->fieldByID("H"))->getValue();
+    int t = ((IntField*)e->fieldByID("T"))->getValue();
+
     if(this->core->getState()==10 && this->core->getWeightOfSolution()!=-1){
         bool green = false;
         for(int i=0; i<this->core->getBestWay()->size(); i++){
@@ -50,19 +60,25 @@ void WorkPlaceWidget::drawEntitie(Entitie* e, bool focus){
                 green = true;
             }
         }
-        if(green){
-            painter.setBrush(QBrush(colorGreen));
+        if(t!=1){
+            if(green){
+                painter.setBrush(QBrush(colorGreen));
+            }else{
+                painter.setBrush(QBrush(colorRed));
+            }
         }else{
-            painter.setBrush(QBrush(colorRed));
+           painter.setBrush(QBrush(color2));
         }
     }else{
-        painter.setBrush(QBrush(color));
+        if(t==0){
+            painter.setBrush(QBrush(color1));
+        }else if(t==1){
+            painter.setBrush(QBrush(color2));
+        }else{
+            painter.setBrush(QBrush(color));
+        }
     }
-    this->calculateEntitie(e);
-    int x = ((IntField*)e->fieldByID("X"))->getValue();
-    int y = ((IntField*)e->fieldByID("Y"))->getValue();
-    int w = ((IntField*)e->fieldByID("W"))->getValue();
-    int h = ((IntField*)e->fieldByID("H"))->getValue();
+
     if(x>max_width-w-5){
         ((IntField*)e->fieldByID("X"))->setValue(max_width-w-5);
         x=max_width-w-5;
@@ -99,7 +115,7 @@ void WorkPlaceWidget::drawEntitie(Entitie* e, bool focus){
 
 void WorkPlaceWidget::drawRelation(Relation* r, bool focus){
     QPainter painter(this);
-    QColor color(0,155,255);
+    QColor color(90,185,255);
 
     painter.setBrush(QBrush(color));
 
@@ -129,10 +145,12 @@ void WorkPlaceWidget::drawRelation(Relation* r, bool focus){
     int y1 = ((IntField*)eR->fieldByID("Y"))->getValue();
     int w1 = ((IntField*)eR->fieldByID("W"))->getValue();
     int h1 = ((IntField*)eR->fieldByID("H"))->getValue();
+    //int t1 = ((IntField*)eR->fieldByID("T"))->getValue();
     int x2 = ((IntField*)eL->fieldByID("X"))->getValue();
     int y2 = ((IntField*)eL->fieldByID("Y"))->getValue();
     int w2 = ((IntField*)eL->fieldByID("W"))->getValue();
     int h2 = ((IntField*)eL->fieldByID("H"))->getValue();
+    //int t2 = ((IntField*)eR->fieldByID("T"))->getValue();
 
     int x01=0;
     int x02=0;
@@ -174,17 +192,54 @@ void WorkPlaceWidget::drawRelation(Relation* r, bool focus){
         y0 = y01 + (y02 - y01)/2;
     }
     QPointF p0(x0,y0);
-    painter.drawLine(p1,p2);
-
+    QPen pen1 = QPen(Qt::black, 1, Qt::DotLine);
+    QPen pen2 = QPen(Qt::black, 1, Qt::SolidLine);
+    QPen pen3 = QPen(Qt::black, 2, Qt::SolidLine);
+    QPen pen4 = QPen(Qt::black, 2, Qt::DotLine);
+    if(r->getAbsL()){
+        if(focus){
+            painter.setPen(pen4);
+        }else{
+            painter.setPen(pen1);
+        }
+    }else{
+        if(focus){
+            painter.setPen(pen3);
+        }else{
+            painter.setPen(pen2);
+        }
+    }
+    painter.drawLine(p1,p0);
+    if(r->getAbsR()){
+        if(focus){
+            painter.setPen(pen4);
+        }else{
+            painter.setPen(pen1);
+        }
+    }else{
+        if(focus){
+            painter.setPen(pen3);
+        }else{
+            painter.setPen(pen2);
+        }
+    }
+    painter.drawLine(p0,p2);
     if(focus){
-        QPointF p1(x01+1,y01-1);
-        QPointF p2(x02+1,y02-1);
-        painter.drawLine(p1,p2);
-        QPointF p3(x01-1,y01+1);
-        QPointF p4(x02-1,y02+1);
-        painter.drawLine(p3,p4);
+        painter.setPen(pen3);
+    }else{
+        painter.setPen(pen2);
     }
     painter.drawEllipse(p0, 10, 10);
+    if(r->getMulL()){
+        QRect tr(p0.x()-7,p0.y()-7,12,12);
+        painter.drawText(tr,"n");
+    }
+    if(r->getMulR()){
+        QRect tr(p0.x()+3,p0.y()-7,12,12);
+        painter.drawText(tr,"n");
+    }
+    painter.setPen(pen2);
+    painter.drawLine(QPointF(p0.x(),p0.y()-10),QPointF(p0.x(),p0.y()+10));
 }
 
 void WorkPlaceWidget::calculateEntitie(Entitie* e){
