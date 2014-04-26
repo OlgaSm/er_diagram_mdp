@@ -72,6 +72,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     //==============================================
     QScrollArea* scrollarea1 = new QScrollArea();
+    scrollarea1->setMaximumWidth(5000);
+    scrollarea1->setMaximumHeight(5000);
+    scrollarea1->setMinimumHeight(250);
+    scrollarea1->setMinimumWidth(250);
     this->w11 = new WorkPlaceWidget();
     w11->setCore(this->core);
     w11->setFrameStyle(QFrame::Panel);
@@ -81,6 +85,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->tab1->layout()->addWidget(w21);
     QBoxLayout* blt = new QBoxLayout(QBoxLayout::TopToBottom);
     w21->setMaximumWidth(400);
+    w21->setMinimumWidth(400);
     w21->setLayout(blt);
     //==============================================
     this->ecw = new EntitieCustomeWidget();
@@ -121,7 +126,6 @@ MainWindow::MainWindow(QWidget *parent)
     pb2b->setCheckable(true);
     //QPushButton* pb3 = new QPushButton("Указатель");
 
-
     this->pb4 = new QPushButton("Удалить");
     this->pb5 = new QPushButton("Сохранить");
     QPushButton* pb6 = new QPushButton("Отправить посылку");
@@ -143,6 +147,8 @@ MainWindow::MainWindow(QWidget *parent)
         QScrollArea* scrollarea2 = new QScrollArea();
         scrollarea2->setMaximumWidth(5000);
         scrollarea2->setMaximumHeight(5000);
+        scrollarea2->setMinimumHeight(250);
+        scrollarea2->setMinimumWidth(250);
         this->w12 = new WorkPlaceWidget();
         w12->setCore(this->core);
         w12->setFrameStyle(QFrame::Panel);
@@ -152,6 +158,7 @@ MainWindow::MainWindow(QWidget *parent)
         this->tab2->layout()->addWidget(w22);
         QBoxLayout* blt2 = new QBoxLayout(QBoxLayout::TopToBottom);
         w22->setMaximumWidth(400);
+        w22->setMinimumWidth(400);
         w22->setLayout(blt2);
         //==============================================
             //this->tab1->setStyleSheet("border: 1px solid black");
