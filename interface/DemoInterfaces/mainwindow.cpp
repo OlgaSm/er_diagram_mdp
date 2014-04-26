@@ -28,7 +28,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Настройка
     this->setAutoFillBackground(true);
-    this->resize(1000,500);
+    this->resize(1000,600);
+    this->timer = new QTimer(this);
+    connect(this->timer, SIGNAL(timeout()), SLOT(timerEvent()));
+    this->timer->start(50);
 
     // Инициализация полей
     this->menuBar = new QMenuBar();
@@ -43,7 +46,10 @@ MainWindow::MainWindow(QWidget *parent)
     this->qtw->setIconSize(QSize(20,20));
     this->qtw->addTab(tab2,QPixmap(":Images/Use.png"),"&Работа");
 
+    //this->qtw->setStyleSheet(" QTabWidget::tab-bar { alignment: left; position: relative; bottom: -37.5em;} QTabWidget::pane {bottom: 2em;} ");
+
     this->menuBar->addMenu(pmenu);
+    this->menuBar->setStyleSheet("QMenuBar { background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 WHITE, stop: 0.4 #D4DFEF, stop: 0.5 #BDCFEB, stop: 1.0 WHITE); spacing: 5px; border: 2px solid #B2C8EA }");
 
     this->pmenu->addAction("Создать");
     this->pmenu->addAction("Сохранить");
@@ -51,8 +57,15 @@ MainWindow::MainWindow(QWidget *parent)
     this->pmenu->addSeparator();
     this->pmenu->addAction(QPixmap(":Images/Exit.png"),"Выйти",this,SLOT(close()));
 
+    this->qtoolbar = new QToolBar("Панель инструментов",this);
+    this->qtoolbar->setStyleSheet("QToolBar { background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 WHITE, stop: 0.4 #D4DFEF, stop: 0.5 #BDCFEB, stop: 1.0 WHITE); spacing: 5px; border: 2px solid #B2C8EA }"); // #BBD4E8
+    this->qtoolbar->setMovable(true);
+    this->qtoolbar->setFloatable(true);
+
+
     this->qbl->setMargin(1);
     this->qbl->addWidget(menuBar);
+    this->qbl->addWidget(this->qtoolbar);
     this->qbl->addWidget(qtw);
     this->state = new QLabel("Сущность");
     this->qbl->addWidget(this->state);
@@ -79,23 +92,41 @@ MainWindow::MainWindow(QWidget *parent)
     //==============================================
     QWidget* pbButtons = new QWidget();
     pbButtons->setLayout(new QBoxLayout(QBoxLayout::LeftToRight));
-    QPushButton* pb0 = new QPushButton("Сущность");
+    this->pb0 = new QPushButton("Сущность");
     pb0->setIcon(EntitieIcon);
     pb0->setIconSize(QSize(20,20));
-    QPushButton* pb1 = new QPushButton("Связь");
+    pb0->setCheckable(true);
+    pb0->setChecked(true);
+    this->pb1 = new QPushButton("Связь");
     pb1->setIcon(RelationIcon);
     pb1->setIconSize(QSize(20,20));
-    QPushButton* pb2 = new QPushButton("Выделить");
+    pb1->setCheckable(true);
+    this->pb2 = new QPushButton("Выделить");
     pb2->setIcon(SelectionIcon);
     pb2->setIconSize(QSize(20,20));
+    pb2->setCheckable(true);
+
+    this->pb0b = new QPushButton();
+    pb0b->setIcon(EntitieIcon);
+    pb0b->setIconSize(QSize(15,15));
+    pb0b->setCheckable(true);
+    pb0b->setChecked(true);
+    this->pb1b = new QPushButton();
+    pb1b->setIcon(RelationIcon);
+    pb1b->setIconSize(QSize(15,15));
+    pb1b->setCheckable(true);
+    this->pb2b = new QPushButton();
+    pb2b->setIcon(SelectionIcon);
+    pb2b->setIconSize(QSize(15,15));
+    pb2b->setCheckable(true);
     //QPushButton* pb3 = new QPushButton("Указатель");
 
-    QPushButton* pb4 = new QPushButton("Удалить");
-    QPushButton* pb5 = new QPushButton("Сохранить");
+
+    this->pb4 = new QPushButton("Удалить");
+    this->pb5 = new QPushButton("Сохранить");
     QPushButton* pb6 = new QPushButton("Отправить посылку");
     //QPushButton* pb7 = new QPushButton("Обновить список сущностей");
     //==============================================
-        //this->tab1->setStyleSheet("border: 1px solid black");
         pbButtons->layout()->addWidget(pb0);
         pbButtons->layout()->addWidget(pb1);
         pbButtons->layout()->addWidget(pb2);
@@ -141,6 +172,15 @@ MainWindow::MainWindow(QWidget *parent)
     this->setLayout(qbl);
     // Соединение со сингналов со слотами
     //==============================================
+    this->pb0b->setToolTip("Инструмент сущность");
+    this->pb1b->setToolTip("Инструмент связь");
+    this->pb2b->setToolTip("Инструмент выделение");
+    this->qtoolbar->addWidget(pb0b);
+    this->qtoolbar->addWidget(pb1b);
+    this->qtoolbar->addWidget(pb2b);
+    QObject::connect(pb0b,SIGNAL(clicked()),this,SLOT(button1Pressed()));
+    QObject::connect(pb1b,SIGNAL(clicked()),this,SLOT(button2Pressed()));
+    QObject::connect(pb2b,SIGNAL(clicked()),this,SLOT(button3Pressed()));
     QObject::connect(pb0,SIGNAL(clicked()),this,SLOT(button1Pressed()));
     QObject::connect(pb1,SIGNAL(clicked()),this,SLOT(button2Pressed()));
     QObject::connect(pb2,SIGNAL(clicked()),this,SLOT(button3Pressed()));
@@ -175,9 +215,24 @@ void MainWindow::tabChanged(){
             this->cb2->addItem( QString::fromStdString(l->at(i)));
             i++;
         }
+        this->pb0b->setChecked(false);
+        this->pb1b->setChecked(false);
+        this->pb2b->setChecked(false);
+        this->pb0b->setEnabled(false);
+        this->pb1b->setEnabled(false);
+        this->pb2b->setEnabled(false);
     }else{
-       this->core->setState(9);
-       this->core->Changed(false);
+        this->core->setState(2);
+        this->core->Changed(false);
+        this->pb0->setChecked(false);
+        this->pb1->setChecked(false);
+        this->pb2->setChecked(true);
+        this->pb0b->setChecked(false);
+        this->pb1b->setChecked(false);
+        this->pb2b->setChecked(true);
+        this->pb0b->setEnabled(true);
+        this->pb1b->setEnabled(true);
+        this->pb2b->setEnabled(true);
     }
 }
 
@@ -187,6 +242,12 @@ void MainWindow::button1Pressed(){
     this->core->setFocus(-1);
     this->core->setFocusObj(true);
     this->w11->repaint();
+    this->pb0->setChecked(true);
+    this->pb0b->setChecked(true);
+    this->pb1->setChecked(false);
+    this->pb2->setChecked(false);
+    this->pb1b->setChecked(false);
+    this->pb2b->setChecked(false);
 }
 
 void MainWindow::button2Pressed(){
@@ -195,12 +256,24 @@ void MainWindow::button2Pressed(){
     this->core->setFocus(-1);
     this->core->setFocusObj(true);
     this->w11->repaint();
+    this->pb1->setChecked(true);
+    this->pb0->setChecked(false);
+    this->pb2->setChecked(false);
+    this->pb1b->setChecked(true);
+    this->pb0b->setChecked(false);
+    this->pb2b->setChecked(false);
 }
 
 void MainWindow::button3Pressed(){
     this->state->setText("Выделить");
     this->core->setState(2);
     this->w11->repaint();
+    this->pb0->setChecked(false);
+    this->pb1->setChecked(false);
+    this->pb2->setChecked(true);
+    this->pb0b->setChecked(false);
+    this->pb1b->setChecked(false);
+    this->pb2b->setChecked(true);
 }
 
 void MainWindow::button4Pressed(){
@@ -235,9 +308,13 @@ void MainWindow::buttonway(){
     i=0;
     te->clear();
     this->te->setReadOnly(true);
-    while (i<way->size()){
-        this->te->append( QString::fromStdString(way->at(i)));
-        i++;
+    if(way->size()!=0){
+        while (i<way->size()){
+            this->te->append( QString::fromStdString(way->at(i)));
+            i++;
+        }
+    }else{
+       this->te->append("Путь не найден");
     }
     this->w12->repaint();
 }
@@ -313,6 +390,21 @@ void MainWindow::button6Pressed(){
             //this->ecw
         }
         this->w11->repaint();
+    }
+    this->core->Changed(true);
+}
+
+void MainWindow::timerEvent(){
+    if(core->getFocus()==-1){
+       if(this->pb4->isEnabled() && this->pb5->isEnabled()){
+          this->pb4->setEnabled(false);
+          this->pb5->setEnabled(false);
+       }
+    }else{
+        if(!this->pb4->isEnabled() || !this->pb5->isEnabled()){
+           this->pb4->setEnabled(true);
+           this->pb5->setEnabled(true);
+        }
     }
 }
 

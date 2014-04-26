@@ -13,11 +13,12 @@
 #include "Contaner/Core.h"
 #include "workplacewidget.h"
 #include "entitiecustomewidget.h"
-
+#include <QToolBar>
 class MainWindow : public QWidget{
 
     Q_OBJECT
 private:
+    QTimer* timer;
     QMenuBar* menuBar;
     QMenu* pmenu;
     QBoxLayout* qbl;
@@ -25,6 +26,14 @@ private:
     WorkPlaceWidget* w11;
     WorkPlaceWidget* w12;
     EntitieCustomeWidget* ecw;
+    QPushButton* pb0;
+    QPushButton* pb1;
+    QPushButton* pb2;
+    QPushButton* pb4;
+    QPushButton* pb5;
+    QPushButton* pb0b;
+    QPushButton* pb1b;
+    QPushButton* pb2b;
     //QLineEdit* le;
     QTextEdit* te;
     QWidget* tab1;
@@ -33,6 +42,7 @@ private:
     QComboBox* cb2;
     QLabel* state;
     Core* core;
+    QToolBar* qtoolbar;
 
 public:
     MainWindow(QWidget *parent = 0);
@@ -48,6 +58,7 @@ public slots:
     void buttonway();
     //void button7Pressed();
     void tabChanged();
+    void timerEvent();
 };
 
 #endif // MAINWINDOW_H

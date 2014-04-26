@@ -9,7 +9,7 @@ EntitieCustomeWidget::EntitieCustomeWidget(QWidget *parent) :
     QWidget(parent){
     this->timer = new QTimer(this);
     connect(this->timer, SIGNAL(timeout()), SLOT(timerEvent()));
-    this->timer->start(100);
+    this->timer->start(50);
     this->core = new Core;
     this->fildlist = new List<LineOfField*>();
     this->curFocus = -1;
@@ -71,7 +71,7 @@ void EntitieCustomeWidget::timerEvent(){
                     //scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
                     QWidget* qw = new QWidget();
                     qw->setLayout(new QBoxLayout(QBoxLayout::TopToBottom));
-                    for(int i=5; i<e->fieldCount(); i++){
+                    for(int i=6; i<e->fieldCount(); i++){
                         LineOfField* lf = new LineOfField(this, e, e->fieldAt(i),this);
                         this->fildlist->push_back(lf);
                         qw->layout()->addWidget(lf);

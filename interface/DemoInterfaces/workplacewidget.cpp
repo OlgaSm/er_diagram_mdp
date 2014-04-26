@@ -8,6 +8,7 @@
 #include <math.h>
 #define max_width 5000
 #define max_height 5000
+#define work_count 6
 
 WorkPlaceWidget::WorkPlaceWidget(QWidget *parent) :
     QFrame(parent){
@@ -39,9 +40,9 @@ void WorkPlaceWidget::paintDesk(){
 
 void WorkPlaceWidget::drawEntitie(Entitie* e, bool focus){
     QPainter painter(this);
-    QColor color( 255,200,125 );
-    QColor colorRed( 255,125,125 );
-    QColor colorGreen( 55,155,55 );
+    QColor color(255,200,125);
+    QColor colorRed(255,125,125);
+    QColor colorGreen(55,155,55);
     if(this->core->getState()==10 && this->core->getWeightOfSolution()!=-1){
         bool green = false;
         for(int i=0; i<this->core->getBestWay()->size(); i++){
@@ -68,7 +69,7 @@ void WorkPlaceWidget::drawEntitie(Entitie* e, bool focus){
     }
     if(y>max_height-h-5){
         ((IntField*)e->fieldByID("Y"))->setValue(max_height-h-5);
-        y=max_height-h-56;
+        y=max_height-h-5;
     }
     if(x<5){
         ((IntField*)e->fieldByID("X"))->setValue(5);
@@ -89,9 +90,9 @@ void WorkPlaceWidget::drawEntitie(Entitie* e, bool focus){
     painter.drawRect(r1);
     painter.drawRect(r2);
     painter.drawText(r12,label.c_str());
-    for(int i=5; i<e->fieldCount(); i++){
+    for(int i=work_count; i<e->fieldCount(); i++){
        string field = e->fieldAt(i)->getID();
-       QRect tr(x+5,y+5+(i+1-5)*24,w-10,h-10);
+       QRect tr(x+5,y+5+(i+1-work_count)*24,w-10,h-10);
        painter.drawText(tr,field.c_str());
     }
 }
@@ -116,11 +117,11 @@ void WorkPlaceWidget::drawRelation(Relation* r, bool focus){
             indexL = j;
         }
     }
-    if(indexR<4){
-        indexR=4;
+    if(indexR<work_count-1){
+        indexR=work_count-1;
     }
-    if(indexL<4){
-        indexL=4;
+    if(indexL<work_count-1){
+        indexL=work_count-1;
     }
     this->calculateEntitie(eL);
     this->calculateEntitie(eR);
@@ -145,8 +146,8 @@ void WorkPlaceWidget::drawRelation(Relation* r, bool focus){
             x02=x2;
             x01=x1+w1+1;
         }
-        y01 = y1+(indexR+1-5)*24+((indexR+1-4)*24-(indexR+1-5)*24)/2;
-        y02 = y2+(indexL+1-5)*24+((indexL+1-4)*24-(indexL+1-5)*24)/2;
+        y01 = y1+(indexR+1-work_count)*24+((indexR+1-(work_count-1))*24-(indexR+1-work_count)*24)/2;
+        y02 = y2+(indexL+1-work_count)*24+((indexL+1-(work_count-1))*24-(indexL+1-work_count)*24)/2;
     }else{
         if(y1>y2){
             y01=y1;
@@ -187,7 +188,7 @@ void WorkPlaceWidget::drawRelation(Relation* r, bool focus){
 }
 
 void WorkPlaceWidget::calculateEntitie(Entitie* e){
-    int height = e->fieldCount() - 4;
+    int height = e->fieldCount() - (work_count-1);
     if(height<1) height = 1;
     ((IntField*)e->fieldByID("H"))->setValue(height*24);
 }
@@ -200,7 +201,6 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
     if(this->core->getState()==0){ // Добавление сущности
         //=====================================================
         string name;
-        //int num = this->core->getEntitieCount();
         int num = this->core->getCounter();
         char str[255];
         sprintf(str, "Entitie № %d", num);
@@ -211,6 +211,7 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
         e0->addUserField(new IntField("W",100));
         e0->addUserField(new IntField("H",100));
         e0->addUserField(new IntField("F",1));
+        e0->addUserField(new IntField("T",-1));
         calculateEntitie(e0);
         //=====================================================
 
@@ -301,11 +302,11 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
                    indexL = j;
                }
            }
-           if(indexR<4){
-               indexR=4;
+           if(indexR<work_count-1){
+               indexR=work_count-1;
            }
-           if(indexL<4){
-               indexL=4;
+           if(indexL<work_count-1){
+               indexL=work_count-1;
            }
            //this->calculateEntitie(eR);
            //this->calculateEntitie(eL);
@@ -331,8 +332,8 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
                    x02=x2-5;
                    x01=x1+w1;
                }
-               y01 = y1+(indexR+1-5)*24+((indexR+1-4)*24-(indexR+1-5)*24)/2;
-               y02 = y2+(indexL+1-5)*24+((indexL+1-4)*24-(indexL+1-5)*24)/2;
+               y01 = y1+(indexR+1-work_count)*24+((indexR+1-(work_count-1))*24-(indexR+1-work_count)*24)/2;
+               y02 = y2+(indexL+1-work_count)*24+((indexL+1-(work_count-1))*24-(indexL+1-work_count)*24)/2;
            }else{
                if(y1>y2){
                    y01=y1;
