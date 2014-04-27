@@ -55,6 +55,11 @@ void WorkPlaceWidget::drawEntitie(Entitie* e, bool focus){
     QColor color2(215,215,255);
     QColor colorRed(255,125,125);
     QColor colorGreen(55,155,55);
+    QColor colorGreenAlpha(55,155,55,25);
+    QColor colorBlackAlpha(0,0,0,100);
+    QPen pen1 = QPen(Qt::black, 1, Qt::SolidLine);
+    QPen pen2 = QPen(colorBlackAlpha, 1, Qt::SolidLine);
+    painter.setPen(pen1);
 
     this->calculateEntitie(e);
     int x = ((IntField*)e->fieldByID("X"))->getValue();
@@ -122,9 +127,15 @@ void WorkPlaceWidget::drawEntitie(Entitie* e, bool focus){
        painter.drawText(tr,field.c_str());
     }
     if(t!=1){
+        double distance = this->core->getDistanceOf(e);
         painter.setBrush(QBrush(Qt::black));
         painter.drawEllipse(QPoint(x-1,y-1), 2, 2);
-    }
+        if(focus){
+            painter.setBrush(QBrush(colorGreenAlpha));
+            painter.setPen(pen2);
+            painter.drawEllipse(QPoint(x-1,y-1), (int)qRound(distance), (int)qRound(distance));
+        }
+     }
 }
 
 void WorkPlaceWidget::drawRelation(Relation* r, bool focus){
@@ -342,7 +353,7 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
         core->spotFocus();
         this->repaint();
     }
-    if(this->core->getState()==2){ // Выделение объектов
+    if(this->core->getState()==2 || this->core->getState()==10){ // Выделение объектов
         for(int i=0; i<this->core->getEntitieCount(); i++){
            Entitie* e = this->core->getEntitieAt(i);
            int x =((IntField*)e->fieldByID("X"))->getValue();

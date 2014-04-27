@@ -63,6 +63,9 @@ public:
     void setWeightOfSolution(int weight);
     void Changed(bool changed);
     bool isChanged();
+    int getSpeedOf(Entitie* e);
+    double getDistanceOf(Entitie* e);
+    double getDistanceBetween(Entitie* e1, Entitie* e2);
 };
 
 #endif //CORE_H
