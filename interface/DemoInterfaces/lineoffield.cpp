@@ -36,11 +36,21 @@ LineOfField::LineOfField(EntitieCustomeWidget* ec, Entitie* e, Field* field, QWi
     this->qbl->addWidget(this->value);
     QString type="";
     this->qcb = new QComboBox();
-    this->qcb->addItem("BASE_FIELD");
-    this->qcb->addItem("STRING_FIELD");
-    this->qcb->addItem("INT_FIELD");
-    this->qcb->addItem("DOUBLE_FIELD");
-    this->qcb->addItem("TEMPLATE_FILD");
+
+    int t = ((IntField*)e->fieldByID("T"))->getValue();
+    if(t!=1){
+        this->qcb->addItem("Свойство"); //this->qcb->addItem("BASE_FIELD");
+        this->qcb->addItem("Комментарий"); //this->qcb->addItem("STRING_FIELD");
+        this->qcb->addItem("Скорость"); // this->qcb->addItem("INT_FIELD");
+        this->qcb->addItem("Дистанция"); //this->qcb->addItem("DOUBLE_FIELD");
+        //this->qcb->addItem("Шаблонное поле"); //this->qcb->addItem("TEMPLATE_FILD");
+    }else{
+        this->qcb->addItem("Свойство");
+        this->qcb->addItem("Комментарий");
+        this->qcb->addItem("Скорость++");
+        this->qcb->addItem("Дистанция++");
+        //this->qcb->addItem("Шаблонное поле");
+    }
 
     switch(field->getType()){
         case 0:

@@ -7,15 +7,15 @@
 #include <sstream>
 #include <math.h>
 #define max_width 5000
-#define max_height 5000
+#define max_height 2500
 #define work_count 6
 
 WorkPlaceWidget::WorkPlaceWidget(QWidget *parent) :
     QFrame(parent){
     this->core = new Core();
     QRect r2(0,0,this->size().width()-1,this->size().height()-1);
-    this->setMinimumHeight(max_width);
-    this->setMinimumWidth(max_height);
+    this->setMinimumHeight(max_height);
+    this->setMinimumWidth(max_width);
     this->scroll(this->size().width()-1,this->size().height()-1,r2);
     this->curX=-1;
     this->curY=-1;
@@ -24,6 +24,8 @@ WorkPlaceWidget::WorkPlaceWidget(QWidget *parent) :
 void WorkPlaceWidget::paintEvent(QPaintEvent *){
         QPainter painter(this);
         QRect r2(0,0,this->size().width()-1,this->size().height()-1);
+        QPixmap pm(":Images/Map.png");
+        painter.drawPixmap(0,0,this->size().width()-1,this->size().height()-1,pm);
         painter.drawRect(r2);
         this->paintDesk();
 }
@@ -118,6 +120,10 @@ void WorkPlaceWidget::drawEntitie(Entitie* e, bool focus){
        string field = e->fieldAt(i)->getID();
        QRect tr(x+5,y+5+(i+1-work_count)*24,w-10,h-10);
        painter.drawText(tr,field.c_str());
+    }
+    if(t!=1){
+        painter.setBrush(QBrush(Qt::black));
+        painter.drawEllipse(QPoint(x-1,y-1), 2, 2);
     }
 }
 

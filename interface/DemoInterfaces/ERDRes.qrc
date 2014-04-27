@@ -7,5 +7,6 @@
         <file>Images/Work.png</file>
         <file>Images/Use.png</file>
         <file>Images/Exit.png</file>
+        <file>Images/Map.png</file>
     </qresource>
 </RCC>

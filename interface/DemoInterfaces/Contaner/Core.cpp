@@ -2,6 +2,7 @@
 #include "ERDiagram.h"
 #include "Entitie.h"
 #include "IntField.h"
+#include "DoubleField.h"
 #include "qmath.h"
 #include "Relation.h"
     Core::Core(){
@@ -156,6 +157,8 @@
         return this->solution;
     }
     bool Core::getBestWay(Entitie* e1, Entitie* e2, List<string>* &last, int weight){
+        int speed = 1;
+        double distance = 1000;
         last->push_back(e1->getID());
         if(e1->getID()==e2->getID()){
             if(weight<this->weightOfSolution || this->weightOfSolution==-1){
@@ -177,29 +180,78 @@
                 Relation* r = e1->relationAt(i);
                 if(r->getEntL()!=e1){
                     Entitie* el = r->getEntL();
-                    bool tr=true;
-                    for(int j=0; j<last->size(); j++){
-                        if(last->at(j)==el->getID()){
-                            tr=false;
-                        }
-                    }
-                    if(tr){
-                        if(getBestWay(el, e2, last,weight+1)){
-                            //return true;
+                    int t = ((IntField*)el->fieldByID("T"))->getValue();
+                    if(t==1){
+                        for(int j=6; j<el->fieldCount(); j++){
+                            switch((int)el->fieldAt(j)->getType()){
+                                case(2):
+                                    speed+=((IntField*)el->fieldAt(j))->getValue();
+                                    break;
+
+                                case(3):
+                                    distance+=((DoubleField*)el->fieldAt(j))->getValue();
+                                    break;
+                            }
                         }
                     }
                 }
                 if(r->getEntR()!=e1){
                     Entitie* er = r->getEntR();
-                    bool tr=true;
-                    for(int j=0; j<last->size(); j++){
-                        if(last->at(j)==er->getID()){
-                            tr=false;
+                    int t = ((IntField*)er->fieldByID("T"))->getValue();
+                    if(t==1){
+                        for(int j=6; j<er->fieldCount(); j++){
+                            switch((int)er->fieldAt(j)->getType()){
+                                case 2:
+                                    speed+=((IntField*)er->fieldAt(j))->getValue();
+                                    break;
+
+                                case 3:
+                                    distance+=((DoubleField*)er->fieldAt(j))->getValue();
+                                    break;
+                            }
                         }
                     }
-                    if(tr){
-                        if(getBestWay(er, e2, last,weight+1)){
-                            //return true;
+                }
+            }
+            for(int i=0; i<e1->relationCount(); i++){
+                Relation* r = e1->relationAt(i);
+                if(r->getEntL()!=e1){
+                    Entitie* el = r->getEntL();
+                    int t = ((IntField*)el->fieldByID("T"))->getValue();
+                    int x1 = ((IntField*)e1->fieldByID("X"))->getValue();
+                    int y1 = ((IntField*)e1->fieldByID("Y"))->getValue();
+                    int x2 = ((IntField*)el->fieldByID("X"))->getValue();
+                    int y2 = ((IntField*)el->fieldByID("Y"))->getValue();
+                    double dist = qSqrt(qPow((x1-x2),2)+qPow((y1-y2),2));
+                    if(t!=1 && dist<=distance){
+                        bool tr=true;
+                        for(int j=0; j<last->size(); j++){
+                            if(last->at(j)==el->getID()){
+                                tr=false;
+                            }
+                        }
+                        if(tr){
+                            getBestWay(el, e2, last,weight+1+dist/speed);
+                        }
+                    }
+                }
+                if(r->getEntR()!=e1){
+                    Entitie* er = r->getEntR();
+                    int t = ((IntField*)er->fieldByID("T"))->getValue();
+                    int x1 = ((IntField*)e1->fieldByID("X"))->getValue();
+                    int y1 = ((IntField*)e1->fieldByID("Y"))->getValue();
+                    int x2 = ((IntField*)er->fieldByID("X"))->getValue();
+                    int y2 = ((IntField*)er->fieldByID("Y"))->getValue();
+                    double dist = qSqrt(qPow((x1-x2),2)+qPow((y1-y2),2));
+                    if(t!=1 && dist<=distance){
+                        bool tr=true;
+                        for(int j=0; j<last->size(); j++){
+                            if(last->at(j)==er->getID()){
+                                tr=false;
+                            }
+                        }
+                        if(tr){
+                            getBestWay(er, e2, last,weight+1+dist/speed);
                         }
                     }
                 }
@@ -211,6 +263,7 @@
 
     List<string>* Core::getBestWay(Entitie* e1, Entitie* e2){
            this->weightOfSolution = -1;
+            this->solution=NULL;
            List<string>* way = new List<string>();
            getBestWay(e1, e2, way, 0);
            if(this->solution!=NULL){
