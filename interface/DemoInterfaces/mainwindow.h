@@ -52,7 +52,7 @@ public slots:
     void button1Pressed();
     void button2Pressed();
     void button3Pressed();
-    void button4Pressed();
+    //void button4Pressed();
     void button5Pressed();
     void button6Pressed();
     void buttonway();

@@ -6,7 +6,7 @@
 #include "Relation.h"
     Core::Core(){
         this->content = new ERDiagram("Common");
-        this->state = 0;
+        this->state = 2;
         this->focus = -1;
         this->focusEntitieOrRelation = true;
         this->counter = 0;

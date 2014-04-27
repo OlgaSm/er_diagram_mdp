@@ -29,6 +29,7 @@ private:
 
 public:
     explicit EntitieCustomeWidget(QWidget *parent = 0);
+    void doOnTimer();
     void setCore(Core* core);
     Core* getCore();
     QBoxLayout* qbl;

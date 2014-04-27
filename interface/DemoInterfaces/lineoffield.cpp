@@ -80,7 +80,8 @@ LineOfField::LineOfField(EntitieCustomeWidget* ec, Entitie* e, Field* field, QWi
 void LineOfField::buttonDelete(){
     this->ec->ClearWidget();
     this->e->popFieldByID(field->getID());
-    this->ec->setCurFocus(-1);
+    this->ec->doOnTimer();
+    //this->ec->setCurFocus(-1);
 }
 
 Field* LineOfField::getField(){

@@ -101,7 +101,6 @@ MainWindow::MainWindow(QWidget *parent)
     pb0->setIcon(EntitieIcon);
     pb0->setIconSize(QSize(20,20));
     pb0->setCheckable(true);
-    pb0->setChecked(true);
     this->pb1 = new QPushButton("Связь");
     pb1->setIcon(RelationIcon);
     pb1->setIconSize(QSize(20,20));
@@ -110,12 +109,12 @@ MainWindow::MainWindow(QWidget *parent)
     pb2->setIcon(SelectionIcon);
     pb2->setIconSize(QSize(20,20));
     pb2->setCheckable(true);
+    pb2->setChecked(true);
 
     this->pb0b = new QPushButton();
     pb0b->setIcon(EntitieIcon);
     pb0b->setIconSize(QSize(15,15));
     pb0b->setCheckable(true);
-    pb0b->setChecked(true);
     this->pb1b = new QPushButton();
     pb1b->setIcon(RelationIcon);
     pb1b->setIconSize(QSize(15,15));
@@ -124,6 +123,7 @@ MainWindow::MainWindow(QWidget *parent)
     pb2b->setIcon(SelectionIcon);
     pb2b->setIconSize(QSize(15,15));
     pb2b->setCheckable(true);
+    pb2b->setChecked(true);
     //QPushButton* pb3 = new QPushButton("Указатель");
 
     this->pb4 = new QPushButton("Удалить");
@@ -228,6 +228,7 @@ void MainWindow::tabChanged(){
         this->pb0b->setEnabled(false);
         this->pb1b->setEnabled(false);
         this->pb2b->setEnabled(false);
+        //setCursor(Qt::ArrowCursor);
     }else{
         this->core->setState(2);
         this->core->Changed(false);
@@ -255,6 +256,7 @@ void MainWindow::button1Pressed(){
     this->pb2->setChecked(false);
     this->pb1b->setChecked(false);
     this->pb2b->setChecked(false);
+    //setCursor(Qt::SizeAllCursor);
 }
 
 void MainWindow::button2Pressed(){
@@ -269,6 +271,7 @@ void MainWindow::button2Pressed(){
     this->pb1b->setChecked(true);
     this->pb0b->setChecked(false);
     this->pb2b->setChecked(false);
+    //setCursor(Qt::CrossCursor);
 }
 
 void MainWindow::button3Pressed(){
@@ -281,13 +284,14 @@ void MainWindow::button3Pressed(){
     this->pb0b->setChecked(false);
     this->pb1b->setChecked(false);
     this->pb2b->setChecked(true);
+    //setCursor(Qt::ArrowCursor);
 }
 
-void MainWindow::button4Pressed(){
-    this->state->setText("Указатель");
-    this->core->setState(3);
-    this->w11->repaint();
-}
+//void MainWindow::button4Pressed(){
+//    this->state->setText("Указатель");
+//    this->core->setState(3);
+//    this->w11->repaint();
+//}
 
 void MainWindow::button5Pressed(){
     if(this->core->getFocus()!=-1){
@@ -330,55 +334,7 @@ void MainWindow::button6Pressed(){
     if(this->core->getFocus()!=-1){
         this->state->setText("Сохранить");
         if(core->getFocusObj()){
-
-            Entitie* e = this->core->getEntitieAt(core->getFocus());
-            e->setID(this->ecw->tb->text().toStdString());
-            ((IntField*)e->fieldByID("T"))->setValue(this->ecw->qcb->currentIndex());
-            for(int j=6; e->fieldAt(j)!=NULL;){
-                e->popFieldAt(j);
-            }
-            for(int i=0; i<this->ecw->fildlist->size(); i++){
-                LineOfField* lf = this->ecw->fildlist->at(i);
-                Field* field;// = lf->getField();
-                if(lf->qcb->currentIndex()>=0 && lf->qcb->currentIndex()<5){
-                        switch(lf->qcb->currentIndex()){
-                            case 0:
-                                field = new Field(lf->ID->text().toStdString());
-                                break;
-                            case 1:
-                                field = new StringField(lf->ID->text().toStdString(),lf->value->text().toStdString());
-                                break;
-                            case 2:
-                                field = new IntField(lf->ID->text().toStdString(), lf->value->text().toInt(0));
-                                break;
-                            case 3:
-                                field = new DoubleField(lf->ID->text().toStdString(), lf->value->text().toFloat());
-                                break;
-                        }
-
-                }
-                field->setID(lf->ID->text().toStdString());
-                switch((int)field->getType()){
-                    case 1:
-                        ((StringField*)(field))->setValue(lf->value->text().toStdString());
-                        break;
-                    case 2:
-                        ((IntField*)(field))->setValue(lf->value->text().toInt());
-                        break;
-                    case 3:
-                        ((DoubleField*)(field))->setValue(lf->value->text().toDouble());
-                        break;
-                }
-                delete(lf);
-                e->addUserField(field);
-            }
-            delete(this->ecw->fildlist);
-            this->ecw->fildlist = new List<LineOfField*>();
-            for(int i=6; i<e->fieldCount(); i++){
-                Field* f = e->fieldAt(i);
-                this->ecw->fildlist->push_back(new LineOfField(this->ecw,e,f, this));
-            }
-            this->ecw->setCurFocus(-1);
+            this->ecw->save();
         }else{
             Relation* r = this->core->getRelationAt(core->getFocus());
             Relation* nr = new Relation(this->ecw->tb->text().toStdString(),

@@ -17,6 +17,8 @@ WorkPlaceWidget::WorkPlaceWidget(QWidget *parent) :
     this->setMinimumHeight(max_width);
     this->setMinimumWidth(max_height);
     this->scroll(this->size().width()-1,this->size().height()-1,r2);
+    this->curX=-1;
+    this->curY=-1;
 }
 
 void WorkPlaceWidget::paintEvent(QPaintEvent *){
@@ -34,6 +36,12 @@ void WorkPlaceWidget::paintDesk(){
     for(int i=0; i<this->core->getRelationCount(); i++){
         drawRelation(this->core->getRelationAt(i),((i==this->core->getFocus())&&(!this->core->getFocusObj())));
     }
+//    if(this->core->getState()==0){
+//        QPainter painter(this);
+//        //QRect r(this->curX,this->curY,100,50); cursor().pos().x()
+//        QRect r(cursor().pos().x(),cursor().pos().y(),100,50);
+//        painter.drawRect(r);
+//    }
 }
 
 
@@ -426,3 +434,8 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
         this->repaint();
     }
 }
+
+//void WorkPlaceWidget::mouseMoveEvent(QMouseEvent* pe){
+//    this->curX=pe->x();
+//    this->curY=pe->y();
+//}
