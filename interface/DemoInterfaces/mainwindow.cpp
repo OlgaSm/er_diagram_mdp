@@ -51,9 +51,9 @@ MainWindow::MainWindow(QWidget *parent)
     this->menuBar->addMenu(pmenu);
     this->menuBar->setStyleSheet("QMenuBar { background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 WHITE, stop: 0.4 #D4DFEF, stop: 0.5 #BDCFEB, stop: 1.0 WHITE); spacing: 5px; border: 2px solid #B2C8EA }");
 
-    this->pmenu->addAction("Создать");
-    this->pmenu->addAction("Сохранить");
-    this->pmenu->addAction("Загрузить");
+    this->pmenu->addAction(QPixmap(":Images/New.png"),"Создать");
+    this->pmenu->addAction(QPixmap(":Images/Save.png"),"Сохранить");
+    this->pmenu->addAction(QPixmap(":Images/Load.png"),"Загрузить");
     this->pmenu->addSeparator();
     this->pmenu->addAction(QPixmap(":Images/Exit.png"),"Выйти",this,SLOT(close()));
 

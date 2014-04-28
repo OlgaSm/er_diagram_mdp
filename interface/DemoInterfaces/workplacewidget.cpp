@@ -53,8 +53,8 @@ void WorkPlaceWidget::drawEntitie(Entitie* e, bool focus){
     QColor color(255,200,125);
     QColor color1(255,170,100);
     QColor color2(215,215,255);
-    QColor colorRed(255,125,125);
-    QColor colorGreen(55,155,55);
+    QColor colorRed(252,139,130);
+    QColor colorGreen(125,220,125);
     QColor colorGreenAlpha(55,155,55,25);
     QColor colorBlackAlpha(0,0,0,100);
     QPen pen1 = QPen(Qt::black, 1, Qt::SolidLine);

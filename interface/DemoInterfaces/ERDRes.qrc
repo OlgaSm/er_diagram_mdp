@@ -8,5 +8,8 @@
         <file>Images/Use.png</file>
         <file>Images/Exit.png</file>
         <file>Images/Map.png</file>
+        <file>Images/New.png</file>
+        <file>Images/Save.png</file>
+        <file>Images/Load.png</file>
     </qresource>
 </RCC>

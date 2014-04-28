@@ -190,7 +190,7 @@
                     }
                     int t = ((IntField*)el->fieldByID("T"))->getValue();
                     double dist = getDistanceBetween(e1, el);
-                    if(t!=1 && dist<=distance){
+                    if(t!=1 && dist<=(distance + this->getDistanceOf(el))){
                         bool tr=true;
                         for(int j=0; j<last->size(); j++){
                             if(last->at(j)==el->getID()){
@@ -212,7 +212,7 @@
                     }
                     int t = ((IntField*)er->fieldByID("T"))->getValue();
                     double dist = getDistanceBetween(e1, er);
-                    if(t!=1 && dist<=distance){
+                    if(t!=1 && dist<=(distance + this->getDistanceOf(er))){
                         bool tr=true;
                         for(int j=0; j<last->size(); j++){
                             if(last->at(j)==er->getID()){

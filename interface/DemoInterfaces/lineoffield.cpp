@@ -39,10 +39,10 @@ LineOfField::LineOfField(EntitieCustomeWidget* ec, Entitie* e, Field* field, QWi
 
     int t = ((IntField*)e->fieldByID("T"))->getValue();
     if(t!=1){
-        this->qcb->addItem("Свойство"); //this->qcb->addItem("BASE_FIELD");
-        this->qcb->addItem("Комментарий"); //this->qcb->addItem("STRING_FIELD");
-        this->qcb->addItem("Скорость"); // this->qcb->addItem("INT_FIELD");
-        this->qcb->addItem("Дистанция"); //this->qcb->addItem("DOUBLE_FIELD");
+        this->qcb->addItem("Поле"); //this->qcb->addItem("BASE_FIELD");
+        this->qcb->addItem("Строковое поле"); //this->qcb->addItem("STRING_FIELD");
+        this->qcb->addItem("Целочисленное поле"); // this->qcb->addItem("INT_FIELD");
+        this->qcb->addItem("Числовое поле"); //this->qcb->addItem("DOUBLE_FIELD");
         //this->qcb->addItem("Шаблонное поле"); //this->qcb->addItem("TEMPLATE_FILD");
     }else{
         this->qcb->addItem("Свойство");
