@@ -94,6 +94,7 @@ MainWindow::MainWindow(QWidget *parent)
     QPixmap EntitieIcon(":Images/Entitie.png");
     QPixmap RelationIcon(":Images/Relation.png");
     QPixmap SelectionIcon(":Images/Selection.png");
+    QPixmap SendIcon(":Images/Send.png");
     //==============================================
     QWidget* pbButtons = new QWidget();
     pbButtons->setLayout(new QBoxLayout(QBoxLayout::LeftToRight));
@@ -128,7 +129,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->pb4 = new QPushButton("Удалить");
     this->pb5 = new QPushButton("Сохранить");
-    QPushButton* pb6 = new QPushButton("Отправить посылку");
+    QPushButton* pb6 = new QPushButton(); // "Отправить посылку"
+    pb6->setIcon(SendIcon);
+    pb6->setIconSize(QSize(400,100));
     //QPushButton* pb7 = new QPushButton("Обновить список сущностей");
     //==============================================
         pbButtons->layout()->addWidget(pb0);
@@ -315,19 +318,21 @@ void MainWindow::buttonway(){
     string en2 = this->cb2->currentText().toStdString();
     Entitie* e1 = this->core->getEntitieByID(en1);
     Entitie* e2 = this->core->getEntitieByID(en2);
-    List<string>* way = core->getBestWay(e1,e2);
-    i=0;
-    te->clear();
-    this->te->setReadOnly(true);
-    if(way->size()!=0){
-        while (i<way->size()){
-            this->te->append( QString::fromStdString(way->at(i)));
-            i++;
+    if(e1!=NULL && e2!=NULL){
+        List<string>* way = core->getBestWay(e1,e2);
+        i=0;
+        te->clear();
+        this->te->setReadOnly(true);
+        if(way->size()!=0){
+            while (i<way->size()){
+                this->te->append( QString::fromStdString(way->at(i)));
+                i++;
+            }
+        }else{
+           this->te->append("Путь не найден");
         }
-    }else{
-       this->te->append("Путь не найден");
+        this->w12->repaint();
     }
-    this->w12->repaint();
 }
 
 void MainWindow::button6Pressed(){

@@ -2,14 +2,18 @@
 #include "ERDiagram.h"
 #include "Entitie.h"
 #include "IntField.h"
+#include "DoubleField.h"
 #include "qmath.h"
 #include "Relation.h"
     Core::Core(){
         this->content = new ERDiagram("Common");
-        this->state = 0;
+        this->state = 2;
         this->focus = -1;
         this->focusEntitieOrRelation = true;
         this->counter = 0;
+        this->weightOfSolution = -1;
+        this->solution = NULL;
+        this->changed = false;
     }
     int Core::getCounter(){
         return this->counter++;
@@ -44,7 +48,16 @@
     }
 
     void Core::addRelation(Entitie* e1, Entitie* e2, string id, string key){
-        this->content->addRelation(id,key,e1,e2,false,false,false,false);
+        bool add = true;
+        for(int i=0; i<e1->relationCount(); i++){
+           Relation* r = e1->relationAt(i);
+           if(r->getEntL()== e2 || r->getEntR()== e2){
+               add = false;
+           }
+        }
+        if(add){
+            this->content->addRelation(id,key,e1,e2,false,false,false,false);
+        }
     }
 
     void Core::addEntitie(string name){
@@ -140,30 +153,169 @@
         this->focusEntitieOrRelation = feor;
     }
 
-//    List<string>* Core::getBestWay(Entitie* e1, Entitie* e2){
-//        return NULL;
-//    }
-
     List<string>* Core::getBestWay(){
-           Entitie* e1;
-           Relation* r1;
-           List<string>* way = new List<string>();
-           int i,j;
-           i=0;
-           while (i<this->content->getEntitieCount()){
-               e1= this->content->entitieAt(i);
-               way->push_back("Сущность "+e1->getID()+"\n");
-               j=0;
-               while (j<e1->relationCount()){
-                   r1=e1->relationAt(j);
-                   j++;
-                   way->push_back("Связь R "+r1->getEntR()->getID());
-                   way->push_back("Связь L "+r1->getEntL()->getID());
-               }
-               i++;
+        return this->solution;
+    }
+    bool Core::getBestWay(Entitie* e1, Entitie* e2, List<string>* &last, int weight){
+        last->push_back(e1->getID());
+        if(e1->getID()==e2->getID()){
+            if(weight<this->weightOfSolution || this->weightOfSolution==-1){
+                this->weightOfSolution = weight;
+                if(this->solution!=NULL){
+                    this->solution = new List<string>();
+                }else{
+                    delete(this->solution);
+                    this->solution = new List<string>();
+                }
+                for(int i=0; i<last->size(); i++){
+                    this->solution->push_back(last->at(i));
+                }
+            }
+            last->popAt(last->size()-1);
+            return true;
+        }else{
+            int speed = this->getSpeedOf(e1);
+            double distance = this->getDistanceOf(e1);
+            int addWeight = 1;
+            int subWeight = 0;
+            for(int i=0; i<e1->relationCount(); i++){
+                Relation* r = e1->relationAt(i);
+                if(r->getEntL()!=e1){
+                    Entitie* el = r->getEntL();
+                    if(r->getAbsL()){
+                        addWeight+=2;
+                    }
+                    if(r->getMulL()){
+                        subWeight+=1;
+                    }
+                    int t = ((IntField*)el->fieldByID("T"))->getValue();
+                    double dist = getDistanceBetween(e1, el);
+                    if(t!=1 && dist<=(distance + this->getDistanceOf(el))){
+                        bool tr=true;
+                        for(int j=0; j<last->size(); j++){
+                            if(last->at(j)==el->getID()){
+                                tr=false;
+                            }
+                        }
+                        if(tr){
+                            getBestWay(el, e2, last,(weight+1+dist/speed)*addWeight-subWeight);
+                        }
+                    }
+                }
+                if(r->getEntR()!=e1){
+                    Entitie* er = r->getEntR();
+                    if(r->getAbsR()){
+                        addWeight+=2;
+                    }
+                    if(r->getMulR()){
+                        subWeight+=1;
+                    }
+                    int t = ((IntField*)er->fieldByID("T"))->getValue();
+                    double dist = getDistanceBetween(e1, er);
+                    if(t!=1 && dist<=(distance + this->getDistanceOf(er))){
+                        bool tr=true;
+                        for(int j=0; j<last->size(); j++){
+                            if(last->at(j)==er->getID()){
+                                tr=false;
+                            }
+                        }
+                        if(tr){
+                            getBestWay(er, e2, last,weight+1+dist/speed+addWeight);
+                        }
+                    }
+                }
+            }
+        }
+        last->popAt(last->size()-1);
+        return false;
+    }
 
-           };
-           return way;
+    int Core::getSpeedOf(Entitie* e){
+        int speed = 1;
+        for(int i=0; i<e->relationCount(); i++){
+            Relation* r = e->relationAt(i);
+            if(r->getEntL()!=e){
+                Entitie* eL = r->getEntL();
+                int t = ((IntField*)eL->fieldByID("T"))->getValue();
+                if(t==1){
+                    for(int j=6; j<eL->fieldCount(); j++){
+                        if((int)eL->fieldAt(j)->getType()==2){
+                            speed+=((IntField*)eL->fieldAt(j))->getValue();
+                        }
+                    }
+                }
+            }
+            if(r->getEntR()!=e){
+                Entitie* eR = r->getEntR();
+                int t = ((IntField*)eR->fieldByID("T"))->getValue();
+                if(t==1){
+                    for(int j=6; j<eR->fieldCount(); j++){
+                        if((int)eR->fieldAt(j)->getType()==2){
+                            speed+=((IntField*)eR->fieldAt(j))->getValue();
+                        }
+                    }
+                }
+            }
+        }
+        if(speed>=0){
+            return speed;
+        }else{
+            return 0;
+        }
+    }
+
+    double Core::getDistanceOf(Entitie* e){
+        double distance = 200;
+        for(int i=0; i<e->relationCount(); i++){
+            Relation* r = e->relationAt(i);
+            if(r->getEntL()!=e){
+                Entitie* eL = r->getEntL();
+                int t = ((IntField*)eL->fieldByID("T"))->getValue();
+                if(t==1){
+                    for(int j=6; j<eL->fieldCount(); j++){
+                        if((int)eL->fieldAt(j)->getType()==3){
+                            distance+=((DoubleField*)eL->fieldAt(j))->getValue();
+                        }
+                    }
+                }
+            }
+            if(r->getEntR()!=e){
+                Entitie* eR = r->getEntR();
+                int t = ((IntField*)eR->fieldByID("T"))->getValue();
+                if(t==1){
+                    for(int j=6; j<eR->fieldCount(); j++){
+                        if((int)eR->fieldAt(j)->getType()==3){
+                            distance+=((DoubleField*)eR->fieldAt(j))->getValue();
+                        }
+                    }
+                }
+            }
+        }
+        if(distance>=0){
+            return distance;
+        }else{
+            return 0;
+        }
+    }
+
+    double Core::getDistanceBetween(Entitie* e1, Entitie* e2){
+        int x1 = ((IntField*)e1->fieldByID("X"))->getValue();
+        int y1 = ((IntField*)e1->fieldByID("Y"))->getValue();
+        int x2 = ((IntField*)e2->fieldByID("X"))->getValue();
+        int y2 = ((IntField*)e2->fieldByID("Y"))->getValue();
+        return qSqrt(qPow((x1-x2),2)+qPow((y1-y2),2));
+    }
+
+    List<string>* Core::getBestWay(Entitie* e1, Entitie* e2){
+           this->weightOfSolution = -1;
+            this->solution=NULL;
+           List<string>* way = new List<string>();
+           getBestWay(e1, e2, way, 0);
+           if(this->solution!=NULL){
+               return this->solution;
+           }else{
+               return new List<string>();
+           }
       }
 
     List<string>* Core::getListEn(){
@@ -173,16 +325,35 @@
            i=0;
            while (i<this->content->getEntitieCount()){
                e1= this->content->entitieAt(i);
-               l->push_back(e1->getID());
+               int t = ((IntField*)e1->fieldByID("T"))->getValue();
+               if(t!=1){
+                   l->push_back(e1->getID());
+               }
                i++;
            };
            return l;
       }
 
-int Core::getIndexRelationByID(string ID){
-    return this->content->getIndexRelationByID(ID);
-}
+    int Core::getWeightOfSolution(){
+        return this->weightOfSolution;
+    }
 
-int Core::getIndexEntitieByID(string ID){
-    return this->content->getIndexEntitieByID(ID);
-}
+    void Core::setWeightOfSolution(int weight){
+        this->weightOfSolution=weight;
+    }
+
+    int Core::getIndexRelationByID(string ID){
+        return this->content->getIndexRelationByID(ID);
+    }
+
+    int Core::getIndexEntitieByID(string ID){
+        return this->content->getIndexEntitieByID(ID);
+    }
+
+    void Core::Changed(bool changed){
+        this->changed=changed;
+    }
+
+    bool Core::isChanged(){
+        return this->changed;
+    }

@@ -34,6 +34,7 @@ public:
     void    addIntField(int value);
     void    addDoubleField(double value);
     void    addStringField(string value);
+    void    addStdField(string value);
     void    popFieldAt(int i);
     void    popFieldByID(string ID);
     int     fieldCount();

@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
 
     // Relation Test
     //=================================================
-    Relation* relation = new Relation("Test relation",entitie1,entitie2,true,true,true,true);
+    Relation* relation = new Relation("Test relation","A",entitie1,entitie2,true,true,true,true );
     if(entitie1->isRelationListEmpty()){
         printf("Relation1 isEmpty==true\n");
     }else{

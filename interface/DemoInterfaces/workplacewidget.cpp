@@ -141,6 +141,9 @@ void WorkPlaceWidget::drawEntitie(Entitie* e, bool focus){
 void WorkPlaceWidget::drawRelation(Relation* r, bool focus){
     QPainter painter(this);
     QColor color(90,185,255);
+    QColor colorGreenAlpha(55,155,55,25);
+    QColor colorBlackAlpha(0,0,0,100);
+    QPen penf = QPen(colorBlackAlpha, 1, Qt::SolidLine);
 
     painter.setBrush(QBrush(color));
 
@@ -170,12 +173,12 @@ void WorkPlaceWidget::drawRelation(Relation* r, bool focus){
     int y1 = ((IntField*)eR->fieldByID("Y"))->getValue();
     int w1 = ((IntField*)eR->fieldByID("W"))->getValue();
     int h1 = ((IntField*)eR->fieldByID("H"))->getValue();
-    //int t1 = ((IntField*)eR->fieldByID("T"))->getValue();
+    int t1 = ((IntField*)eR->fieldByID("T"))->getValue();
     int x2 = ((IntField*)eL->fieldByID("X"))->getValue();
     int y2 = ((IntField*)eL->fieldByID("Y"))->getValue();
     int w2 = ((IntField*)eL->fieldByID("W"))->getValue();
     int h2 = ((IntField*)eL->fieldByID("H"))->getValue();
-    //int t2 = ((IntField*)eR->fieldByID("T"))->getValue();
+    int t2 = ((IntField*)eR->fieldByID("T"))->getValue();
 
     int x01=0;
     int x02=0;
@@ -265,6 +268,20 @@ void WorkPlaceWidget::drawRelation(Relation* r, bool focus){
     }
     painter.setPen(pen2);
     painter.drawLine(QPointF(p0.x(),p0.y()-10),QPointF(p0.x(),p0.y()+10));
+    if(focus){
+        if(t1!=1){
+            double distance = this->core->getDistanceOf(eL);
+            painter.setBrush(QBrush(colorGreenAlpha));
+            painter.setPen(penf);
+            painter.drawEllipse(QPoint(x1-1,y1-1), (int)qRound(distance), (int)qRound(distance));
+         }
+        if(t2!=1){
+            double distance = this->core->getDistanceOf(eR);
+            painter.setBrush(QBrush(colorGreenAlpha));
+            painter.setPen(penf);
+            painter.drawEllipse(QPoint(x2-1,y2-1), (int)qRound(distance), (int)qRound(distance));
+         }
+    }
 }
 
 void WorkPlaceWidget::calculateEntitie(Entitie* e){
@@ -354,6 +371,7 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
         this->repaint();
     }
     if(this->core->getState()==2 || this->core->getState()==10){ // Выделение объектов
+        core->setFocus(-1);
         for(int i=0; i<this->core->getEntitieCount(); i++){
            Entitie* e = this->core->getEntitieAt(i);
            int x =((IntField*)e->fieldByID("X"))->getValue();
