@@ -167,6 +167,20 @@ MainWindow::MainWindow(QWidget *parent)
             //this->tab1->setStyleSheet("border: 1px solid black");
 
             this->te = new QTextEdit();
+            this->te->setReadOnly(true);
+            this->te->isMaximized();
+            QScrollArea* scrollarea3 = new QScrollArea();
+            QBoxLayout* a = new QBoxLayout(QBoxLayout::TopToBottom);
+            a->addWidget(te);
+            scrollarea3->setLayout(a);
+            //scrollarea3->setWidget(te);
+            scrollarea3->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//            scrollarea3->setMaximumWidth(500);
+//            scrollarea3->setMaximumHeight(500);
+//            scrollarea3->setMinimumHeight(350);
+//            scrollarea3->setMinimumWidth(100);
+            scrollarea3->viewport()->isMaximized();
+            //scrollarea3->
             w22->layout()->addWidget(new QLabel("Получатель"));
             this->cb = new QComboBox();
             this->cb2 = new QComboBox();
@@ -175,7 +189,7 @@ MainWindow::MainWindow(QWidget *parent)
             w22->layout()->addWidget(cb2);
             //blt2->addStretch();
             //w22->layout()->addWidget(pb7);
-            w22->layout()->addWidget(this->te);
+            blt2->addWidget(scrollarea3);
             w22->layout()->addWidget(pb6);
 
     //==============================================
@@ -322,12 +336,28 @@ void MainWindow::buttonway(){
         List<string>* way = core->getBestWay(e1,e2);
         i=0;
         te->clear();
-        this->te->setReadOnly(true);
         if(way->size()!=0){
+            Entitie* e0 = NULL;
+            double totalTime = 0;
+            double totalSpeed = 0;
+            double totalDistance = 0;
             while (i<way->size()){
-                this->te->append( QString::fromStdString(way->at(i)));
+                Entitie* e = this->core->getEntitieByID(way->at(i));
+                if(e0!=NULL){
+                    double dist = this->core->getDistanceBetween(e,e0);
+                    int speed = this->core->getSpeedOf(e0)*5;
+                    double time = dist / speed;
+                    totalTime +=time;
+                    totalSpeed +=speed;
+                    totalDistance +=dist;
+                    this->te->append("Дистанция: "+QString::number(dist)+"\nСкорость: "+QString::number(speed)+"\nВремя: "+QString::number(time));
+                    this->te->append("_________________________________________________");
+                }
+                this->te->append(""+QString::number(i+1)+") " + QString::fromStdString(way->at(i)));
                 i++;
+                e0 = e;
             }
+            this->te->append("\nОбщая дистанция: "+QString::number(totalDistance)+"\nСредняя скорость: "+QString::number(totalSpeed/i)+"\nВремя пути: "+QString::number(totalTime));
         }else{
            this->te->append("Путь не найден");
         }
