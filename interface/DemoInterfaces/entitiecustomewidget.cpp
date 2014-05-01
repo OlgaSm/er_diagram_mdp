@@ -5,28 +5,54 @@
 #include "Contaner/StringField.h"
 #include <QScrollArea>
 
-EntitieCustomeWidget::EntitieCustomeWidget(QWidget *parent) :
+//=====================================
+#include "DebugDefine.h"
+//=====================================
+
+EntitieCustomeWidget::EntitieCustomeWidget(QWidget *parent, Core* core) :
     QWidget(parent){
     this->timer = new QTimer(this);
     connect(this->timer, SIGNAL(timeout()), SLOT(timerEvent()));
     this->timer->start(50);
-    this->core = new Core;
+    this->core = core;
     this->fildlist = new List<LineOfField*>();
     this->curFocus = -1;
     this->curObj = true;
     this->qbl = new QBoxLayout(QBoxLayout::TopToBottom);
-
     // Layout
     this->setLayout(qbl);
-
+    #ifdef DEBUGLOG_ENTITIEWIDGET
+        QFile file(LOG_PATH);
+        file.open(QIODevice::Append | QIODevice::Text);
+        QTextStream out(&file);
+        out << "+ ENTWIDG created" << endl;
+        file.close();
+        //CountCreatedObject++;
+    #endif
 }
 
-void EntitieCustomeWidget::setCore(Core *core){
-    this->core = core;
-}
-
-Core* EntitieCustomeWidget::getCore(){
-    return this->core;
+EntitieCustomeWidget::~EntitieCustomeWidget(){
+    while(this->layout()->count()>0){
+        QLayoutItem* item = this->layout()->itemAt(0);
+        this->layout()->removeItem( item );
+        this->layout()->removeWidget(item->widget());
+        delete item->widget();
+        delete item;
+        this->layout()->update();
+    }
+    for(int i=0; i<this->fildlist->size(); i++){
+        this->fildlist->popAt(i);
+    }
+    delete(this->fildlist);
+    delete(this->timer);
+    #ifdef DEBUGLOG_ENTITIEWIDGET
+        QFile file(LOG_PATH);
+        file.open(QIODevice::Append | QIODevice::Text);
+        QTextStream out(&file);
+        out << "- ENTWIDG deleted" << endl;
+        file.close();
+        //CountDeltedObject++;
+    #endif
 }
 
 void EntitieCustomeWidget::ClearWidget(){
@@ -41,6 +67,7 @@ void EntitieCustomeWidget::ClearWidget(){
     for(int i=0; i<this->fildlist->size(); i++){
         this->fildlist->popAt(i);
     }
+    delete(this->fildlist);
     this->fildlist = new List<LineOfField*>();
 }
 
@@ -73,11 +100,15 @@ void EntitieCustomeWidget::doOnTimer(){
                 this->qcb->setCurrentIndex(-1);
             }
 
+            // Label хар-ки
+            QLabel* qlprop = new QLabel(QString("Скорость: ")+QString::number(this->core->getSpeedOf(e))+QString(" п/дч\nРадиус действий: ")+QString::number(this->core->getDistanceOf(e))+QString(" п"));
+
             // Добавление widget'ов
             this->qbl->addWidget(this->entitieName);
             this->qbl->addWidget(this->tb);
             this->qbl->addWidget(new QLabel("Тип сущности:"));
             this->qbl->addWidget(this->qcb);
+            this->qbl->addWidget(qlprop);
             QScrollArea* scrollArea = new QScrollArea();
             scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
             QWidget* qw = new QWidget();
@@ -123,11 +154,11 @@ void EntitieCustomeWidget::doOnTimer(){
             this->mr->setChecked(r->getMulR());
             this->qbl->addWidget(mr);
             //==========================================
-            this->al = new QCheckBox("Обязательная связь с сущностью 1");
+            this->al = new QCheckBox("Не обязательная связь с сущностью 1");
             this->al->setChecked(r->getAbsL());
             this->qbl->addWidget(al);
             //==========================================
-            this->ar = new QCheckBox("Обязательная связь с сущностью 2");
+            this->ar = new QCheckBox("Не обязательная связь с сущностью 2");
             this->ar->setChecked(r->getAbsR());
             this->qbl->addWidget(ar);
             //==========================================
@@ -161,7 +192,7 @@ void EntitieCustomeWidget::buttonAdd(){
     if(this->core->getFocus()!=-1 && this->core->getFocusObj()){
         this->save();
         Entitie* e = this->core->getEntitieAt(this->core->getFocus());
-        e->addStdField("DefaultField");
+        e->addStdField("Field "+QString::number(this->core->getCounter1()).toStdString());
         this->curFocus = -1;
     }
 }
@@ -176,7 +207,7 @@ void EntitieCustomeWidget::save(){
         }
         for(int i=0; i<this->fildlist->size(); i++){
             LineOfField* lf = this->fildlist->at(i);
-            Field* field;// = lf->getField();
+            Field* field;
             if(lf->qcb->currentIndex()>=0 && lf->qcb->currentIndex()<5){
                     switch(lf->qcb->currentIndex()){
                         case 0:
@@ -216,7 +247,6 @@ void EntitieCustomeWidget::save(){
             this->fildlist->push_back(new LineOfField(this,e,f, this));
         }
         this->doOnTimer();
-        //this->setCurFocus(-1);
     }
 }
 

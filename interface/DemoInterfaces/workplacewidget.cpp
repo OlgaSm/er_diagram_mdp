@@ -10,15 +10,38 @@
 #define max_height 2500
 #define work_count 6
 
-WorkPlaceWidget::WorkPlaceWidget(QWidget *parent) :
+//=====================================
+#include "DebugDefine.h"
+//=====================================
+
+WorkPlaceWidget::WorkPlaceWidget(QWidget *parent, Core* core) :
     QFrame(parent){
-    this->core = new Core();
+    this->core = core;
     QRect r2(0,0,this->size().width()-1,this->size().height()-1);
     this->setMinimumHeight(max_height);
     this->setMinimumWidth(max_width);
     this->scroll(this->size().width()-1,this->size().height()-1,r2);
     this->curX=-1;
     this->curY=-1;
+    #ifdef DEBUGLOG_WORKDESK
+        QFile file(LOG_PATH);
+        file.open(QIODevice::Append | QIODevice::Text);
+        QTextStream out(&file);
+        out << "+ WORKDESK created" << endl;
+        file.close();
+        //CountCreatedObject++;
+    #endif
+}
+
+WorkPlaceWidget::~WorkPlaceWidget(){
+    #ifdef DEBUGLOG_WORKDESK
+        QFile file(LOG_PATH);
+        file.open(QIODevice::Append | QIODevice::Text);
+        QTextStream out(&file);
+        out << "- WORKDESK deleted" << endl;
+        file.close();
+        //CountDeltedObject++;
+    #endif
 }
 
 void WorkPlaceWidget::paintEvent(QPaintEvent *){
@@ -178,7 +201,7 @@ void WorkPlaceWidget::drawRelation(Relation* r, bool focus){
     int y2 = ((IntField*)eL->fieldByID("Y"))->getValue();
     int w2 = ((IntField*)eL->fieldByID("W"))->getValue();
     int h2 = ((IntField*)eL->fieldByID("H"))->getValue();
-    int t2 = ((IntField*)eR->fieldByID("T"))->getValue();
+    int t2 = ((IntField*)eL->fieldByID("T"))->getValue();
 
     int x01=0;
     int x02=0;
@@ -270,13 +293,13 @@ void WorkPlaceWidget::drawRelation(Relation* r, bool focus){
     painter.drawLine(QPointF(p0.x(),p0.y()-10),QPointF(p0.x(),p0.y()+10));
     if(focus){
         if(t1!=1){
-            double distance = this->core->getDistanceOf(eL);
+            double distance = this->core->getDistanceOf(eR);
             painter.setBrush(QBrush(colorGreenAlpha));
             painter.setPen(penf);
             painter.drawEllipse(QPoint(x1-1,y1-1), (int)qRound(distance), (int)qRound(distance));
          }
         if(t2!=1){
-            double distance = this->core->getDistanceOf(eR);
+            double distance = this->core->getDistanceOf(eL);
             painter.setBrush(QBrush(colorGreenAlpha));
             painter.setPen(penf);
             painter.drawEllipse(QPoint(x2-1,y2-1), (int)qRound(distance), (int)qRound(distance));
@@ -288,10 +311,6 @@ void WorkPlaceWidget::calculateEntitie(Entitie* e){
     int height = e->fieldCount() - (work_count-1);
     if(height<1) height = 1;
     ((IntField*)e->fieldByID("H"))->setValue(height*24);
-}
-
-void WorkPlaceWidget::setCore(Core* core){
-    this->core=core;
 }
 
 void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
@@ -353,9 +372,9 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
         }else{
             if(focus!=this->core->getFocus() && focus!=-1){
                 string name;
-                int num = this->core->getCounter();
+                int num = this->core->getCounter0();
                 char str[255];
-                sprintf(str, "Relation № %d", num);
+                sprintf(str, "Relation %d", num);
                 name = (const char*)str;
 
                 Entitie* e1 = this->core->getEntitieAt(this->core->getFocus());

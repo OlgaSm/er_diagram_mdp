@@ -1,6 +1,10 @@
 #ifndef LISTITEM_H
 #define LISTITEM_H
 
+//=====================================
+#include "DebugDefine.h"
+//=====================================
+
 template<class Type>
 class ListItem{
     private:
@@ -8,7 +12,7 @@ class ListItem{
 		ListItem* next;
 
     public:
-        ListItem(Type x);
+        explicit ListItem(Type x);
 		~ListItem();
     public:
 		void setNext(ListItem* next);
@@ -25,6 +29,14 @@ template<class Type>
 ListItem<Type>::ListItem(Type x){
     this->x = x;
     this->next = 0;
+    #ifdef DEBUGLOG_LISTITEM
+        QFile file(LOG_PATH);
+        file.open(QIODevice::Append | QIODevice::Text);
+        QTextStream out(&file);
+        out << "+ ListItem created" << endl;
+        file.close();
+        //CountCreatedObject++;
+    #endif
 }
 
 template<class Type>
@@ -33,6 +45,14 @@ ListItem<Type>::~ListItem(){
         delete next;
         next = 0;
     }
+    #ifdef DEBUGLOG_LISTITEM
+        QFile file(LOG_PATH);
+        file.open(QIODevice::Append | QIODevice::Text);
+        QTextStream out(&file);
+        out << "- ListItem deleted" << endl;
+        file.close();
+        //CountDeltedObject++;
+    #endif
 }
 
 template<class Type>

@@ -17,7 +17,7 @@ private:
     List<Relation*>* relations;
 
 public:
-    ERDiagram(string id);
+    explicit ERDiagram(string id);
     ~ERDiagram();
 
 public:    

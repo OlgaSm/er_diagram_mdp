@@ -20,7 +20,7 @@ private:
     List<Relation*>* myRelations;
 
 public:
-    Entitie(string ID);
+    explicit Entitie(string ID);
 	~Entitie();	
 	
 public:

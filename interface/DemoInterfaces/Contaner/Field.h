@@ -17,17 +17,17 @@ enum Field_Types{
 
 class Field {
 
-private:
-    string ID;
-	
-public:
-    Field(string ID);
-    virtual ~Field();
-	
-public:
-    string getID();
-    void setID(string ID);
-    virtual Field_Types getType();
+    private:
+        string ID;
+
+    public:
+        explicit Field(string ID);
+        virtual ~Field();
+
+    public:
+        string getID();
+        void setID(string ID);
+        virtual Field_Types getType();
 };
 
 #endif // FIELD_H

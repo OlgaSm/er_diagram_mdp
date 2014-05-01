@@ -4,6 +4,10 @@
 #include <string>
 #include "Field.h"
 
+//=====================================
+#include "DebugDefine.h"
+//=====================================
+
 using namespace std;
 
 template<class Type>
@@ -13,7 +17,7 @@ private:
 	Type value;
 
 public:    
-    DataField(string id, Type val);
+    explicit DataField(string id, Type val);
     ~DataField();
 
 public:    
@@ -27,14 +31,28 @@ public:
 //=============================================================
 
 template<class Type>
-DataField<Type>::DataField(string id, Type val) : Field(id)
-{
+DataField<Type>::DataField(string id, Type val) : Field(id){
 	this->value = val;
+    #ifdef DEBUGLOG_DATAFIELD
+        QFile file(LOG_PATH);
+        file.open(QIODevice::Append | QIODevice::Text);
+        QTextStream out(&file);
+        out << "+ TemplateField created" << endl;
+        file.close();
+        //CountCreatedObject++;
+    #endif
 }
 
 template<class Type>
-DataField<Type>::~DataField()
-{
+DataField<Type>::~DataField(){
+#ifdef DEBUGLOG_DATAFIELD
+    QFile file(LOG_PATH);
+    file.open(QIODevice::Append | QIODevice::Text);
+    QTextStream out(&file);
+    out << "- TemplateField deleted" << endl;
+    file.close();
+    //CountDeltedObject++;
+#endif
 }
 
 template<class Type>

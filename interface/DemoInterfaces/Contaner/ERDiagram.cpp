@@ -2,23 +2,41 @@
 #include "Entitie.h"
 #include "Relation.h"
 
-ERDiagram::ERDiagram (string id) 
-{
+//=====================================
+#include "DebugDefine.h"
+//=====================================
+
+ERDiagram::ERDiagram (string id){
 	this->ID = id;
     this->entities = new List<Entitie*>();
 	this->relations = new List<Relation*>();
+    #ifdef DEBUGLOG_ERD
+        QFile file(LOG_PATH);
+        file.open(QIODevice::Append | QIODevice::Text);
+        QTextStream out(&file);
+        out << "+ ERD created" << endl;
+        file.close();
+        //CountCreatedObject++;
+    #endif
 }
 
-ERDiagram::~ERDiagram () 
-{
-	for(int i=0; i<this->entities->size(); i++){
-		delete(entities->at(i));
+ERDiagram::~ERDiagram () {
+    for(int i=0; i<this->relations->size(); i++){
+        delete(relations->at(i));
     }
-	for(int i=0; i<this->relations->size(); i++){
-		delete(relations->at(i));
+    for(int i=0; i<this->entities->size(); i++){
+        delete(entities->at(i));
     }
-	delete(entities);
-	delete(relations);
+    delete(entities);
+    delete(relations);
+    #ifdef DEBUGLOG_ERD
+        QFile file(LOG_PATH);
+        file.open(QIODevice::Append | QIODevice::Text);
+        QTextStream out(&file);
+        out << "- ERD deleted" << endl;
+        file.close();
+        //CountDeltedObject++;
+    #endif
 }
 
 Relation* ERDiagram::relationAt (int i) 

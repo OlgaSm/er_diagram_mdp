@@ -12,7 +12,7 @@ private:
 	double value;
 
 public:    
-    DoubleField(string id, double val);
+    explicit DoubleField(string id, double val);
     ~DoubleField();
 
 public:    

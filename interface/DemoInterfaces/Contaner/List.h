@@ -5,6 +5,10 @@
 #include "ListItem.h"
 //=============================================================
 
+//=====================================
+#include "DebugDefine.h"
+//=====================================
+
 template<class Type>
 class ListItem;
 
@@ -14,7 +18,7 @@ private:
      ListItem<T>* head;
 
 public:
-    List();
+    explicit List();
     ~List();
 
 public:
@@ -31,12 +35,28 @@ public:
 template<class T>
 List<T>::List(){
     this->head = 0;
+    #ifdef DEBUGLOG_LIST
+        QFile file(LOG_PATH);
+        file.open(QIODevice::Append | QIODevice::Text);
+        QTextStream out(&file);
+        out << "+ List created" << endl;
+        file.close();
+        //CountCreatedObject++;
+    #endif
 }
 
 template<class T>
 List<T>::~List(){
     delete head;
     head = 0;
+    #ifdef DEBUGLOG_LIST
+        QFile file(LOG_PATH);
+        file.open(QIODevice::Append | QIODevice::Text);
+        QTextStream out(&file);
+        out << "- List deleted" << endl;
+        file.close();
+        //CountDeltedObject++;
+    #endif
 }
 
 template<class T>

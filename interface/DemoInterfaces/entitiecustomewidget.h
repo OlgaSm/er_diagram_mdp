@@ -28,10 +28,9 @@ private:
     QPushButton* addButton;
 
 public:
-    explicit EntitieCustomeWidget(QWidget *parent = 0);
+    explicit EntitieCustomeWidget(QWidget *parent = 0, Core* core = new Core());
+    ~EntitieCustomeWidget();
     void doOnTimer();
-    void setCore(Core* core);
-    Core* getCore();
     QBoxLayout* qbl;
     QLineEdit* tb;
     QLineEdit* key;

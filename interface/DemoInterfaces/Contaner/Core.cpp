@@ -5,31 +5,57 @@
 #include "DoubleField.h"
 #include "qmath.h"
 #include "Relation.h"
+
+//=====================================
+#include "DebugDefine.h"
+//=====================================
+
     Core::Core(){
         this->content = new ERDiagram("Common");
         this->state = 2;
         this->focus = -1;
         this->focusEntitieOrRelation = true;
         this->counter = 0;
+        this->counter0 = 0;
+        this->counter1 = 0;
         this->weightOfSolution = -1;
         this->solution = NULL;
         this->changed = false;
+        #ifdef DEBUGLOG_CORE
+            QFile file(LOG_PATH);
+            file.open(QIODevice::Append | QIODevice::Text);
+            QTextStream out(&file);
+            out << "+ Core created" << endl;
+            file.close();
+            //CountCreatedObject++;
+        #endif
     }
+
     int Core::getCounter(){
         return this->counter++;
     }
 
-//    Core::~Core(){
+    int Core::getCounter0(){
+        return this->counter0++;
+    }
 
-//    }
+    int Core::getCounter1(){
+        return this->counter1++;
+    }
 
-//    void Core::saveProject(string file){
+    Core::~Core(){
+        #ifdef DEBUGLOG_CORE
+            QFile file(LOG_PATH);
+            file.open(QIODevice::Append | QIODevice::Text);
+            QTextStream out(&file);
+            out << "- Core deleted" << endl;
+            file.close();
+            //CountDeltedObject++;
+        #endif
+        delete(this->solution);
+        delete(this->content);
+    }
 
-//    }
-
-//    void Core::loadProject(string file){
-
-//    }
 
     void Core::popRelationAt(int n){
         this->content->popRelationAt(n,true);
@@ -231,7 +257,11 @@
     }
 
     int Core::getSpeedOf(Entitie* e){
-        int speed = 1;
+        int speed = 5;
+        int t = ((IntField*)e->fieldByID("T"))->getValue();
+        if(t==0){
+            speed+=5;
+        }
         for(int i=0; i<e->relationCount(); i++){
             Relation* r = e->relationAt(i);
             if(r->getEntL()!=e){
@@ -265,7 +295,11 @@
     }
 
     double Core::getDistanceOf(Entitie* e){
-        double distance = 200;
+        double distance = 100;
+        int t = ((IntField*)e->fieldByID("T"))->getValue();
+        if(t==0){
+            distance+=100;
+        }
         for(int i=0; i<e->relationCount(); i++){
             Relation* r = e->relationAt(i);
             if(r->getEntL()!=e){
@@ -308,7 +342,8 @@
 
     List<string>* Core::getBestWay(Entitie* e1, Entitie* e2){
            this->weightOfSolution = -1;
-            this->solution=NULL;
+           delete(this->solution);
+           this->solution=NULL;
            List<string>* way = new List<string>();
            getBestWay(e1, e2, way, 0);
            if(this->solution!=NULL){

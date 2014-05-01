@@ -6,6 +6,10 @@
 #include "entitiecustomewidget.h"
 #include <qcoreapplication.h>
 
+//=====================================
+#include "DebugDefine.h"
+//=====================================
+
 LineOfField::LineOfField(EntitieCustomeWidget* ec, Entitie* e, Field* field, QWidget *parent) :
     QWidget(parent)
 {   this->ec = ec;
@@ -85,6 +89,14 @@ LineOfField::LineOfField(EntitieCustomeWidget* ec, Entitie* e, Field* field, QWi
     //this->qbl->addStretch();
     this->setLayout(this->qbl);
     QObject::connect(this->qpb,SIGNAL(clicked()),this,SLOT(buttonDelete()));
+    #ifdef DEBUGLOG_LINEFIELD
+        QFile file(LOG_PATH);
+        file.open(QIODevice::Append | QIODevice::Text);
+        QTextStream out(&file);
+        out << "+ LINEFIELD created" << endl;
+        file.close();
+        //CountCreatedObject++;
+    #endif
 }
 
 void LineOfField::buttonDelete(){
@@ -96,4 +108,15 @@ void LineOfField::buttonDelete(){
 
 Field* LineOfField::getField(){
     return this->field;
+}
+
+LineOfField::~LineOfField(){
+    #ifdef DEBUGLOG_LINEFIELD
+        QFile file(LOG_PATH);
+        file.open(QIODevice::Append | QIODevice::Text);
+        QTextStream out(&file);
+        out << "- LINEFIELD deleted" << endl;
+        file.close();
+        //CountDeltedObject++;
+    #endif
 }

@@ -24,7 +24,8 @@ private:
     EntitieCustomeWidget* ec;
 
 public:
-    explicit LineOfField(EntitieCustomeWidget* ec, Entitie* e, Field* field = NULL,QWidget *parent = 0);
+    explicit LineOfField(EntitieCustomeWidget* ec, Entitie* e, Field* field = new Field("Default"),QWidget *parent = 0);
+    ~LineOfField();
     QComboBox* qcb;
     QLineEdit* ID;
     QLineEdit* value;

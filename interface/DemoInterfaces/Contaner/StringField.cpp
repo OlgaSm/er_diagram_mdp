@@ -2,13 +2,31 @@
 #include "Field.h"
 #include "StringField.h"
 
-StringField::StringField(string id, string val) : Field(id)
-{
+//=====================================
+#include "DebugDefine.h"
+//=====================================
+
+StringField::StringField(string id, string val) : Field(id){
     this->value = val;
+    #ifdef DEBUGLOG_STRING_FIELD
+        QFile file(LOG_PATH);
+        file.open(QIODevice::Append | QIODevice::Text);
+        QTextStream out(&file);
+        out << "+ StringField created" << endl;
+        file.close();
+        //CountCreatedObject++;
+    #endif
 }
 
-StringField::~StringField()
-{
+StringField::~StringField(){
+    #ifdef DEBUGLOG_STRING_FIELD
+        QFile file(LOG_PATH);
+        file.open(QIODevice::Append | QIODevice::Text);
+        QTextStream out(&file);
+        out << "- StringField deleted" << endl;
+        file.close();
+        //CountDeltedObject++;
+    #endif
 }
 
 string StringField::getValue()

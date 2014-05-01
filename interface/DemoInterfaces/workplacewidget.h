@@ -19,9 +19,9 @@ private:
     int curY;
 
 public:
-    explicit WorkPlaceWidget(QWidget *parent = 0);
+    explicit WorkPlaceWidget(QWidget *parent = 0, Core* core = new Core());
+    ~WorkPlaceWidget();
     void paintEvent(QPaintEvent *);
-    void setCore(Core* core);
 signals:
 
 public slots:

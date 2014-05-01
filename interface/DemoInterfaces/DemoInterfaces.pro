@@ -40,7 +40,8 @@ HEADERS  += mainwindow.h \
     Contaner/Relation.h \
     Contaner/StringField.h \
     entitiecustomewidget.h \
-    lineoffield.h
+    lineoffield.h \
+    DebugDefine.h
 
 OTHER_FILES += \
     Contaner/ReadMe.txt \

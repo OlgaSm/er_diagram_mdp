@@ -8,10 +8,22 @@
 #include "Relation.h"
 //=====================================================
 
+//=====================================
+#include "DebugDefine.h"
+//=====================================
+
 Entitie::Entitie(string ID){
     this->ID = ID;
     this->myfield = new List<Field*>();
     this->myRelations = new List<Relation*>();
+    #ifdef DEBUGLOG_ENTITIE
+        QFile file(LOG_PATH);
+        file.open(QIODevice::Append | QIODevice::Text);
+        QTextStream out(&file);
+        out << "+ Entitie created" << endl;
+        file.close();
+        //CountCreatedObject++;
+    #endif
 }
 
 Entitie::~Entitie(){
@@ -25,6 +37,14 @@ Entitie::~Entitie(){
     }
     delete(myfield);
     delete(myRelations);
+    #ifdef DEBUGLOG_ENTITIE
+        QFile file(LOG_PATH);
+        file.open(QIODevice::Append | QIODevice::Text);
+        QTextStream out(&file);
+        out << "- Entitie deleted" << endl;
+        file.close();
+        //CountDeltedObject++;
+    #endif
 }
 
 string Entitie::getID(){

@@ -12,7 +12,7 @@ private:
 	string value;
 
 public:    
-    StringField(string id, string val);
+    explicit StringField(string id, string val);
     ~StringField();
 
 public:    

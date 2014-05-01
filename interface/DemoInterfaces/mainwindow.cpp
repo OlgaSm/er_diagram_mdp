@@ -18,6 +18,10 @@
 #include "Contaner/StringField.h"
 #include <QScrollArea>
 
+//=====================================
+#include "DebugDefine.h"
+//=====================================
+
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
 {   
@@ -28,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Настройка
     this->setAutoFillBackground(true);
-    this->resize(1000,600);
+    this->resize(1200,750);
     this->timer = new QTimer(this);
     connect(this->timer, SIGNAL(timeout()), SLOT(timerEvent()));
     this->timer->start(50);
@@ -76,8 +80,7 @@ MainWindow::MainWindow(QWidget *parent)
     scrollarea1->setMaximumHeight(5000);
     scrollarea1->setMinimumHeight(250);
     scrollarea1->setMinimumWidth(250);
-    this->w11 = new WorkPlaceWidget();
-    w11->setCore(this->core);
+    this->w11 = new WorkPlaceWidget(this,this->core);
     w11->setFrameStyle(QFrame::Panel);
     QWidget* w21 = new QWidget();
     scrollarea1->setWidget(w11);
@@ -88,8 +91,7 @@ MainWindow::MainWindow(QWidget *parent)
     w21->setMinimumWidth(400);
     w21->setLayout(blt);
     //==============================================
-    this->ecw = new EntitieCustomeWidget();
-    ecw->setCore(this->core);
+    this->ecw = new EntitieCustomeWidget(this, this->core);
     //==============================================
     QPixmap EntitieIcon(":Images/Entitie.png");
     QPixmap RelationIcon(":Images/Relation.png");
@@ -152,8 +154,7 @@ MainWindow::MainWindow(QWidget *parent)
         scrollarea2->setMaximumHeight(5000);
         scrollarea2->setMinimumHeight(250);
         scrollarea2->setMinimumWidth(250);
-        this->w12 = new WorkPlaceWidget();
-        w12->setCore(this->core);
+        this->w12 = new WorkPlaceWidget(this,this->core);
         w12->setFrameStyle(QFrame::Panel);
         QWidget* w22 = new QWidget();
         scrollarea2->setWidget(w12);
@@ -173,22 +174,14 @@ MainWindow::MainWindow(QWidget *parent)
             QBoxLayout* a = new QBoxLayout(QBoxLayout::TopToBottom);
             a->addWidget(te);
             scrollarea3->setLayout(a);
-            //scrollarea3->setWidget(te);
             scrollarea3->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-//            scrollarea3->setMaximumWidth(500);
-//            scrollarea3->setMaximumHeight(500);
-//            scrollarea3->setMinimumHeight(350);
-//            scrollarea3->setMinimumWidth(100);
             scrollarea3->viewport()->isMaximized();
-            //scrollarea3->
             w22->layout()->addWidget(new QLabel("Получатель"));
             this->cb = new QComboBox();
             this->cb2 = new QComboBox();
             w22->layout()->addWidget(cb);
             w22->layout()->addWidget(new QLabel("Отправитель"));
             w22->layout()->addWidget(cb2);
-            //blt2->addStretch();
-            //w22->layout()->addWidget(pb7);
             blt2->addWidget(scrollarea3);
             w22->layout()->addWidget(pb6);
 
@@ -208,17 +201,34 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(pb0,SIGNAL(clicked()),this,SLOT(button1Pressed()));
     QObject::connect(pb1,SIGNAL(clicked()),this,SLOT(button2Pressed()));
     QObject::connect(pb2,SIGNAL(clicked()),this,SLOT(button3Pressed()));
-    //QObject::connect(pb3,SIGNAL(clicked()),this,SLOT(button4Pressed()));
     QObject::connect(pb4,SIGNAL(clicked()),this,SLOT(button5Pressed()));
     QObject::connect(pb5,SIGNAL(clicked()),this,SLOT(button6Pressed()));
     QObject::connect(pb6,SIGNAL(clicked()),this,SLOT(buttonway()));
-//    QObject::connect(pb7,SIGNAL(clicked()),this,SLOT(button7Pressed()));
     QObject::connect(this->qtw,SIGNAL(currentChanged(int)),this,SLOT(tabChanged()));
+
+    #ifdef DEBUGLOG_MAIN
+        QFile file(LOG_PATH);
+        file.open(QIODevice::Append | QIODevice::Text);
+        QTextStream out(&file);
+        out << "+ MAIN created" << endl;
+        file.close();
+        //CountCreatedObject++;
+    #endif
 }
 
-MainWindow::~MainWindow()
-{
-
+MainWindow::~MainWindow(){
+    delete(this->core);
+    delete(this->timer);
+    #ifdef DEBUGLOG_MAIN
+        QFile file(LOG_PATH);
+        file.open(QIODevice::Append | QIODevice::Text);
+        QTextStream out(&file);
+        out << "- MAIN deleted" << endl;
+        //CountDeltedObject++;
+        //out << "\n Created objects - "<< CountCreatedObject <<" \n" << endl;
+        //out << "Deleted objects - "<< CountDeltedObject <<" \n" << endl;
+        file.close();
+    #endif
 }
 
 void MainWindow::tabChanged(){
@@ -345,7 +355,7 @@ void MainWindow::buttonway(){
                 Entitie* e = this->core->getEntitieByID(way->at(i));
                 if(e0!=NULL){
                     double dist = this->core->getDistanceBetween(e,e0);
-                    int speed = this->core->getSpeedOf(e0)*5;
+                    int speed = this->core->getSpeedOf(e0);
                     double time = dist / speed;
                     totalTime +=time;
                     totalSpeed +=speed;
@@ -357,7 +367,7 @@ void MainWindow::buttonway(){
                 i++;
                 e0 = e;
             }
-            this->te->append("\nОбщая дистанция: "+QString::number(totalDistance)+"\nСредняя скорость: "+QString::number(totalSpeed/i)+"\nВремя пути: "+QString::number(totalTime));
+            this->te->append("\nОбщая дистанция: "+QString::number(totalDistance)+" п\nСредняя скорость: "+QString::number(totalSpeed/(i+1))+" п/дч\nВремя пути: "+QString::number(totalTime)+"дч");
         }else{
            this->te->append("Путь не найден");
         }

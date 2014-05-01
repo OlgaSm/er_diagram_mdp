@@ -2,6 +2,11 @@
 #include "Relation.h"
 #include "Entitie.h"
 //=============================================================
+
+//=====================================
+#include "DebugDefine.h"
+//=====================================
+
 string Relation::getID(){
     return this->relationID;
 }
@@ -54,6 +59,14 @@ Relation::Relation(string relationID,
 
     this->entitieL->addRelation(this);
     this->entitieR->addRelation(this);
+    #ifdef DEBUGLOG_RELATION
+        QFile file(LOG_PATH);
+        file.open(QIODevice::Append | QIODevice::Text);
+        QTextStream out(&file);
+        out << "+ Relation created" << endl;
+        file.close();
+        //CountCreatedObject++;
+    #endif
 }
 
 Relation::~Relation(){
@@ -63,4 +76,12 @@ Relation::~Relation(){
     if(this->entitieR!=NULL){
         this->entitieR->popRelationByID(this->relationID, false);
     }
+    #ifdef DEBUGLOG_RELATION
+        QFile file(LOG_PATH);
+        file.open(QIODevice::Append | QIODevice::Text);
+        QTextStream out(&file);
+        out << "- Relation deleted" << endl;
+        file.close();
+        //CountDeltedObject++;
+    #endif
 }

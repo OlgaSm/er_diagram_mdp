@@ -28,7 +28,7 @@ public:
     bool getMulL();
     bool getAbsR();
     bool getAbsL();
-    Relation(string fieldID,
+    explicit Relation(string fieldID,
              string key,
              Entitie* entitieR,
              Entitie* entitieL,

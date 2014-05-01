@@ -12,7 +12,7 @@ private:
 	int value;
 
 public:    
-    IntField(string id, int val);
+    explicit IntField(string id, int val);
     ~IntField();
 
 public:    
