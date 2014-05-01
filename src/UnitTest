@@ -1,0 +1,162 @@
+#include "gtest.h"
+#include "ERDiagram.h"
+#include "Entitie.h"
+#include "Relation.h"
+#include "Field.h"
+
+class EntitieTest : public testing::Test
+{
+protected :
+	virtual void SEtUp ()
+	{
+		entit1->addUserField(field1);
+		entit1->addUserField(field3);
+		entit1->addUserField(field2);
+		entit2->addRelation(relat1);
+		entit2->addRelation(relat2);
+		entit2->addRelation(relat3);
+	}
+	Field* field1 = new Field("field1");
+	Field* field2 = new Field("field2");
+	Field* field3 = new Field("field3");
+	Entitie* entit1 = new Entitie("entitie1");
+	Entitie* entit2 = new Entitie("entitie2");
+	Relation* relat1 = new Relation("relation1","",entit1,entit2,true,true,true,true );
+	Relation* relat2 = new Relation("relation2","",entit2,entit1,true,true,true,true );
+	Relation* relat3 = new Relation("relation3","",entit1,entit2,false,false,false,false );
+};
+
+TEST_F (EntitieTest, TestEmptyFieldList)
+{
+	EXPECT_TRUE (entit2->isFieldListEmpty());
+	EXPECT_FALSE (entit1->isFieldListEmpty());
+}
+
+TEST_F (EntitieTest, TestGetField)
+{
+	ASSERT_FALSE (entit1->isFieldListEmpty());
+	EXPECT_EQ (field3, entit1->fieldAt(1));
+	EXPECT_EQ (field1, entit1->fieldByID("field1"));
+}
+
+TEST_F (EntitieTest, TestPopField)
+{
+	ASSERT_GT (0, entit1->fieldCount());
+	entit1->popFieldAt(1);
+	EXPECT_EQ (2, entit1->fieldCount());
+	entit1->popFieldByID("field1");
+	EXPECT_EQ (1, entit1->fieldCount());
+	EXPECT_EQ (field2, entit1->fieldAt(0));
+}
+//-------------------------------------------------
+TEST_F (EntitieTest, TestEmptyRelationList)
+{
+	EXPECT_TRUE (entit1->isRelationListEmpty());
+	EXPECT_FALSE (entit2->isRelationListEmpty());
+}
+
+TEST_F (EntitieTest, TestGetRelation)
+{
+	ASSERT_FALSE (entit2->isRelationListEmpty());
+	EXPECT_EQ (relat2, entit2->relationAt(1));
+	EXPECT_EQ (relat2, entit2->relationByID("relat1"));
+}
+
+TEST_F (EntitieTest, TestPopRelation)
+{
+	ASSERT_GT (0, entit2->relationCount());
+	entit2->popRelationAt(2, true);
+	EXPECT_EQ (2, entit2->relationCount());
+	entit2->popRelationByID("relat1", false);
+	EXPECT_EQ (1, entit2->relationCount());
+	EXPECT_EQ (relat2, entit2->relationAt(0));
+	
+	entit1->addRelation(relat3);
+	entit1->addRelation(relat1);
+	EXPECT_EQ (1, entit1->relationCount());
+	EXPECT_EQ (relat1, entit1->relationAt(0));
+}
+//==================================================================================================
+class RelationTest : public testing::Test
+{
+protected :
+	virtual void SEtUp ()
+	{
+		entit1->addRelation(relat1);
+		entit1->addRelation(relat2);
+		entit2->addRelation(relat1);
+		entit2->addRelation(relat2);
+	}
+	Entitie* entit1 = new Entitie("entitie1");
+	Entitie* entit2 = new Entitie("entitie2");
+	Relation* relat1 = new Relation("relation1","",entit1,entit2,true,true,true,true );
+	Relation* relat2 = new Relation("relation2","",entit2,entit1,true,true,true,true );
+};
+
+TEST_F (RelationTest, TestRightEntitie)
+{
+	EXPECT_FALSE (entit1->isRelationListEmpty());
+	EXPECT_FALSE (entit2->isRelationListEmpty());
+	EXPECT_EQ (entit1, relat1->getEntR());
+	EXPECT_EQ (entit2, relat2->getEntR());
+}
+
+TEST_F (RelationTest, TestLeftEntitie)
+{
+	EXPECT_FALSE (entit1->isRelationListEmpty());
+	EXPECT_FALSE (entit2->isRelationListEmpty());
+	EXPECT_EQ (entit2, relat1->getEntL());
+	EXPECT_EQ (entit1, relat2->getEntL());
+}
+//==================================================================================================
+class ERDiagramTest : public testing::Test
+{
+protected :
+	virtual void SEtUp ()
+	{
+		my_diag->addUserEntitie(entit1);
+		my_diag->addUserRelation(relat1);
+		my_diag->addEntitie("entitie2");	
+		my_diag->addRelation("relation2","",entit2,entit1,true,true,true,true);	
+		
+	}
+	Entitie* entit1 = new Entitie("entitie1");
+	//Entitie* entit2 = new Entitie("entitie2");
+	Relation* relat1 = new Relation("relation1","",entit1,entit2,true,true,true,true );
+	//Relation* relat2 = new Relation("relation2","",entit2,entit1,true,true,true,true );
+	ERDiagram* my_diag = new ERDiagram("myDiagram");
+};
+
+TEST_F (ERDiagramTest, TestGetEntitie)
+{
+	EXPECT_EQ ("entitie2", my_diag->entitieAt(1)->getID());
+	EXPECT_EQ (entit1, my_diag->entitieByID("entitie1"));
+}
+
+TEST_F (ERDiagramTest, TestPopEntitie)
+{
+	my_diag->popEntitieAt(0);
+	EXPECT_EQ (NULL my_diag->entitieAt(1));
+	my_diag->popEntitieByID("entitie2");
+	EXPECT_EQ (NULL my_diag->entitieAt(0));
+}
+//-------------------------------------------------
+TEST_F (ERDiagramTest, TestGetRelation)
+{
+	EXPECT_EQ ("relation2", my_diag->relationAt(1)->getID());
+	EXPECT_EQ (relatt1, my_diag->relationByID("relation1"));
+}
+
+TEST_F (ERDiagramTest, TestPopRelation)
+{
+	my_diag->popRelationAt(0);
+	EXPECT_EQ (NULL my_diag->relationAt(1));
+	my_diag->popRelationByID("relation2");
+	EXPECT_EQ (NULL my_diag->relationAt(0));
+}
+//==================================================================================================
+int main(int argc, char **argv) 
+{
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}
