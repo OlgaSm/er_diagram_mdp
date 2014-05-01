@@ -346,6 +346,7 @@
            this->solution=NULL;
            List<string>* way = new List<string>();
            getBestWay(e1, e2, way, 0);
+           delete(way);
            if(this->solution!=NULL){
                return this->solution;
            }else{

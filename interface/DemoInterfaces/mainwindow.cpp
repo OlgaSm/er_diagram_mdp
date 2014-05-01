@@ -249,6 +249,7 @@ void MainWindow::tabChanged(){
             this->cb2->addItem( QString::fromStdString(l->at(i)));
             i++;
         }
+        delete(l);
         this->pb0b->setChecked(false);
         this->pb1b->setChecked(false);
         this->pb2b->setChecked(false);
