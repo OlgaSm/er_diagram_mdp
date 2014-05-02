@@ -9,13 +9,9 @@
 //=====================================================
 
 Entitie::Entitie(string ID){
-    if(isIDFree())
-	{
-		this->ID = ID;
-		this->myfield = new List<Field*>();
-		this->myRelations = new List<Relation*>();
-	}
-	//else 
+   	this->ID = ID;
+	this->myfield = new List<Field*>();
+	this->myRelations = new List<Relation*>();
 }
 
 Entitie::~Entitie(){
