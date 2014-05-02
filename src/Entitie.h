@@ -28,6 +28,7 @@ public:
     void setID(string ID);
 	
 public:
+	bool isIDFree (string id);
     Field* 	fieldAt(int i);
     Field* 	fieldByID(string ID);
     void    addUserField(Field* f);

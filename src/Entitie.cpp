@@ -9,9 +9,13 @@
 //=====================================================
 
 Entitie::Entitie(string ID){
-    this->ID = ID;
-    this->myfield = new List<Field*>();
-    this->myRelations = new List<Relation*>();
+    if(isIDFree())
+	{
+		this->ID = ID;
+		this->myfield = new List<Field*>();
+		this->myRelations = new List<Relation*>();
+	}
+	//else 
 }
 
 Entitie::~Entitie(){
@@ -35,6 +39,16 @@ void Entitie::setID(string ID){
     this->ID = ID;
 }
 
+bool Entitie::isIDFree (string id)
+{
+	for(int i=0; i<this->myfield->size(); i++)
+	{
+		if (myfield->at(i)->getID() == id)
+			return false;
+	}
+	return true;
+}
+
 Field* 	Entitie::fieldAt(int i){
     return this->myfield->at(i);
 }
@@ -49,7 +63,9 @@ Field* 	Entitie::fieldByID(string ID){
 }
 
 void    Entitie::addUserField(Field* f){
-    this->myfield->push_back(f);
+	if (isIDFree())
+		this->myfield->push_back(f);
+	//else
 }
 
 void    Entitie::addIntField(int value){
