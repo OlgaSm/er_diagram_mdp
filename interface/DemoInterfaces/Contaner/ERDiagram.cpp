@@ -118,6 +118,7 @@ void ERDiagram::popEntitieAt (int i){
     for(int j=0; j< del->size(); j++){
         delete(del->at(j));
     }
+    delete(del);
 	delete(this->entities->at(i));
 	this->entities->popAt(i);
 }
