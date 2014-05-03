@@ -4,6 +4,7 @@
 #include <string>
 #include "List.h"
 #include "Factory/entitiefactory.h"
+#include <QString>
 
 using namespace std;
 class ERDiagram;
@@ -30,8 +31,10 @@ private:
 public:
     explicit Core();
 	~Core();
+    void ClearEr();
+    QString calcMD5(QString fileName);
     void saveProject(string file);
-    void loadProject(string file);
+    bool loadProject(string file);
     void addRelation(Relation* r);
     void addRelation(Entitie* e1, Entitie* e2, string id, string key);
     void addEntitie(string name);
@@ -47,6 +50,7 @@ public:
     void setWeightOfSolution(int weight);
     void Changed(bool changed);
     void setFocusObj(bool feor);
+    void newConten();
 
     int getEntitieCount();
     int getRelationCount();

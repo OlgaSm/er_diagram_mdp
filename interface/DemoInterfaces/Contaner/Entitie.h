@@ -45,6 +45,7 @@ public:
     void    popRelationByID(string ID, bool deleteRelationAfterPoping);
     int     relationCount();
     bool    isRelationListEmpty();
+	bool    isIDFree(string id);
 };
 
 #endif // ENTITIE_H

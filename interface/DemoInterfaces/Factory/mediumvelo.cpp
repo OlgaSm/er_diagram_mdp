@@ -16,6 +16,10 @@ MediumVelo::MediumVelo():Entitie("Велосипед(ср) "+QString::number(id+
 MediumVelo::~MediumVelo(){
 }
 
+void MediumVelo::setId(int id0){
+    id=id0;
+}
+
 string MediumVelo::getBrand(){
     return this->ID;
 }

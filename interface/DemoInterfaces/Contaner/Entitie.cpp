@@ -69,7 +69,11 @@ Field* 	Entitie::fieldByID(string ID){
 }
 
 void    Entitie::addUserField(Field* f){
-    this->myfield->push_back(f);
+//    if (isIDFree(f->getID())){
+		this->myfield->push_back(f);
+//	}else{
+//		delete(f);
+//	}
 }
 
 void    Entitie::addIntField(int value){
@@ -158,4 +162,13 @@ bool Entitie::isRelationListEmpty(){
     }else{
         return true;
     }
+}
+
+bool Entitie::isIDFree(string id){
+	for(int i=0; i<this->myfield->size(); i++)
+	{
+		if (myfield->at(i)->getID() == id)
+			return false;
+	}
+	return true;
 }

@@ -17,6 +17,10 @@ SlowVelo::~SlowVelo(){
 
 }
 
+void SlowVelo::setId(int id0){
+    id=id0;
+}
+
 string SlowVelo::getBrand(){
     return this->ID;
 }

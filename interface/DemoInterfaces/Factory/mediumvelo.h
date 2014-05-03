@@ -8,6 +8,7 @@ private :
 public:
     MediumVelo();
     ~MediumVelo();
+    static void setId(int id0);
     string getBrand();
     double getPower ();
 };

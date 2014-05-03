@@ -8,6 +8,7 @@ private :
 public:
     MediumCar();
     ~MediumCar();
+    static void setId(int id0);
     string getBrand();
     double getPower ();
 };

@@ -17,6 +17,10 @@ MediumCar::MediumCar():Entitie("Автомобиль "+QString::number(id++).toS
 MediumCar::~MediumCar(){
 }
 
+void MediumCar::setId(int id0){
+    id=id0;
+}
+
 string MediumCar::getBrand(){
     return this->ID;
 }

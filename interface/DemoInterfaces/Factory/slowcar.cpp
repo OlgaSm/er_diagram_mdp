@@ -18,6 +18,10 @@ SlowCar::~SlowCar(){
 
 }
 
+void SlowCar::setId(int id0){
+    id=id0;
+}
+
 string SlowCar::getBrand(){
     return this->ID;
 }

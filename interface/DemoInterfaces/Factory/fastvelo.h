@@ -8,6 +8,7 @@ private :
     static int id;
 public:
     FastVelo();
+    static void setId(int id0);
     ~FastVelo();
     string getBrand();
     double getPower ();

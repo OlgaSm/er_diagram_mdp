@@ -7,6 +7,12 @@
 #include "Factory/slowvelofactory.h"
 #include "Factory/mediumvelofactory.h"
 #include "Factory/fastvelofactory.h"
+#include "Factory/slowcar.h"
+#include "Factory/mediumcar.h"
+#include "Factory/fastcar.h"
+#include "Factory/slowvelo.h"
+#include "Factory/mediumvelo.h"
+#include "Factory/fastvelo.h"
 
 enum Entitie_Types{
     _Empty,
@@ -38,6 +44,7 @@ private:
 
 public:
     static EntitieFactory* entitieFactory();
+    static void setGlobalId(int id0);
     static void DeleteFactory();
     Entitie* createEntitie(Entitie_Types t);
 };

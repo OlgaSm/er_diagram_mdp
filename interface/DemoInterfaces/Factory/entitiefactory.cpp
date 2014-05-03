@@ -80,5 +80,16 @@ void EntitieFactory::DeleteFactory(){
     }
 }
 
+void EntitieFactory::setGlobalId(int id0){
+    id=id0;
+    SlowCar::setId(id);
+    MediumCar::setId(id);
+    FastCar::setId(id);
+    SlowVelo::setId(id);
+    MediumVelo::setId(id);
+    FastVelo::setId(id);
+    DeleteFactory();
+}
+
 EntitieFactory* EntitieFactory::factory = NULL;
 int EntitieFactory::id = 0;

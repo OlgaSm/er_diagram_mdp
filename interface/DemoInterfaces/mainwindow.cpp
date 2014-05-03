@@ -17,6 +17,8 @@
 #include "Contaner/DataField.h"
 #include "Contaner/StringField.h"
 #include <QScrollArea>
+#include <QMessageBox>
+#include <QFileDialog>
 #include <helpbrowser.h>
 
 //=====================================
@@ -55,11 +57,11 @@ MainWindow::MainWindow(QWidget *parent)
     this->menuBar->addAction("&Cправка",this,SLOT(showHelp()));
     this->menuBar->setStyleSheet("QMenuBar { background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 WHITE, stop: 0.4 #D4DFEF, stop: 0.5 #BDCFEB, stop: 1.0 WHITE); spacing: 5px; border: 2px solid #B2C8EA }");
 
-    this->pmenu->addAction(QPixmap(":Images/New.png"),"Создать");
-    this->pmenu->addAction(QPixmap(":Images/Save.png"),"Сохранить");
-    this->pmenu->addAction(QPixmap(":Images/Load.png"),"Загрузить");
+    this->pmenu->addAction(QPixmap(":Images/New.png"),"Создать",this,SLOT(newEr()));
+    this->pmenu->addAction(QPixmap(":Images/Save.png"),"Сохранить",this,SLOT(savemenu()));
+    this->pmenu->addAction(QPixmap(":Images/Load.png"),"Загрузить",this,SLOT(loadmenu()));
     this->pmenu->addSeparator();
-    this->pmenu->addAction(QPixmap(":Images/Exit.png"),"Выйти",this,SLOT(close()));
+    this->pmenu->addAction(QPixmap(":Images/Exit.png"),"Выйти",this,SLOT(ExitFromPr()));
 
     this->qtoolbar = new QToolBar("Панель инструментов",this);
     this->qtoolbar->setStyleSheet("QToolBar { background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 WHITE, stop: 0.4 #D4DFEF, stop: 0.5 #BDCFEB, stop: 1.0 WHITE); spacing: 5px; border: 2px solid #B2C8EA }"); // #BBD4E8
@@ -191,6 +193,19 @@ MainWindow::MainWindow(QWidget *parent)
     this->setLayout(qbl);
     // Соединение со сингналов со слотами
     //==============================================
+    QPushButton* newButton = new QPushButton(this->qtoolbar);
+    newButton->setIcon(QPixmap(":Images/New.png"));
+    newButton->setToolTip("Создать");
+    QPushButton* saveButton = new QPushButton(this->qtoolbar);
+    saveButton->setIcon(QPixmap(":Images/Save.png"));
+    saveButton->setToolTip("Сохранить");
+    QPushButton* loadButton = new QPushButton(this->qtoolbar);
+    loadButton->setIcon(QPixmap(":Images/Load.png"));
+    loadButton->setToolTip("Загрузить");
+    QPushButton* helpButton = new QPushButton(this->qtoolbar);
+    helpButton->setIcon(QPixmap(":Images/Help.png"));
+    helpButton->setToolTip("Справка");
+    //==============================================
     this->pb0b->setToolTip("Инструмент сущность");
     this->pb1b->setToolTip("Инструмент связь");
     this->pb2b->setToolTip("Инструмент выделение");
@@ -203,10 +218,22 @@ MainWindow::MainWindow(QWidget *parent)
     this->qcbe->addItem("Скоростной велосипед");
     this->qcbe->addItem("Горный велосипед");
     this->qcbe->setCurrentIndex(0);
+    this->qtoolbar->addWidget(newButton);
+    this->qtoolbar->addWidget(saveButton);
+    this->qtoolbar->addWidget(loadButton);
+    this->qtoolbar->addSeparator();
     this->qtoolbar->addWidget(pb0b);
     this->qtoolbar->addWidget(pb1b);
     this->qtoolbar->addWidget(pb2b);
+    this->qtoolbar->addSeparator();
     this->qtoolbar->addWidget(this->qcbe);
+    this->qtoolbar->addSeparator();
+    this->qtoolbar->addWidget(helpButton);
+    QObject::connect(newButton,SIGNAL(clicked()),this,SLOT(newEr()));
+    QObject::connect(saveButton,SIGNAL(clicked()),this,SLOT(savemenu()));
+    QObject::connect(loadButton,SIGNAL(clicked()),this,SLOT(loadmenu()));
+    QObject::connect(helpButton,SIGNAL(clicked()),this,SLOT(showHelp()));
+
     QObject::connect(pb0b,SIGNAL(clicked()),this,SLOT(button1Pressed()));
     QObject::connect(pb1b,SIGNAL(clicked()),this,SLOT(button2Pressed()));
     QObject::connect(pb2b,SIGNAL(clicked()),this,SLOT(button3Pressed()));
@@ -381,12 +408,25 @@ void MainWindow::button5Pressed(){
 
 void MainWindow::buttonway(){
     int i;
+    bool isOk = true;
+    for(int i=0; i<this->cb->count(); i++){
+        QString temp = this->cb->itemText(i);
+        if(i!=this->cb->count()-1){
+            for(int j=i+1; j<this->cb->count(); j++){
+                if(this->cb->itemText(j)==temp){
+                    isOk = false;
+                    break;
+                }
+            }
+        }
+    }
+
     this->state->setText("Нахождение оптимального пути");
     string en1 = this->cb->currentText().toStdString();
     string en2 = this->cb2->currentText().toStdString();
     Entitie* e1 = this->core->getEntitieByID(en1);
     Entitie* e2 = this->core->getEntitieByID(en2);
-    if(e1!=NULL && e2!=NULL){
+    if(e1!=NULL && e2!=NULL && isOk){
         List<string>* way = core->getBestWay(e1,e2);
         i=0;
         te->clear();
@@ -416,6 +456,8 @@ void MainWindow::buttonway(){
            this->te->append("Путь не найден");
         }
         this->w12->repaint();
+    }else{
+        QMessageBox::warning(this,"Сообщение","Диаграмма некорректна!");
     }
 }
 
@@ -463,3 +505,71 @@ void MainWindow::showHelp(){
    helpBrowser->show();
 }
 
+void MainWindow::newEr(){
+    int n=0;
+    if(this->core->getEntitieCount()!=0){
+         n=QMessageBox::information(this,"Предупреждение", "Сохранить текущую ER-диаграмму?",QMessageBox::Yes,QMessageBox::No,QMessageBox::Cancel);
+         if(n==QMessageBox::Yes){
+             this->savemenu();
+         }
+    }else{
+        n=QMessageBox::No;
+    }
+    if(n!=QMessageBox::Cancel){
+        this->core->newConten();
+    }
+}
+
+void MainWindow::savemenu(){
+   if(this->core->getEntitieCount()!=0){
+        QString file=QFileDialog::getSaveFileName(this,"Сохранить ER-диаграмму","","*.erd");
+        if(!file.contains(".erd")){
+            file = file + QString(".erd");
+        }
+        this->core->saveProject(file.toStdString());
+   }else{
+       QMessageBox::warning(this, "Предупреждение","ER-диаграмма отсутствует!!!", QMessageBox::Ok);
+   }
+
+}
+
+void MainWindow::loadmenu(){
+   int n=0;
+   if(this->core->getEntitieCount()!=0){
+        n=QMessageBox::information(this,"Предупреждение", "Сохранить изменения ER-диаграммы перед загрузкой?",QMessageBox::Yes,QMessageBox::No,QMessageBox::Cancel);
+        if(n==QMessageBox::Yes){
+            this->savemenu();
+        }
+   }else{
+       n=QMessageBox::No;
+   }
+   if(n!=QMessageBox::Cancel){
+       QString file=QFileDialog::getOpenFileName(this,"Загрузка ER-диаграммы","", "*.erd");
+       if(!file.isEmpty()){
+           if(this->core->loadProject(file.toStdString())){
+               this->w11->repaint();
+               this->w12->repaint();
+               EntitieFactory::entitieFactory()->setGlobalId(this->core->getCounter());
+           }else{
+               QMessageBox::critical(this, "Ошибка","Файл поврежден!!!", QMessageBox::Ok);
+
+           }
+
+       }
+   }
+}
+
+void MainWindow::ExitFromPr(){
+    int n=0;
+    if(this->core->getEntitieCount()!=0){
+         n=QMessageBox::information(this,"Предупреждение", "Сохранить изменения ER-диаграммы перед загрузкой?",QMessageBox::Yes,QMessageBox::No,QMessageBox::Cancel);
+         if(n==QMessageBox::Yes){
+             this->savemenu();
+         }
+    }else{
+        n=QMessageBox::No;
+    }
+    if(n!=QMessageBox::Cancel){
+        close();
+    }
+}

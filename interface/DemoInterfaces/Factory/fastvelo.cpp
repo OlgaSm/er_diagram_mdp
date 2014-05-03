@@ -15,6 +15,11 @@ FastVelo::FastVelo():Entitie("Велосипед(отл) "+QString::number(id++)
 
 FastVelo::~FastVelo(){
 }
+
+void FastVelo::setId(int id0){
+    id=id0;
+}
+
 string FastVelo::getBrand(){
     return this->ID;
 }

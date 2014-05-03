@@ -59,6 +59,10 @@ public slots:
     void timerEvent();
     void showHelp();
     void indexChanged(int index);
+    void savemenu();
+    void loadmenu();
+    void ExitFromPr();
+    void newEr();
 };
 
 #endif // MAINWINDOW_H

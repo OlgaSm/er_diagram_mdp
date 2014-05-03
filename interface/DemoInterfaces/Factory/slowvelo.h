@@ -10,6 +10,7 @@ private:
 public:
     SlowVelo();
     ~SlowVelo();
+    static void setId(int id0);
     string getBrand();
     double getPower();
 };

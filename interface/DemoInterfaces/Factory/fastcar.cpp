@@ -14,6 +14,10 @@ FastCar::FastCar():Entitie("Спорткар "+QString::number(id++).toStdString
     this->myfield->push_back(new DoubleField("Дистанция",75));
 }
 
+void FastCar::setId(int id0){
+    id=id0;
+}
+
 FastCar::~FastCar(){
 }
 string FastCar::getBrand(){
