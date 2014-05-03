@@ -8,6 +8,7 @@ HelpBrowser::HelpBrowser(const QString& strPath, const QString& strFileName,QWid
     QPushButton* pbForward = new QPushButton(">>",this);
     QTextBrowser* textBrowser = new QTextBrowser(this);
 
+    this->resize(500,500);
     connect(pbBack, SIGNAL(clicked()),textBrowser,SLOT(backward()));
     connect(pbHome, SIGNAL(clicked()),textBrowser,SLOT(home()));
     connect(pbForward, SIGNAL(clicked()),textBrowser,SLOT(forward()));
