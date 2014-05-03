@@ -43,7 +43,7 @@ private:
     QLabel* state;
     Core* core;
     QToolBar* qtoolbar;
-
+    QComboBox* qcbe;
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
@@ -57,6 +57,8 @@ public slots:
     void buttonway();
     void tabChanged();
     void timerEvent();
+    void showHelp();
+    void indexChanged(int index);
 };
 
 #endif // MAINWINDOW_H

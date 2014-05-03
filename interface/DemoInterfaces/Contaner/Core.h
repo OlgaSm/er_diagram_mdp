@@ -3,6 +3,7 @@
 
 #include <string>
 #include "List.h"
+#include "Factory/entitiefactory.h"
 
 using namespace std;
 class ERDiagram;
@@ -14,7 +15,6 @@ private:
 	ERDiagram* content;
     int focus;
     int state;
-    bool changed;
     // 0 - Сущность
     // 1 - Связь
     // 2 - Выделить
@@ -22,8 +22,10 @@ private:
     int counter0;
     int counter1;
     int weightOfSolution;
-    List<string>* solution;
     bool focusEntitieOrRelation;
+    bool changed;
+    List<string>* solution;
+    Entitie_Types type;
 
 public:
     explicit Core();
@@ -67,6 +69,9 @@ public:
     List<string>* getBestWay(Entitie* e1, Entitie* e2);
     List<string>* getBestWay();
     List<string>* getListEn();
+
+    Entitie_Types getEntitieType();
+    void setEntitieType(Entitie_Types type);
 
     bool getFocusObj();
     bool getBestWay(Entitie* e1, Entitie* e2, List<string>* &last, int weight);

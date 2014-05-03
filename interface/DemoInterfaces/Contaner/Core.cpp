@@ -12,7 +12,7 @@
 
     Core::Core(){
         this->content = new ERDiagram("Common");
-        this->state = 2;
+        this->state = 0;
         this->focus = -1;
         this->focusEntitieOrRelation = true;
         this->counter = 0;
@@ -21,6 +21,7 @@
         this->weightOfSolution = -1;
         this->solution = NULL;
         this->changed = false;
+        this->type = _Empty;
         #ifdef DEBUGLOG_CORE
             QFile file(LOG_PATH);
             file.open(QIODevice::Append | QIODevice::Text);
@@ -41,6 +42,14 @@
 
     int Core::getCounter1(){
         return this->counter1++;
+    }
+
+    Entitie_Types Core::getEntitieType(){
+        return this->type;
+    }
+
+    void Core::setEntitieType(Entitie_Types type){
+        this->type = type;
     }
 
     Core::~Core(){
@@ -187,7 +196,7 @@
         if(e1->getID()==e2->getID()){
             if(weight<this->weightOfSolution || this->weightOfSolution==-1){
                 this->weightOfSolution = weight;
-                if(this->solution!=NULL){
+                if(this->solution==NULL){
                     this->solution = new List<string>();
                 }else{
                     delete(this->solution);
@@ -350,7 +359,8 @@
            if(this->solution!=NULL){
                return this->solution;
            }else{
-               return new List<string>();
+               this->solution = new List<string>();
+               return this->solution;
            }
       }
 

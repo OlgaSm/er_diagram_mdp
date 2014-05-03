@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include "erallocator.h"
 
 //=====================================
 #include "DebugDefine.h"

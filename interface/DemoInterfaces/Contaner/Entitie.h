@@ -9,19 +9,16 @@ using namespace std;
 
 class Relation;
 class Field;
-class IntField;
-class DoubleField;
-class StringField;
 
 class Entitie {
-private:
+protected:
     string ID;
     List<Field*>* myfield;
     List<Relation*>* myRelations;
 
 public:
     explicit Entitie(string ID);
-	~Entitie();	
+    virtual ~Entitie();
 	
 public:
     string getID();

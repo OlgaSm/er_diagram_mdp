@@ -6,6 +6,7 @@
 #include <string>
 #include <sstream>
 #include <math.h>
+#include <Factory/entitiefactory.h>
 #define max_width 5000
 #define max_height 2500
 #define work_count 6
@@ -61,12 +62,6 @@ void WorkPlaceWidget::paintDesk(){
     for(int i=0; i<this->core->getRelationCount(); i++){
         drawRelation(this->core->getRelationAt(i),((i==this->core->getFocus())&&(!this->core->getFocusObj())));
     }
-//    if(this->core->getState()==0){
-//        QPainter painter(this);
-//        //QRect r(this->curX,this->curY,100,50); cursor().pos().x()
-//        QRect r(cursor().pos().x(),cursor().pos().y(),100,50);
-//        painter.drawRect(r);
-//    }
 }
 
 
@@ -321,13 +316,17 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
         char str[255];
         sprintf(str, "Entitie № %d", num);
         name = (const char*)str;
-        Entitie* e0 = new Entitie(name);
-        e0->addUserField(new IntField("X",pe->x()));
-        e0->addUserField(new IntField("Y",pe->y()));
-        e0->addUserField(new IntField("W",100));
-        e0->addUserField(new IntField("H",100));
-        e0->addUserField(new IntField("F",1));
-        e0->addUserField(new IntField("T",-1));
+//        Entitie* e0 = new Entitie(name);
+//        e0->addUserField(new IntField("X",pe->x()));
+//        e0->addUserField(new IntField("Y",pe->y()));
+//        e0->addUserField(new IntField("W",100));
+//        e0->addUserField(new IntField("H",100));
+//        e0->addUserField(new IntField("F",1));
+//        e0->addUserField(new IntField("T",-1));
+        //EntitieFactory()
+        Entitie* e0 = EntitieFactory::entitieFactory()->createEntitie(this->core->getEntitieType());
+        ((IntField*)e0->fieldByID("X"))->setValue(pe->x());
+        ((IntField*)e0->fieldByID("Y"))->setValue(pe->y());
         calculateEntitie(e0);
         //=====================================================
 
@@ -350,6 +349,8 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
             core->addEntitieTo(e0);
             core->setFocus(core->getIndexEntitieByID(e0->getID()));
             this->repaint();
+        }else{
+            delete(e0);
         }
     }
     if(this->core->getState()==1){ // Добавление связи

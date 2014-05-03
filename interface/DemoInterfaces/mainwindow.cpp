@@ -17,6 +17,7 @@
 #include "Contaner/DataField.h"
 #include "Contaner/StringField.h"
 #include <QScrollArea>
+#include <helpbrowser.h>
 
 //=====================================
 #include "DebugDefine.h"
@@ -38,21 +39,20 @@ MainWindow::MainWindow(QWidget *parent)
     this->timer->start(50);
 
     // Инициализация полей
-    this->menuBar = new QMenuBar();
-    this->pmenu = new QMenu("&Файл");
-    this->qbl = new QBoxLayout(QBoxLayout::TopToBottom);
-    this->qtw = new QTabWidget();
-    this->tab1 = new QWidget();
-    this->tab2 = new QWidget();
+    this->menuBar = new QMenuBar(this);
+    this->pmenu = new QMenu("&Файл",this->menuBar);
+    this->qbl = new QBoxLayout(QBoxLayout::TopToBottom,this);
+    this->qtw = new QTabWidget(this);
+    this->tab1 = new QWidget(this->qtw);
+    this->tab2 = new QWidget(this->qtw);
     this->tab1->setLayout(new QBoxLayout(QBoxLayout::LeftToRight));
     this->tab2->setLayout(new QBoxLayout(QBoxLayout::LeftToRight));
     this->qtw->addTab(tab1,QPixmap(":Images/Work.png"),"&Редактор");
     this->qtw->setIconSize(QSize(20,20));
     this->qtw->addTab(tab2,QPixmap(":Images/Use.png"),"&Работа");
 
-    //this->qtw->setStyleSheet(" QTabWidget::tab-bar { alignment: left; position: relative; bottom: -37.5em;} QTabWidget::pane {bottom: 2em;} ");
-
     this->menuBar->addMenu(pmenu);
+    this->menuBar->addAction("&Cправка",this,SLOT(showHelp()));
     this->menuBar->setStyleSheet("QMenuBar { background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 WHITE, stop: 0.4 #D4DFEF, stop: 0.5 #BDCFEB, stop: 1.0 WHITE); spacing: 5px; border: 2px solid #B2C8EA }");
 
     this->pmenu->addAction(QPixmap(":Images/New.png"),"Создать");
@@ -71,18 +71,18 @@ MainWindow::MainWindow(QWidget *parent)
     this->qbl->addWidget(menuBar);
     this->qbl->addWidget(this->qtoolbar);
     this->qbl->addWidget(qtw);
-    this->state = new QLabel("Сущность");
+    this->state = new QLabel("Сущность",this);
     this->qbl->addWidget(this->state);
 
     //==============================================
-    QScrollArea* scrollarea1 = new QScrollArea();
+    QScrollArea* scrollarea1 = new QScrollArea(this->tab1);
     scrollarea1->setMaximumWidth(5000);
     scrollarea1->setMaximumHeight(5000);
     scrollarea1->setMinimumHeight(250);
     scrollarea1->setMinimumWidth(250);
     this->w11 = new WorkPlaceWidget(this,this->core);
     w11->setFrameStyle(QFrame::Panel);
-    QWidget* w21 = new QWidget();
+    QWidget* w21 = new QWidget(this->tab1);
     scrollarea1->setWidget(w11);
     this->tab1->layout()->addWidget(scrollarea1);
     this->tab1->layout()->addWidget(w21);
@@ -98,42 +98,41 @@ MainWindow::MainWindow(QWidget *parent)
     QPixmap SelectionIcon(":Images/Selection.png");
     QPixmap SendIcon(":Images/Send.png");
     //==============================================
-    QWidget* pbButtons = new QWidget();
+    QWidget* pbButtons = new QWidget(w21);
     pbButtons->setLayout(new QBoxLayout(QBoxLayout::LeftToRight));
-    this->pb0 = new QPushButton("Сущность");
+    this->pb0 = new QPushButton("Сущность",w21);
     pb0->setIcon(EntitieIcon);
     pb0->setIconSize(QSize(20,20));
     pb0->setCheckable(true);
-    this->pb1 = new QPushButton("Связь");
+    pb0->setChecked(true);
+    this->pb1 = new QPushButton("Связь",w21);
     pb1->setIcon(RelationIcon);
     pb1->setIconSize(QSize(20,20));
     pb1->setCheckable(true);
-    this->pb2 = new QPushButton("Выделить");
+    this->pb2 = new QPushButton("Выделить",w21);
     pb2->setIcon(SelectionIcon);
     pb2->setIconSize(QSize(20,20));
     pb2->setCheckable(true);
-    pb2->setChecked(true);
 
-    this->pb0b = new QPushButton();
+    this->pb0b = new QPushButton(this->qtoolbar);
     pb0b->setIcon(EntitieIcon);
     pb0b->setIconSize(QSize(15,15));
     pb0b->setCheckable(true);
-    this->pb1b = new QPushButton();
+    pb0b->setChecked(true);
+    this->pb1b = new QPushButton(this->qtoolbar);
     pb1b->setIcon(RelationIcon);
     pb1b->setIconSize(QSize(15,15));
     pb1b->setCheckable(true);
-    this->pb2b = new QPushButton();
+    this->pb2b = new QPushButton(this->qtoolbar);
     pb2b->setIcon(SelectionIcon);
     pb2b->setIconSize(QSize(15,15));
     pb2b->setCheckable(true);
-    pb2b->setChecked(true);
+
     //QPushButton* pb3 = new QPushButton("Указатель");
 
-    this->pb4 = new QPushButton("Удалить");
-    this->pb5 = new QPushButton("Сохранить");
-    QPushButton* pb6 = new QPushButton(); // "Отправить посылку"
-    pb6->setIcon(SendIcon);
-    pb6->setIconSize(QSize(400,100));
+    this->pb4 = new QPushButton("Удалить",w21);
+    this->pb5 = new QPushButton("Сохранить",w21);
+
     //QPushButton* pb7 = new QPushButton("Обновить список сущностей");
     //==============================================
         pbButtons->layout()->addWidget(pb0);
@@ -149,7 +148,7 @@ MainWindow::MainWindow(QWidget *parent)
         w21->layout()->addWidget(pb5);
         w21->layout()->addWidget(pb4);
     //==============================================
-        QScrollArea* scrollarea2 = new QScrollArea();
+        QScrollArea* scrollarea2 = new QScrollArea(this->tab2);
         scrollarea2->setMaximumWidth(5000);
         scrollarea2->setMaximumHeight(5000);
         scrollarea2->setMinimumHeight(250);
@@ -157,6 +156,9 @@ MainWindow::MainWindow(QWidget *parent)
         this->w12 = new WorkPlaceWidget(this,this->core);
         w12->setFrameStyle(QFrame::Panel);
         QWidget* w22 = new QWidget();
+        QPushButton* pb6 = new QPushButton(w22); // "Отправить посылку"
+        pb6->setIcon(SendIcon);
+        pb6->setIconSize(QSize(400,100));
         scrollarea2->setWidget(w12);
         this->tab2->layout()->addWidget(scrollarea2);
         this->tab2->layout()->addWidget(w22);
@@ -167,20 +169,20 @@ MainWindow::MainWindow(QWidget *parent)
         //==============================================
             //this->tab1->setStyleSheet("border: 1px solid black");
 
-            this->te = new QTextEdit();
+            this->te = new QTextEdit(w22);
             this->te->setReadOnly(true);
             this->te->isMaximized();
-            QScrollArea* scrollarea3 = new QScrollArea();
+            QScrollArea* scrollarea3 = new QScrollArea(w22);
             QBoxLayout* a = new QBoxLayout(QBoxLayout::TopToBottom);
             a->addWidget(te);
             scrollarea3->setLayout(a);
             scrollarea3->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
             scrollarea3->viewport()->isMaximized();
-            w22->layout()->addWidget(new QLabel("Получатель"));
-            this->cb = new QComboBox();
-            this->cb2 = new QComboBox();
+            w22->layout()->addWidget(new QLabel("Получатель",w22));
+            this->cb = new QComboBox(w22);
+            this->cb2 = new QComboBox(w22);
             w22->layout()->addWidget(cb);
-            w22->layout()->addWidget(new QLabel("Отправитель"));
+            w22->layout()->addWidget(new QLabel("Отправитель",w22));
             w22->layout()->addWidget(cb2);
             blt2->addWidget(scrollarea3);
             w22->layout()->addWidget(pb6);
@@ -192,9 +194,19 @@ MainWindow::MainWindow(QWidget *parent)
     this->pb0b->setToolTip("Инструмент сущность");
     this->pb1b->setToolTip("Инструмент связь");
     this->pb2b->setToolTip("Инструмент выделение");
+    this->qcbe = new QComboBox(this->qtoolbar);
+    this->qcbe->addItem("Пустая сущность");
+    this->qcbe->addItem("Старая машина");
+    this->qcbe->addItem("Бюджетная машина");
+    this->qcbe->addItem("Спорткар");
+    this->qcbe->addItem("Детский велосипед");
+    this->qcbe->addItem("Скоростной велосипед");
+    this->qcbe->addItem("Горный велосипед");
+    this->qcbe->setCurrentIndex(0);
     this->qtoolbar->addWidget(pb0b);
     this->qtoolbar->addWidget(pb1b);
     this->qtoolbar->addWidget(pb2b);
+    this->qtoolbar->addWidget(this->qcbe);
     QObject::connect(pb0b,SIGNAL(clicked()),this,SLOT(button1Pressed()));
     QObject::connect(pb1b,SIGNAL(clicked()),this,SLOT(button2Pressed()));
     QObject::connect(pb2b,SIGNAL(clicked()),this,SLOT(button3Pressed()));
@@ -204,6 +216,7 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(pb4,SIGNAL(clicked()),this,SLOT(button5Pressed()));
     QObject::connect(pb5,SIGNAL(clicked()),this,SLOT(button6Pressed()));
     QObject::connect(pb6,SIGNAL(clicked()),this,SLOT(buttonway()));
+    QObject::connect(this->qcbe,SIGNAL(currentIndexChanged(int)),this,SLOT(indexChanged(int)));//currentIndexChanged ( int index )
     QObject::connect(this->qtw,SIGNAL(currentChanged(int)),this,SLOT(tabChanged()));
 
     #ifdef DEBUGLOG_MAIN
@@ -230,7 +243,33 @@ MainWindow::~MainWindow(){
         file.close();
     #endif
 }
-
+void MainWindow::indexChanged(int index){
+    switch(index){
+        case 0:
+            this->core->setEntitieType(_Empty);
+            break;
+        case 1:
+            this->core->setEntitieType(_SlowCar);
+            break;
+        case 2:
+            this->core->setEntitieType(_MediumCar);
+            break;
+        case 3:
+            this->core->setEntitieType(_FastCar);
+            break;
+        case 4:
+            this->core->setEntitieType(_SlowVelo);
+            break;
+        case 5:
+            this->core->setEntitieType(_MediumVelo);
+            break;
+        case 6:
+            this->core->setEntitieType(_FastVelo);
+            break;
+        default:
+        this->core->setEntitieType(_Empty);
+    }
+}
 void MainWindow::tabChanged(){
     if(this->qtw->currentIndex()==1){
         this->core->setState(10);
@@ -257,6 +296,7 @@ void MainWindow::tabChanged(){
         this->pb1b->setEnabled(false);
         this->pb2b->setEnabled(false);
         //setCursor(Qt::ArrowCursor);
+        this->qcbe->setEnabled(false);
     }else{
         this->core->setState(2);
         this->core->Changed(false);
@@ -285,6 +325,7 @@ void MainWindow::button1Pressed(){
     this->pb1b->setChecked(false);
     this->pb2b->setChecked(false);
     //setCursor(Qt::SizeAllCursor);
+    this->qcbe->setEnabled(true);
 }
 
 void MainWindow::button2Pressed(){
@@ -300,6 +341,7 @@ void MainWindow::button2Pressed(){
     this->pb0b->setChecked(false);
     this->pb2b->setChecked(false);
     //setCursor(Qt::CrossCursor);
+    this->qcbe->setEnabled(false);
 }
 
 void MainWindow::button3Pressed(){
@@ -313,6 +355,7 @@ void MainWindow::button3Pressed(){
     this->pb1b->setChecked(false);
     this->pb2b->setChecked(true);
     //setCursor(Qt::ArrowCursor);
+    this->qcbe->setEnabled(false);
 }
 
 //void MainWindow::button4Pressed(){
@@ -415,16 +458,8 @@ void MainWindow::timerEvent(){
     }
 }
 
-//void MainWindow::button7Pressed(){
-//    int i;
-//    i=0;
-//    cb->clear();
-//    cb2->clear();
-//    List<string>* l = core->getListEn();
-//    while (i<l->size()){
-//        this->cb->addItem( QString::fromStdString(l->at(i)));
-//        this->cb2->addItem( QString::fromStdString(l->at(i)));
-//        i++;
-//    }
-//}
+void MainWindow::showHelp(){
+   HelpBrowser* helpBrowser = new HelpBrowser(QString(":Resources"),QString("Help.html"),this);
+   helpBrowser->show();
+}
 

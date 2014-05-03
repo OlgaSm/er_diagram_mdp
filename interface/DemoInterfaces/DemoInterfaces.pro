@@ -24,7 +24,23 @@ SOURCES += main.cpp\
     Contaner/Relation.cpp \
     Contaner/StringField.cpp \
     entitiecustomewidget.cpp \
-    lineoffield.cpp
+    lineoffield.cpp \
+    helpbrowser.cpp \
+    Factory/entitiefactory.cpp \
+    Factory/slowcar.cpp \
+    Factory/mediumcar.cpp \
+    Factory/fastcar.cpp \
+    Factory/slowcarfactory.cpp \
+    Factory/CarFactory.cpp \
+    Factory/mediumcarfactory.cpp \
+    Factory/fastcarfactory.cpp \
+    Factory/fastvelo.cpp \
+    Factory/mediumvelo.cpp \
+    Factory/slowvelo.cpp \
+    Factory/fastvelofactory.cpp \
+    Factory/mediumvelofactory.cpp \
+    Factory/slowvelofactory.cpp \
+    Factory/VeloFactory.cpp
 
 HEADERS  += mainwindow.h \
     workplacewidget.h \
@@ -41,7 +57,23 @@ HEADERS  += mainwindow.h \
     Contaner/StringField.h \
     entitiecustomewidget.h \
     lineoffield.h \
-    DebugDefine.h
+    DebugDefine.h \
+    helpbrowser.h \
+    Factory/entitiefactory.h \
+    Factory/slowcar.h \
+    Factory/mediumcar.h \
+    Factory/fastcar.h \
+    Factory/slowcarfactory.h \
+    Factory/CarFactory.h \
+    Factory/mediumcarfactory.h \
+    Factory/fastcarfactory.h \
+    Factory/fastvelo.h \
+    Factory/mediumvelo.h \
+    Factory/slowvelo.h \
+    Factory/fastvelofactory.h \
+    Factory/mediumvelofactory.h \
+    Factory/slowvelofactory.h \
+    Factory/VeloFactory.h
 
 OTHER_FILES += \
     Contaner/ReadMe.txt \

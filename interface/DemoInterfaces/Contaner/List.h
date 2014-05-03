@@ -2,7 +2,9 @@
 #define LIST_H
 
 //=============================================================
+#include <stdexcept>
 #include "ListItem.h"
+//#include "ER"
 //=============================================================
 
 //=====================================
@@ -74,7 +76,6 @@ int List<T>:: size(){
     }
 }
 
-// Добавить создание эксепшена
 template<class T>
 T List<T>::at(int i){
     if(this->head!=0){
@@ -85,8 +86,10 @@ T List<T>::at(int i){
             }
             li=li->getNext();
         }
+        throw invalid_argument("Индекс за пределами списка!");
         return 0;
     }else{
+        throw invalid_argument("Список пуст!");
         return 0;
     }
 }

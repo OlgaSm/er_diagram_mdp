@@ -12,5 +12,6 @@
         <file>Images/Save.png</file>
         <file>Images/Load.png</file>
         <file>Images/Send.png</file>
+        <file>Resources/Help.html</file>
     </qresource>
 </RCC>

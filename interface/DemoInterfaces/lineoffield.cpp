@@ -20,6 +20,7 @@ LineOfField::LineOfField(EntitieCustomeWidget* ec, Entitie* e, Field* field, QWi
     switch(field->getType()){
         case 0:
             value = "Nothing";
+
             break;
         case 1:
             value = QString::fromStdString(((StringField*)(field))->getValue());
@@ -36,6 +37,9 @@ LineOfField::LineOfField(EntitieCustomeWidget* ec, Entitie* e, Field* field, QWi
     }
     this->ID = new QLineEdit(QString::fromStdString(field->getID()));
     this->value = new QLineEdit(value);
+    if(field->getType()==0){
+        this->value->setEnabled(false);
+    }
     this->qbl->addWidget(this->ID);
     this->qbl->addWidget(this->value);
     QString type="";
@@ -100,9 +104,9 @@ LineOfField::LineOfField(EntitieCustomeWidget* ec, Entitie* e, Field* field, QWi
 }
 
 void LineOfField::buttonDelete(){
-    this->ec->ClearWidget();
-    this->e->popFieldByID(field->getID());
+    this->e->popFieldByID(this->field->getID());
     this->ec->doOnTimer();
+    //this->ec->ClearWidget();
     //this->ec->setCurFocus(-1);
 }
 

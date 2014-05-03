@@ -202,12 +202,15 @@ void EntitieCustomeWidget::save(){
         Entitie* e = this->core->getEntitieAt(core->getFocus());
         e->setID(this->tb->text().toStdString());
         ((IntField*)e->fieldByID("T"))->setValue(this->qcb->currentIndex());
-        for(int j=6; e->fieldAt(j)!=NULL;){
-            e->popFieldAt(j);
+//        for(int j=6; e->fieldAt(j)!=NULL;){
+//            e->popFieldAt(j);
+//        }
+        while(6<e->fieldCount()){
+            e->popFieldAt(e->fieldCount()-1);
         }
         for(int i=0; i<this->fildlist->size(); i++){
             LineOfField* lf = this->fildlist->at(i);
-            Field* field;
+            Field* field = NULL;
             if(lf->qcb->currentIndex()>=0 && lf->qcb->currentIndex()<5){
                     switch(lf->qcb->currentIndex()){
                         case 0:
@@ -222,10 +225,12 @@ void EntitieCustomeWidget::save(){
                         case 3:
                             field = new DoubleField(lf->ID->text().toStdString(), lf->value->text().toFloat());
                             break;
+                        default:
+                            field = new Field(lf->ID->text().toStdString());
+                            break;
                     }
 
             }
-            field->setID(lf->ID->text().toStdString());
             switch((int)field->getType()){
                 case 1:
                     ((StringField*)(field))->setValue(lf->value->text().toStdString());
