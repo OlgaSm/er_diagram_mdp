@@ -19,6 +19,7 @@ private:
 public:
     explicit ERDiagram(string id);
     ~ERDiagram();
+	bool    isIDFree(string id, List* my_list);
 
 public:    
     Relation*     relationAt(int i);
