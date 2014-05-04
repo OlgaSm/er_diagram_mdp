@@ -14,5 +14,7 @@
         <file>Images/Send.png</file>
         <file>Resources/Help.html</file>
         <file>Images/Help.png</file>
+        <file>Images/ER.png</file>
+        <file>Images/ER.ico</file>
     </qresource>
 </RCC>

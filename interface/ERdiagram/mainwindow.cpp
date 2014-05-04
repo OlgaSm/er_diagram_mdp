@@ -35,6 +35,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Настройка
     this->setAutoFillBackground(true);
+    this->setWindowTitle("ER-диаграмма");
+    QIcon qi(":Images/ER.ico");
+    this->setWindowIcon(qi);
     this->resize(1200,750);
     this->timer = new QTimer(this);
     connect(this->timer, SIGNAL(timeout()), SLOT(timerEvent()));
