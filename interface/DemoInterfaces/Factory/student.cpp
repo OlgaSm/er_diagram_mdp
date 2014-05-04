@@ -4,18 +4,18 @@
 #include "Contaner/IntField.h"
 #include "Contaner/StringField.h"
 
-Student::Student():Entitie("ë‚„§•≠‚ "+QString::number(id++).toStdString()){
+Student::Student():Entitie("–°—Ç—É–¥–µ–Ω—Ç "+QString::number(id++).toStdString()){
     this->myfield->push_back(new IntField("X",0));
     this->myfield->push_back(new IntField("Y",0));
     this->myfield->push_back(new IntField("W",100));
     this->myfield->push_back(new IntField("H",100));
     this->myfield->push_back(new IntField("F",1));
-    this->myfield->push_back(new IntField("T",1));
-    this->myfield->push_back(new IntField("ë™Æ‡Æ·‚Ï",10));
-    this->myfield->push_back(new StringField("î†¨®´®Ô","à¢†≠Æ¢"));
-    this->myfield->push_back(new StringField("à¨Ô","à¢†≠"));
-    this->myfield->push_back(new StringField("é‚Á•‚·‚¢Æ","à¢†≠Æ¢®Á"));
-	//this->myfield->push_back(new StringField("å•·‚Æ ß†≠Ô‚®Ô","à≠·‚®‚„‚"));
+    this->myfield->push_back(new IntField("T",0));
+    this->myfield->push_back(new IntField("–í–æ–∑—Ä–∞—Å—Ç",18));
+    this->myfield->push_back(new StringField("–§–∞–º–∏–ª–∏—è","–ò–≤–∞–Ω–æ–≤"));
+    this->myfield->push_back(new StringField("–ò–º—è","–ò–≤–∞–Ω"));
+    this->myfield->push_back(new StringField("–û—Ç—á–µ—Ç—Å—Ç–≤–æ","–ò–≤–∞–Ω–æ–≤–∏—á"));
+    this->myfield->push_back(new StringField("–ú–µ—Å—Ç–æ –∑–∞–Ω—è—Ç–∏—è","–£–Ω–∏–≤–µ—Ä—Å–∏—Ç–µ—Ç"));
 }
 
 Student::~Student(){
@@ -30,11 +30,11 @@ string Student::getStatus(){
 }
 
 string Student::getName(){
-    return "à¢†≠Æ¢ à¢†≠ à¢†≠Æ¢®Á";
+    return "–ò–≤–∞–Ω–æ–≤ –ò–≤–∞–Ω –ò–≤–∞–Ω–æ–≤–∏—á";
 }
 /*
 string Student::getPlace(){
-    return "à≠·‚®‚„‚";
+    return "–£–Ω–∏–≤–µ—Ä—Å–∏—Ç–µ—Ç";
 }
 */
 double Student::getPower (){

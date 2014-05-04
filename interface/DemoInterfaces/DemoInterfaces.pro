@@ -40,7 +40,16 @@ SOURCES += main.cpp\
     Factory/fastvelofactory.cpp \
     Factory/mediumvelofactory.cpp \
     Factory/slowvelofactory.cpp \
-    Factory/VeloFactory.cpp
+    Factory/VeloFactory.cpp \
+    Factory/HumanFactory.cpp \
+    Factory/schoolboy.cpp \
+    Factory/schoolboyfactory.cpp \
+    Factory/student.cpp \
+    Factory/studentfactory.cpp \
+    Factory/teacher.cpp \
+    Factory/teacherfactory.cpp \
+    Factory/courier.cpp \
+    Factory/courierfactory.cpp
 
 HEADERS  += mainwindow.h \
     workplacewidget.h \
@@ -73,7 +82,16 @@ HEADERS  += mainwindow.h \
     Factory/fastvelofactory.h \
     Factory/mediumvelofactory.h \
     Factory/slowvelofactory.h \
-    Factory/VeloFactory.h
+    Factory/VeloFactory.h \
+    Factory/HumanFactory.h \
+    Factory/schoolboy.h \
+    Factory/schoolboyfactory.h \
+    Factory/student.h \
+    Factory/studentfactory.h \
+    Factory/teacher.h \
+    Factory/teacherfactory.h \
+    Factory/courier.h \
+    Factory/courierfactory.h
 
 OTHER_FILES += \
     Contaner/ReadMe.txt \

@@ -217,6 +217,11 @@ MainWindow::MainWindow(QWidget *parent)
     this->qcbe->addItem("Детский велосипед");
     this->qcbe->addItem("Скоростной велосипед");
     this->qcbe->addItem("Горный велосипед");
+    this->qcbe->addItem("Школьник");
+    this->qcbe->addItem("Студент");
+    this->qcbe->addItem("Человек");
+    this->qcbe->addItem("Курьер");
+
     this->qcbe->setCurrentIndex(0);
     this->qtoolbar->addWidget(newButton);
     this->qtoolbar->addWidget(saveButton);
@@ -292,6 +297,18 @@ void MainWindow::indexChanged(int index){
             break;
         case 6:
             this->core->setEntitieType(_FastVelo);
+            break;
+        case 7:
+            this->core->setEntitieType(_SchoolBoy);
+            break;
+        case 8:
+            this->core->setEntitieType(_Student);
+            break;
+        case 9:
+            this->core->setEntitieType(_Teacher);
+            break;
+        case 10:
+            this->core->setEntitieType(_Courier);
             break;
         default:
         this->core->setEntitieType(_Empty);

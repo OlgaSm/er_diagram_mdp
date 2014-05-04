@@ -4,18 +4,18 @@
 #include "Contaner/IntField.h"
 #include "Contaner/StringField.h"
 
-Courier::Courier():Entitie("Courier "+QString::number(id++).toStdString()){
+Courier::Courier():Entitie("Курьер "+QString::number(id++).toStdString()){
     this->myfield->push_back(new IntField("X",0));
     this->myfield->push_back(new IntField("Y",0));
     this->myfield->push_back(new IntField("W",100));
     this->myfield->push_back(new IntField("H",100));
     this->myfield->push_back(new IntField("F",1));
-    this->myfield->push_back(new IntField("T",1));
-    this->myfield->push_back(new IntField("Skorost",15));
-    this->myfield->push_back(new StringField("Familya","Stepanov"));
-    this->myfield->push_back(new StringField("Imya","Stepan"));
-    this->myfield->push_back(new StringField("Otchetstvo","Stepanovich"));
-	//this->myfield->push_back(new StringField("Mesto zanyatya","Gorod"));
+    this->myfield->push_back(new IntField("T",0));
+    this->myfield->push_back(new IntField("Возраст",21));
+    this->myfield->push_back(new StringField("Фамилия","Степанов"));
+    this->myfield->push_back(new StringField("Имя","Степан"));
+    this->myfield->push_back(new StringField("Отчество","Степанович"));
+    this->myfield->push_back(new StringField("Место работы","Город"));
 }
 
 Courier::~Courier(){
@@ -30,11 +30,11 @@ string Courier::getStatus(){
 }
 
 string Courier::getName(){
-    return "Stepanov Stepan Stepanovich";
+    return "Степанов Степан Степанович";
 }
 /*
 string Courier::getPlace(){
-    return "Gorod";
+    return "Город";
 }
 */
 double Courier::getPower (){

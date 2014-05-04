@@ -4,18 +4,18 @@
 #include "Contaner/IntField.h"
 #include "Contaner/StringField.h"
 
-Teacher::Teacher():Entitie("Prepodavatel "+QString::number(id++).toStdString()){
+Teacher::Teacher():Entitie("Человек "+QString::number(id++).toStdString()){
     this->myfield->push_back(new IntField("X",0));
     this->myfield->push_back(new IntField("Y",0));
     this->myfield->push_back(new IntField("W",100));
     this->myfield->push_back(new IntField("H",100));
     this->myfield->push_back(new IntField("F",1));
-    this->myfield->push_back(new IntField("T",1));
-    this->myfield->push_back(new IntField("Skorost",12));
-    this->myfield->push_back(new StringField("Familya","Antonov"));
-    this->myfield->push_back(new StringField("Imya","Anton"));
-    this->myfield->push_back(new StringField("Otchetstvo","Antonovich"));
-	//this->myfield->push_back(new StringField("Mesto zanyatya","Universitet"));
+    this->myfield->push_back(new IntField("T",0));
+    this->myfield->push_back(new IntField("Возраст",25));
+    this->myfield->push_back(new StringField("Фамилия","Антонов"));
+    this->myfield->push_back(new StringField("Имя","Антон"));
+    this->myfield->push_back(new StringField("Отчество","Антонович"));
+    this->myfield->push_back(new StringField("Место работы","Университет"));
 }
 
 Teacher::~Teacher(){
@@ -30,7 +30,7 @@ string Teacher::getStatus(){
 }
 
 string Teacher::getName(){
-    return "Antonov Anton Antonovich";
+    return "Антонов Антон Антонович";
 }
 /*
 string Teacher::getPlace(){

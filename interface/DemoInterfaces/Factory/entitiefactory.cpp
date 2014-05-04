@@ -35,6 +35,18 @@ Entitie* EntitieFactory::createEntitie(Entitie_Types t){
         case 6:
             e = this->fvf->createVelo();
             break;
+        case 7:
+            e = this->sbf->createHuman();
+            break;
+        case 8:
+            e = this->sf->createHuman();
+            break;
+        case 9:
+            e = this->tf->createHuman();
+            break;
+        case 10:
+            e = this->cf->createHuman();
+            break;
         default:
             e = new Entitie("Сущность "+QString::number(id++).toStdString());
             e->addUserField(new IntField("X",0));
@@ -55,6 +67,10 @@ EntitieFactory::EntitieFactory(){
     this->svf = new SlowVeloFactory();
     this->mvf = new MediumVeloFactory();
     this->fvf = new FastVeloFactory();
+    this->sbf = new SchoolboyFactory();
+    this->tf = new TeacherFactory();
+    this->sf = new StudentFactory();
+    this->cf = new CourierFactory();
 }
 
 EntitieFactory::~EntitieFactory(){
@@ -64,6 +80,10 @@ EntitieFactory::~EntitieFactory(){
     delete(this->svf);
     delete(this->mvf);
     delete(this->fvf);
+    delete(this->sbf);
+    delete(this->tf);
+    delete(this->sf);
+    delete(this->cf);
 }
 
 EntitieFactory* EntitieFactory::entitieFactory(){
@@ -88,6 +108,10 @@ void EntitieFactory::setGlobalId(int id0){
     SlowVelo::setId(id);
     MediumVelo::setId(id);
     FastVelo::setId(id);
+    Schoolboy::setId(id);
+    Teacher::setId(id);
+    Student::setId(id);
+    Courier::setId(id);
     DeleteFactory();
 }
 

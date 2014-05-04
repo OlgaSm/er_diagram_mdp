@@ -7,6 +7,15 @@
 #include "Factory/slowvelofactory.h"
 #include "Factory/mediumvelofactory.h"
 #include "Factory/fastvelofactory.h"
+#include "Factory/HumanFactory.h"
+#include "Factory/courierfactory.h"
+#include "Factory/schoolboyfactory.h"
+#include "Factory/studentfactory.h"
+#include "Factory/teacherfactory.h"
+#include "Factory/courier.h"
+#include "Factory/schoolboy.h"
+#include "Factory/student.h"
+#include "Factory/teacher.h"
 #include "Factory/slowcar.h"
 #include "Factory/mediumcar.h"
 #include "Factory/fastcar.h"
@@ -21,8 +30,11 @@ enum Entitie_Types{
     _FastCar,
     _SlowVelo,
     _MediumVelo,
-    _FastVelo
-    // Add Humans
+    _FastVelo,
+    _SchoolBoy,
+    _Student,
+    _Teacher,
+    _Courier
 };
 
 
@@ -40,6 +52,10 @@ private:
     SlowVeloFactory* svf;
     MediumVeloFactory* mvf;
     FastVeloFactory* fvf;
+    SchoolboyFactory* sbf;
+    TeacherFactory* tf;
+    StudentFactory* sf;
+    CourierFactory* cf;
     //===========================
 
 public:

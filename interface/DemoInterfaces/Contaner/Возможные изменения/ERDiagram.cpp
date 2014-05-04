@@ -83,7 +83,15 @@ void    ERDiagram::popRelationByID(string ID, bool del){
 }
 
 void ERDiagram::addUserRelation (Relation* r){
-	this->relations->push_back(r);
+/*	if(isIDFree (r->getID(), this->relations)) 
+	{*/
+		this->relations->push_back(r);
+/*	}
+	else 
+	{
+		delete (r);
+	}
+*/
 }
 
 void ERDiagram::popRelationAt (int i, bool del){
@@ -105,7 +113,15 @@ Entitie* ERDiagram::entitieByID (string id) {
 }
 
 void ERDiagram::addUserEntitie (Entitie* e){
-	this->entities->push_back(e);
+/*	if(isIDFree (e->getID(), this->entities)) 
+	{*/
+		this->entities->push_back(e);
+/*	}
+	else 
+	{
+		delete (e);
+	}
+*/
 }
 
 void ERDiagram::popEntitieAt (int i){
@@ -124,11 +140,15 @@ void ERDiagram::popEntitieAt (int i){
 }
 
 void    ERDiagram::addRelation(string fieldID, string key, Entitie* entitieR, Entitie* entitieL, bool MultiplicityR, bool MultiplicityL, bool AbstractR, bool AbstractL){
-    this->relations->push_back(new Relation(fieldID, key, entitieR, entitieL, MultiplicityR, MultiplicityL, AbstractR, AbstractL));
+//	if(isIDFree(fieldID, this->relations)) {
+		this->relations->push_back(new Relation(fieldID, key, entitieR, entitieL, MultiplicityR, MultiplicityL, AbstractR, AbstractL));
+//	}
 }
 
 void    ERDiagram::addEntitie(string ID){
-	this->entities->push_back(new Entitie(ID));
+//	if(isIDFree(ID, this->entities)) {
+		this->entities->push_back(new Entitie(ID));
+//	}
 }
 
 int ERDiagram::getEntitieCount(){
@@ -155,4 +175,13 @@ int ERDiagram::getIndexEntitieByID(string ID){
         }
     }
     return 0;
+}
+
+bool ERDiagram::isIDFree(string id, List* my_list){
+	for(int i=0; i<my_list->size(); i++)
+	{
+		if (my_list->at(i)->getID() == id)
+			return false;
+	}
+	return true;
 }
