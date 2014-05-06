@@ -42,7 +42,6 @@ MainWindow::MainWindow(QWidget *parent)
     this->timer = new QTimer(this);
     connect(this->timer, SIGNAL(timeout()), SLOT(timerEvent()));
     this->timer->start(50);
-
     // Инициализация полей
     this->menuBar = new QMenuBar(this);
     this->pmenu = new QMenu("&Файл",this->menuBar);
@@ -527,6 +526,7 @@ void MainWindow::showHelp(){
 
 void MainWindow::newEr(){
     int n=0;
+    if (this->core->isChanged()==true ) {
     if(this->core->getEntitieCount()!=0){
          n=QMessageBox::information(this,"Предупреждение", "Сохранить текущую ER-диаграмму?",QMessageBox::Yes,QMessageBox::No,QMessageBox::Cancel);
          if(n==QMessageBox::Yes){
@@ -538,6 +538,11 @@ void MainWindow::newEr(){
     if(n!=QMessageBox::Cancel){
         this->core->newConten();
     }
+    }else{
+         this->core->newConten();
+         this->w11->repaint();
+         this->w12->repaint();
+         }
 }
 
 void MainWindow::savemenu(){
@@ -547,6 +552,9 @@ void MainWindow::savemenu(){
             file = file + QString(".erd");
         }
         this->core->saveProject(file.toStdString());
+        //----------------------------
+        this->core->Changed(false);
+        //----------------------------
    }else{
        QMessageBox::warning(this, "Предупреждение","ER-диаграмма отсутствует!!!", QMessageBox::Ok);
    }
@@ -558,7 +566,7 @@ void MainWindow::loadmenu(){
    if(this->core->getEntitieCount()!=0){
         n=QMessageBox::information(this,"Предупреждение", "Сохранить изменения ER-диаграммы перед загрузкой?",QMessageBox::Yes,QMessageBox::No,QMessageBox::Cancel);
         if(n==QMessageBox::Yes){
-            this->savemenu();
+            this->savemenu(); 
         }
    }else{
        n=QMessageBox::No;
@@ -570,6 +578,9 @@ void MainWindow::loadmenu(){
                this->w11->repaint();
                this->w12->repaint();
                EntitieFactory::entitieFactory()->setGlobalId(this->core->getCounter());
+               //----------------------------
+               this->core->Changed(false);
+               //----------------------------
            }else{
                QMessageBox::critical(this, "Ошибка","Файл поврежден!!!", QMessageBox::Ok);
 
@@ -581,8 +592,9 @@ void MainWindow::loadmenu(){
 
 void MainWindow::ExitFromPr(){
     int n=0;
+    if ((this->core->isChanged()==true) ) {
     if(this->core->getEntitieCount()!=0){
-         n=QMessageBox::information(this,"Предупреждение", "Сохранить изменения ER-диаграммы перед загрузкой?",QMessageBox::Yes,QMessageBox::No,QMessageBox::Cancel);
+         n=QMessageBox::information(this,"Предупреждение", "Сохранить изменения ER-диаграммы перед выходом?",QMessageBox::Yes,QMessageBox::No,QMessageBox::Cancel);
          if(n==QMessageBox::Yes){
              this->savemenu();
          }
@@ -590,6 +602,11 @@ void MainWindow::ExitFromPr(){
         n=QMessageBox::No;
     }
     if(n!=QMessageBox::Cancel){
+        close();
+    }
+    }else
+    {
+        //n=QMessageBox::critical(this,"Предупреждение", "Проект не был изменен",QMessageBox::Ok);
         close();
     }
 }
