@@ -22,8 +22,17 @@ WorkPlaceWidget::WorkPlaceWidget(QWidget *parent, Core* core) :
     this->setMinimumHeight(max_height);
     this->setMinimumWidth(max_width);
     this->scroll(this->size().width()-1,this->size().height()-1,r2);
-    this->curX=-1;
-    this->curY=-1;
+    this->curX = 10;
+    this->curY = 10;
+    this->selected = false;
+    this->currentMoved = -1;
+    this->setMouseTracking(true);
+    this->curType = this->core->getEntitieType();
+    this->abstract = EntitieFactory::entitieFactory()->createEntitie(this->core->getEntitieType());
+    ((IntField*)this->abstract->fieldByID("X"))->setValue(this->curX);
+    ((IntField*)this->abstract->fieldByID("Y"))->setValue(this->curY);
+    calculateEntitie(this->abstract);
+    this->curType = this->core->getEntitieType();
     #ifdef DEBUGLOG_WORKDESK
         QFile file(LOG_PATH);
         file.open(QIODevice::Append | QIODevice::Text);
@@ -51,30 +60,58 @@ void WorkPlaceWidget::paintEvent(QPaintEvent *){
         QPixmap pm(":Images/Map.png");
         painter.drawPixmap(0,0,this->size().width()-1,this->size().height()-1,pm);
         painter.drawRect(r2);
+        if(this->curX<10){
+            this->curX=10;
+        }
+        if(this->curY<10){
+            this->curY=10;
+        }
+        if(this->curX>max_width-10){
+            this->curX=max_width-10;
+        }
+        if(this->curY>max_height-10){
+            this->curY=max_height-10;
+        }
+        if(this->curType!=this->core->getEntitieType()){
+           delete(this->abstract);
+           this->curType = this->core->getEntitieType();
+           this->abstract = EntitieFactory::entitieFactory()->createEntitie(this->core->getEntitieType());
+           ((IntField*)this->abstract->fieldByID("X"))->setValue(this->curX);
+           ((IntField*)this->abstract->fieldByID("Y"))->setValue(this->curY);
+           calculateEntitie(this->abstract);
+        }else{
+           ((IntField*)this->abstract->fieldByID("X"))->setValue(this->curX);
+           ((IntField*)this->abstract->fieldByID("Y"))->setValue(this->curY);
+        }
+        //painter.drawEllipse(this->curX, this->curY, 10, 10);
         this->paintDesk();
 }
 
 void WorkPlaceWidget::paintDesk(){
     this->core->spotFocus();
     for(int i=0; i<this->core->getEntitieCount(); i++){
-       this->drawEntitie(this->core->getEntitieAt(i),(i==this->core->getFocus() && this->core->getFocusObj()));
+       this->drawEntitie(this->core->getEntitieAt(i),(i==this->core->getFocus() && this->core->getFocusObj()),false);
     }
     for(int i=0; i<this->core->getRelationCount(); i++){
         drawRelation(this->core->getRelationAt(i),((i==this->core->getFocus())&&(!this->core->getFocusObj())));
     }
+    if(this->core->getState()==0){this->drawEntitie(this->abstract,false,true);}
 }
 
 
 
-void WorkPlaceWidget::drawEntitie(Entitie* e, bool focus){
+void WorkPlaceWidget::drawEntitie(Entitie* e, bool focus, bool isAbstract){
+    int alpha = (isAbstract ? 20 : 255);
+    int alpha0 = (isAbstract ? 0 : 25);
+    int alpha1 = (isAbstract ? 0 : 100);
     QPainter painter(this);
-    QColor color(255,200,125);
-    QColor color1(255,170,100);
-    QColor color2(215,215,255);
-    QColor colorRed(252,139,130);
-    QColor colorGreen(125,220,125);
-    QColor colorGreenAlpha(55,155,55,25);
-    QColor colorBlackAlpha(0,0,0,100);
+    QColor color(255,200,125,alpha);
+    QColor color1(255,170,100,alpha);
+    QColor color2(215,215,255,alpha);
+    QColor colorRed(252,139,130,alpha);
+    QColor colorGreen(125,220,125,alpha);
+    QColor colorGreenAlpha(55,155,55,alpha0);
+    QColor colorBlackAlpha(0,0,0,alpha1);
     QPen pen1 = QPen(Qt::black, 1, Qt::SolidLine);
     QPen pen2 = QPen(colorBlackAlpha, 1, Qt::SolidLine);
     painter.setPen(pen1);
@@ -153,7 +190,7 @@ void WorkPlaceWidget::drawEntitie(Entitie* e, bool focus){
             painter.setPen(pen2);
             painter.drawEllipse(QPoint(x-1,y-1), (int)qRound(distance), (int)qRound(distance));
         }
-     }
+    }
 }
 
 void WorkPlaceWidget::drawRelation(Relation* r, bool focus){
@@ -391,6 +428,7 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
         this->repaint();
     }
     if(this->core->getState()==2 || this->core->getState()==10){ // Выделение объектов
+        this->selected = true;
         core->setFocus(-1);
         for(int i=0; i<this->core->getEntitieCount(); i++){
            Entitie* e = this->core->getEntitieAt(i);
@@ -399,6 +437,7 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
            int w = ((IntField*)e->fieldByID("W"))->getValue();
            int h = ((IntField*)e->fieldByID("H"))->getValue();
            if((x<pe->x())&&(y<pe->y())&&(w+x>pe->x())&&(h+y>pe->y())){
+               if(this->currentMoved==-1){this->currentMoved=i;}
                core->setFocus(i);
                core->setFocusObj(true);
            }
@@ -490,7 +529,21 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
     }
 }
 
-//void WorkPlaceWidget::mouseMoveEvent(QMouseEvent* pe){
-//    this->curX=pe->x();
-//    this->curY=pe->y();
-//}
+void WorkPlaceWidget::mouseMoveEvent(QMouseEvent* pe){
+    int deltaX = this->curX - (pe->x());
+    int deltaY = this->curY - (pe->y());
+    if(this->currentMoved!=-1 && this->selected){
+        Entitie* e = this->core->getEntitieAt(this->currentMoved);
+        ((IntField*)e->fieldByID("X"))->setValue(((IntField*)e->fieldByID("X"))->getValue()-deltaX);
+        ((IntField*)e->fieldByID("Y"))->setValue(((IntField*)e->fieldByID("Y"))->getValue()-deltaY);
+    }
+    this->curX=pe->x();
+    this->curY=pe->y();
+    this->repaint();
+}
+
+void WorkPlaceWidget::mouseReleaseEvent(QMouseEvent *pe){
+    this->selected = false;
+    this->currentMoved=-1;
+    pe->ignore();
+}

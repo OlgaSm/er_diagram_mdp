@@ -37,9 +37,9 @@ LineOfField::LineOfField(EntitieCustomeWidget* ec, Entitie* e, Field* field, QWi
     }
     this->ID = new QLineEdit(QString::fromStdString(field->getID()));
     this->value = new QLineEdit(value);
-    if(field->getType()==0){
-        this->value->setEnabled(false);
-    }
+//    if(field->getType()==0){
+//        this->value->setEnabled(false);
+//    }
     this->qbl->addWidget(this->ID);
     this->qbl->addWidget(this->value);
     QString type="";

@@ -182,11 +182,11 @@ MainWindow::MainWindow(QWidget *parent)
             scrollarea3->setLayout(a);
             scrollarea3->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
             scrollarea3->viewport()->isMaximized();
-            w22->layout()->addWidget(new QLabel("Получатель",w22));
+            w22->layout()->addWidget(new QLabel("Отправитель",w22));
             this->cb = new QComboBox(w22);
             this->cb2 = new QComboBox(w22);
             w22->layout()->addWidget(cb);
-            w22->layout()->addWidget(new QLabel("Отправитель",w22));
+            w22->layout()->addWidget(new QLabel("Получатель",w22));
             w22->layout()->addWidget(cb2);
             blt2->addWidget(scrollarea3);
             w22->layout()->addWidget(pb6);

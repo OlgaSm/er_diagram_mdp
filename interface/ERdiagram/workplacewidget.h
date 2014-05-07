@@ -12,11 +12,15 @@ class WorkPlaceWidget : public QFrame
 private:
     Core* core;
     void paintDesk();
-    void drawEntitie(Entitie* e, bool focus);
+    void drawEntitie(Entitie* e, bool focus, bool isAbstract);
     void drawRelation(Relation* r, bool focus);
     void calculateEntitie(Entitie* e);
     int curX;
     int curY;
+    int currentMoved;
+    bool selected;
+    Entitie* abstract;
+    Entitie_Types curType;
 
 public:
     explicit WorkPlaceWidget(QWidget *parent = 0, Core* core = new Core());
@@ -28,7 +32,8 @@ public slots:
 
 protected:
     virtual void mousePressEvent(QMouseEvent* pe);
-    //virtual void mouseMoveEvent(QMouseEvent* pe);
+    virtual void mouseMoveEvent(QMouseEvent* pe);
+    virtual void mouseReleaseEvent(QMouseEvent *pe);
 
 };
 
