@@ -36,7 +36,9 @@ LineOfField::LineOfField(EntitieCustomeWidget* ec, Entitie* e, Field* field, QWi
             break;
     }
     this->ID = new QLineEdit(QString::fromStdString(field->getID()));
+    this->ID->setMaxLength(15);
     this->value = new QLineEdit(value);
+    this->value->setMaxLength(15);
 //    if(field->getType()==0){
 //        this->value->setEnabled(false);
 //    }

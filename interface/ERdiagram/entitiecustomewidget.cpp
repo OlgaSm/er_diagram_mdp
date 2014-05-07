@@ -81,9 +81,8 @@ void EntitieCustomeWidget::doOnTimer(){
 
             this->entitieName = new QLabel("Название сущности:");
             this->tb = new QLineEdit();
-
+            this->tb->setMaxLength(15);
             // Label
-            this->tb->setMaxLength(50);
             this->tb->setText(QString::fromStdString(e->getID()));
 
             // Layout
@@ -135,8 +134,8 @@ void EntitieCustomeWidget::doOnTimer(){
 
             this->entitieName = new QLabel("Название связи:");
             this->tb = new QLineEdit();
+            this->tb->setMaxLength(15);
             // Label
-            this->tb->setMaxLength(50);
             this->tb->setText(QString::fromStdString(r->getID()));
 
             this->qbl->addWidget(this->entitieName);

@@ -28,10 +28,31 @@ WorkPlaceWidget::WorkPlaceWidget(QWidget *parent, Core* core) :
     this->currentMoved = -1;
     this->setMouseTracking(true);
     this->curType = this->core->getEntitieType();
-    this->abstract = EntitieFactory::entitieFactory()->createEntitie(this->core->getEntitieType());
-    ((IntField*)this->abstract->fieldByID("X"))->setValue(this->curX);
-    ((IntField*)this->abstract->fieldByID("Y"))->setValue(this->curY);
-    calculateEntitie(this->abstract);
+
+
+    this->Empty = EntitieFactory::entitieFactory()->createEntitie(_Empty);
+    calculateEntitie(this->Empty);
+    this->SlowCar = EntitieFactory::entitieFactory()->createEntitie(_SlowCar);
+    calculateEntitie(this->SlowCar);
+    this->MediumCar = EntitieFactory::entitieFactory()->createEntitie(_MediumCar);
+    calculateEntitie(this->MediumCar);
+    this->FastCar = EntitieFactory::entitieFactory()->createEntitie(_FastCar);
+    calculateEntitie(this->FastCar);
+    this->SlowVelo = EntitieFactory::entitieFactory()->createEntitie(_SlowVelo);
+    calculateEntitie(this->SlowVelo);
+    this->MediumVelo = EntitieFactory::entitieFactory()->createEntitie(_MediumVelo);
+    calculateEntitie(this->MediumVelo);
+    this->FastVelo = EntitieFactory::entitieFactory()->createEntitie(_FastVelo);
+    calculateEntitie(this->FastVelo);
+    this->SchoolBoy = EntitieFactory::entitieFactory()->createEntitie(_SchoolBoy);
+    calculateEntitie(this->SchoolBoy);
+    this->Student = EntitieFactory::entitieFactory()->createEntitie(_Student);
+    calculateEntitie(this->Student);
+    this->Teacher = EntitieFactory::entitieFactory()->createEntitie(_Teacher);
+    calculateEntitie(this->Teacher);
+    this->Courier = EntitieFactory::entitieFactory()->createEntitie(_Courier);
+    calculateEntitie(this->Courier);
+
     this->curType = this->core->getEntitieType();
     #ifdef DEBUGLOG_WORKDESK
         QFile file(LOG_PATH);
@@ -44,6 +65,17 @@ WorkPlaceWidget::WorkPlaceWidget(QWidget *parent, Core* core) :
 }
 
 WorkPlaceWidget::~WorkPlaceWidget(){
+    delete(this->Empty);
+    delete(this->SlowCar);
+    delete(this->MediumCar);
+    delete(this->FastCar);
+    delete(this->SlowVelo);
+    delete(this->MediumVelo);
+    delete(this->FastVelo);
+    delete(this->SchoolBoy);
+    delete(this->Student);
+    delete(this->Teacher);
+    delete(this->Courier);
     #ifdef DEBUGLOG_WORKDESK
         QFile file(LOG_PATH);
         file.open(QIODevice::Append | QIODevice::Text);
@@ -72,18 +104,6 @@ void WorkPlaceWidget::paintEvent(QPaintEvent *){
         if(this->curY>max_height-10){
             this->curY=max_height-10;
         }
-        if(this->curType!=this->core->getEntitieType()){
-           delete(this->abstract);
-           this->curType = this->core->getEntitieType();
-           this->abstract = EntitieFactory::entitieFactory()->createEntitie(this->core->getEntitieType());
-           ((IntField*)this->abstract->fieldByID("X"))->setValue(this->curX);
-           ((IntField*)this->abstract->fieldByID("Y"))->setValue(this->curY);
-           calculateEntitie(this->abstract);
-        }else{
-           ((IntField*)this->abstract->fieldByID("X"))->setValue(this->curX);
-           ((IntField*)this->abstract->fieldByID("Y"))->setValue(this->curY);
-        }
-        //painter.drawEllipse(this->curX, this->curY, 10, 10);
         this->paintDesk();
 }
 
@@ -95,7 +115,45 @@ void WorkPlaceWidget::paintDesk(){
     for(int i=0; i<this->core->getRelationCount(); i++){
         drawRelation(this->core->getRelationAt(i),((i==this->core->getFocus())&&(!this->core->getFocusObj())));
     }
-    if(this->core->getState()==0){this->drawEntitie(this->abstract,false,true);}
+    if(this->core->getState()==0){
+        switch(this->core->getEntitieType()){
+            case 0:
+                this->drawEntitie(this->Empty,false,true);
+                break;
+            case 1:
+                this->drawEntitie(this->SlowCar,false,true);
+                break;
+            case 2:
+                this->drawEntitie(this->MediumCar,false,true);
+                break;
+            case 3:
+                this->drawEntitie(this->FastCar,false,true);
+                break;
+            case 4:
+                this->drawEntitie(this->SlowVelo,false,true);
+                break;
+            case 5:
+                this->drawEntitie(this->MediumVelo,false,true);
+                break;
+            case 6:
+                this->drawEntitie(this->FastVelo,false,true);
+                break;
+            case 7:
+                this->drawEntitie(this->SchoolBoy,false,true);
+                break;
+            case 8:
+                this->drawEntitie(this->Student,false,true);
+                break;
+            case 9:
+                this->drawEntitie(this->Teacher,false,true);
+                break;
+            case 10:
+                this->drawEntitie(this->Courier,false,true);
+                break;
+            default:
+            this->drawEntitie(this->Empty,false,true);
+        }
+    }
 }
 
 
@@ -104,6 +162,10 @@ void WorkPlaceWidget::drawEntitie(Entitie* e, bool focus, bool isAbstract){
     int alpha = (isAbstract ? 20 : 255);
     int alpha0 = (isAbstract ? 0 : 25);
     int alpha1 = (isAbstract ? 0 : 100);
+    if(isAbstract){
+        ((IntField*)e->fieldByID("X"))->setValue(this->curX);
+        ((IntField*)e->fieldByID("Y"))->setValue(this->curY);
+    }
     QPainter painter(this);
     QColor color(255,200,125,alpha);
     QColor color1(255,170,100,alpha);

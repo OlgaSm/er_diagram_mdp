@@ -19,7 +19,17 @@ private:
     int curY;
     int currentMoved;
     bool selected;
-    Entitie* abstract;
+    Entitie* Empty;
+    Entitie* SlowCar;
+    Entitie* MediumCar;
+    Entitie* FastCar;
+    Entitie* SlowVelo;
+    Entitie* MediumVelo;
+    Entitie* FastVelo;
+    Entitie* SchoolBoy;
+    Entitie* Student;
+    Entitie* Teacher;
+    Entitie* Courier;
     Entitie_Types curType;
 
 public:
