@@ -15,7 +15,13 @@ int main(int argc, char *argv[]){
     #endif
 
     QApplication a(argc, argv);
-    MainWindow w;
+    string path = "";
+    bool content = false;
+    if(argv[1]!=NULL){
+        path = argv[1];
+        content = true;
+    }
+    MainWindow w(content, path);
     w.show();
 
     return a.exec();

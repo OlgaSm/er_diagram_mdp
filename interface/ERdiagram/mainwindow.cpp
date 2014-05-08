@@ -25,7 +25,7 @@
 #include "DebugDefine.h"
 //=====================================
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow( bool content, string path,QWidget *parent)
     : QWidget(parent)
 {   
     // Модель данных
@@ -253,6 +253,19 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(this->qcbe,SIGNAL(currentIndexChanged(int)),this,SLOT(indexChanged(int)));//currentIndexChanged ( int index )
     QObject::connect(this->qtw,SIGNAL(currentChanged(int)),this,SLOT(tabChanged()));
 
+    if(content){
+        if(this->core->loadProject(path)){
+            this->w11->repaint();
+            this->w12->repaint();
+            EntitieFactory::entitieFactory()->setGlobalId(this->core->getCounter());
+            //----------------------------
+            this->core->Changed(false);
+            //----------------------------
+        }else{
+            QMessageBox::critical(this, "Ошибка","Файл поврежден!!! "+QString::fromStdString(path), QMessageBox::Ok);
+
+        }
+    }
     #ifdef DEBUGLOG_MAIN
         QFile file(LOG_PATH);
         file.open(QIODevice::Append | QIODevice::Text);
@@ -583,9 +596,7 @@ void MainWindow::loadmenu(){
                //----------------------------
            }else{
                QMessageBox::critical(this, "Ошибка","Файл поврежден!!!", QMessageBox::Ok);
-
            }
-
        }
    }
 }

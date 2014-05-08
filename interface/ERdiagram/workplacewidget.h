@@ -19,18 +19,6 @@ private:
     int curY;
     int currentMoved;
     bool selected;
-    Entitie* Empty;
-    Entitie* SlowCar;
-    Entitie* MediumCar;
-    Entitie* FastCar;
-    Entitie* SlowVelo;
-    Entitie* MediumVelo;
-    Entitie* FastVelo;
-    Entitie* SchoolBoy;
-    Entitie* Student;
-    Entitie* Teacher;
-    Entitie* Courier;
-    Entitie_Types curType;
 
 public:
     explicit WorkPlaceWidget(QWidget *parent = 0, Core* core = new Core());

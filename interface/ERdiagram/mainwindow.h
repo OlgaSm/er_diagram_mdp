@@ -45,7 +45,7 @@ private:
     QToolBar* qtoolbar;
     QComboBox* qcbe;
 public:
-    MainWindow(QWidget *parent = 0);
+    MainWindow(bool content = false, string path = "", QWidget *parent = 0);
     ~MainWindow();
 
 public slots:

@@ -27,33 +27,6 @@ WorkPlaceWidget::WorkPlaceWidget(QWidget *parent, Core* core) :
     this->selected = false;
     this->currentMoved = -1;
     this->setMouseTracking(true);
-    this->curType = this->core->getEntitieType();
-
-
-    this->Empty = EntitieFactory::entitieFactory()->createEntitie(_Empty);
-    calculateEntitie(this->Empty);
-    this->SlowCar = EntitieFactory::entitieFactory()->createEntitie(_SlowCar);
-    calculateEntitie(this->SlowCar);
-    this->MediumCar = EntitieFactory::entitieFactory()->createEntitie(_MediumCar);
-    calculateEntitie(this->MediumCar);
-    this->FastCar = EntitieFactory::entitieFactory()->createEntitie(_FastCar);
-    calculateEntitie(this->FastCar);
-    this->SlowVelo = EntitieFactory::entitieFactory()->createEntitie(_SlowVelo);
-    calculateEntitie(this->SlowVelo);
-    this->MediumVelo = EntitieFactory::entitieFactory()->createEntitie(_MediumVelo);
-    calculateEntitie(this->MediumVelo);
-    this->FastVelo = EntitieFactory::entitieFactory()->createEntitie(_FastVelo);
-    calculateEntitie(this->FastVelo);
-    this->SchoolBoy = EntitieFactory::entitieFactory()->createEntitie(_SchoolBoy);
-    calculateEntitie(this->SchoolBoy);
-    this->Student = EntitieFactory::entitieFactory()->createEntitie(_Student);
-    calculateEntitie(this->Student);
-    this->Teacher = EntitieFactory::entitieFactory()->createEntitie(_Teacher);
-    calculateEntitie(this->Teacher);
-    this->Courier = EntitieFactory::entitieFactory()->createEntitie(_Courier);
-    calculateEntitie(this->Courier);
-
-    this->curType = this->core->getEntitieType();
     #ifdef DEBUGLOG_WORKDESK
         QFile file(LOG_PATH);
         file.open(QIODevice::Append | QIODevice::Text);
@@ -65,17 +38,6 @@ WorkPlaceWidget::WorkPlaceWidget(QWidget *parent, Core* core) :
 }
 
 WorkPlaceWidget::~WorkPlaceWidget(){
-    delete(this->Empty);
-    delete(this->SlowCar);
-    delete(this->MediumCar);
-    delete(this->FastCar);
-    delete(this->SlowVelo);
-    delete(this->MediumVelo);
-    delete(this->FastVelo);
-    delete(this->SchoolBoy);
-    delete(this->Student);
-    delete(this->Teacher);
-    delete(this->Courier);
     #ifdef DEBUGLOG_WORKDESK
         QFile file(LOG_PATH);
         file.open(QIODevice::Append | QIODevice::Text);
@@ -118,40 +80,40 @@ void WorkPlaceWidget::paintDesk(){
     if(this->core->getState()==0){
         switch(this->core->getEntitieType()){
             case 0:
-                this->drawEntitie(this->Empty,false,true);
+                this->drawEntitie(this->core->Empty,false,true);
                 break;
             case 1:
-                this->drawEntitie(this->SlowCar,false,true);
+                this->drawEntitie(this->core->SlowCar,false,true);
                 break;
             case 2:
-                this->drawEntitie(this->MediumCar,false,true);
+                this->drawEntitie(this->core->MediumCar,false,true);
                 break;
             case 3:
-                this->drawEntitie(this->FastCar,false,true);
+                this->drawEntitie(this->core->FastCar,false,true);
                 break;
             case 4:
-                this->drawEntitie(this->SlowVelo,false,true);
+                this->drawEntitie(this->core->SlowVelo,false,true);
                 break;
             case 5:
-                this->drawEntitie(this->MediumVelo,false,true);
+                this->drawEntitie(this->core->MediumVelo,false,true);
                 break;
             case 6:
-                this->drawEntitie(this->FastVelo,false,true);
+                this->drawEntitie(this->core->FastVelo,false,true);
                 break;
             case 7:
-                this->drawEntitie(this->SchoolBoy,false,true);
+                this->drawEntitie(this->core->SchoolBoy,false,true);
                 break;
             case 8:
-                this->drawEntitie(this->Student,false,true);
+                this->drawEntitie(this->core->Student,false,true);
                 break;
             case 9:
-                this->drawEntitie(this->Teacher,false,true);
+                this->drawEntitie(this->core->Teacher,false,true);
                 break;
             case 10:
-                this->drawEntitie(this->Courier,false,true);
+                this->drawEntitie(this->core->Courier,false,true);
                 break;
             default:
-            this->drawEntitie(this->Empty,false,true);
+            this->drawEntitie(this->core->Empty,false,true);
         }
     }
 }
@@ -159,9 +121,27 @@ void WorkPlaceWidget::paintDesk(){
 
 
 void WorkPlaceWidget::drawEntitie(Entitie* e, bool focus, bool isAbstract){
-    int alpha = (isAbstract ? 20 : 255);
-    int alpha0 = (isAbstract ? 0 : 25);
-    int alpha1 = (isAbstract ? 0 : 100);
+    this->calculateEntitie(e);
+    int x = ((IntField*)e->fieldByID("X"))->getValue();
+    int y = ((IntField*)e->fieldByID("Y"))->getValue();
+    int w = ((IntField*)e->fieldByID("W"))->getValue();
+    int h = ((IntField*)e->fieldByID("H"))->getValue();
+    int t = ((IntField*)e->fieldByID("T"))->getValue();
+
+    bool mov = true;
+    for(int i=0; i<this->core->getEntitieCount(); i++){
+       Entitie* e0 = this->core->getEntitieAt(i);
+       int xe = ((IntField*)e0->fieldByID("X"))->getValue();
+       int ye = ((IntField*)e0->fieldByID("Y"))->getValue();
+       int we = ((IntField*)e0->fieldByID("W"))->getValue();
+       int he = ((IntField*)e0->fieldByID("H"))->getValue();
+       if((xe-w-15<x)&&(ye-h-15<y)&&(we+xe+15>x)&&(he+ye+15>y)&&(e0!=e)){
+           mov = false;
+       }
+    }
+    int alpha =  (((isAbstract)||(!mov)) ? 20 : 250);
+    int alpha0 = (((isAbstract)||(!mov)) ? 0 : 25);
+    int alpha1 = (((isAbstract)||(!mov)) ? 0 : 100);
     if(isAbstract){
         ((IntField*)e->fieldByID("X"))->setValue(this->curX);
         ((IntField*)e->fieldByID("Y"))->setValue(this->curY);
@@ -177,13 +157,6 @@ void WorkPlaceWidget::drawEntitie(Entitie* e, bool focus, bool isAbstract){
     QPen pen1 = QPen(Qt::black, 1, Qt::SolidLine);
     QPen pen2 = QPen(colorBlackAlpha, 1, Qt::SolidLine);
     painter.setPen(pen1);
-
-    this->calculateEntitie(e);
-    int x = ((IntField*)e->fieldByID("X"))->getValue();
-    int y = ((IntField*)e->fieldByID("Y"))->getValue();
-    int w = ((IntField*)e->fieldByID("W"))->getValue();
-    int h = ((IntField*)e->fieldByID("H"))->getValue();
-    int t = ((IntField*)e->fieldByID("T"))->getValue();
 
     if(this->core->getState()==10 && this->core->getWeightOfSolution()!=-1){
         bool green = false;
@@ -256,16 +229,41 @@ void WorkPlaceWidget::drawEntitie(Entitie* e, bool focus, bool isAbstract){
 }
 
 void WorkPlaceWidget::drawRelation(Relation* r, bool focus){
+    Entitie* eR = r->getEntR();
+    Entitie* eL = r->getEntL();
+    this->calculateEntitie(eL);
+    this->calculateEntitie(eR);
+    int x1 = ((IntField*)eR->fieldByID("X"))->getValue();
+    int y1 = ((IntField*)eR->fieldByID("Y"))->getValue();
+    int w1 = ((IntField*)eR->fieldByID("W"))->getValue();
+    int h1 = ((IntField*)eR->fieldByID("H"))->getValue();
+    int t1 = ((IntField*)eR->fieldByID("T"))->getValue();
+    int x2 = ((IntField*)eL->fieldByID("X"))->getValue();
+    int y2 = ((IntField*)eL->fieldByID("Y"))->getValue();
+    int w2 = ((IntField*)eL->fieldByID("W"))->getValue();
+    int h2 = ((IntField*)eL->fieldByID("H"))->getValue();
+    int t2 = ((IntField*)eL->fieldByID("T"))->getValue();
+
+    int alpha = 250;
+    int alpha0 = 25;
+    int alpha1 = 100;
+    int alpha2 = 250;
+    if((x1-w2-15<x2)&&(y1-h2-15<y2)&&(w1+x1+15>x2)&&(h1+y1+15>y2)){
+        alpha = 0;
+        alpha0 = 0;
+        alpha1 = 0;
+        alpha2 = 0;
+    }
+
     QPainter painter(this);
-    QColor color(90,185,255);
-    QColor colorGreenAlpha(55,155,55,25);
-    QColor colorBlackAlpha(0,0,0,100);
+    QColor color(90,185,255,alpha);
+    QColor colorGreenAlpha(55,155,55,alpha0);
+    QColor colorBlackAlpha(0,0,0,alpha1);
+    QColor colorBlack(0,0,0,alpha2);
     QPen penf = QPen(colorBlackAlpha, 1, Qt::SolidLine);
 
     painter.setBrush(QBrush(color));
 
-    Entitie* eR = r->getEntR();
-    Entitie* eL = r->getEntL();
     int indexR = 0;
     int indexL = 0;
     for(int j=0; j<eR->fieldCount() && indexR==0; j++){
@@ -284,18 +282,6 @@ void WorkPlaceWidget::drawRelation(Relation* r, bool focus){
     if(indexL<work_count-1){
         indexL=work_count-1;
     }
-    this->calculateEntitie(eL);
-    this->calculateEntitie(eR);
-    int x1 = ((IntField*)eR->fieldByID("X"))->getValue();
-    int y1 = ((IntField*)eR->fieldByID("Y"))->getValue();
-    int w1 = ((IntField*)eR->fieldByID("W"))->getValue();
-    int h1 = ((IntField*)eR->fieldByID("H"))->getValue();
-    int t1 = ((IntField*)eR->fieldByID("T"))->getValue();
-    int x2 = ((IntField*)eL->fieldByID("X"))->getValue();
-    int y2 = ((IntField*)eL->fieldByID("Y"))->getValue();
-    int w2 = ((IntField*)eL->fieldByID("W"))->getValue();
-    int h2 = ((IntField*)eL->fieldByID("H"))->getValue();
-    int t2 = ((IntField*)eL->fieldByID("T"))->getValue();
 
     int x01=0;
     int x02=0;
@@ -337,10 +323,10 @@ void WorkPlaceWidget::drawRelation(Relation* r, bool focus){
         y0 = y01 + (y02 - y01)/2;
     }
     QPointF p0(x0,y0);
-    QPen pen1 = QPen(Qt::black, 1, Qt::DotLine);
-    QPen pen2 = QPen(Qt::black, 1, Qt::SolidLine);
-    QPen pen3 = QPen(Qt::black, 2, Qt::SolidLine);
-    QPen pen4 = QPen(Qt::black, 2, Qt::DotLine);
+    QPen pen1 = QPen(colorBlack, 1, Qt::DotLine);
+    QPen pen2 = QPen(colorBlack, 1, Qt::SolidLine);
+    QPen pen3 = QPen(colorBlack, 2, Qt::SolidLine);
+    QPen pen4 = QPen(colorBlack, 2, Qt::DotLine);
     if(r->getAbsL()){
         if(focus){
             painter.setPen(pen4);
@@ -415,14 +401,6 @@ void WorkPlaceWidget::mousePressEvent(QMouseEvent* pe){
         char str[255];
         sprintf(str, "Entitie № %d", num);
         name = (const char*)str;
-//        Entitie* e0 = new Entitie(name);
-//        e0->addUserField(new IntField("X",pe->x()));
-//        e0->addUserField(new IntField("Y",pe->y()));
-//        e0->addUserField(new IntField("W",100));
-//        e0->addUserField(new IntField("H",100));
-//        e0->addUserField(new IntField("F",1));
-//        e0->addUserField(new IntField("T",-1));
-        //EntitieFactory()
         Entitie* e0 = EntitieFactory::entitieFactory()->createEntitie(this->core->getEntitieType());
         ((IntField*)e0->fieldByID("X"))->setValue(pe->x());
         ((IntField*)e0->fieldByID("Y"))->setValue(pe->y());

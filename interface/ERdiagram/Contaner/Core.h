@@ -29,6 +29,17 @@ private:
     Entitie_Types type;
 
 public:
+    Entitie* Empty;
+    Entitie* SlowCar;
+    Entitie* MediumCar;
+    Entitie* FastCar;
+    Entitie* SlowVelo;
+    Entitie* MediumVelo;
+    Entitie* FastVelo;
+    Entitie* SchoolBoy;
+    Entitie* Student;
+    Entitie* Teacher;
+    Entitie* Courier;
     explicit Core();
 	~Core();
     void ClearEr();
